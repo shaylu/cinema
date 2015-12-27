@@ -39,4 +39,19 @@ public class LayoutHelper {
                 + "<body>");
         return str.toString();
     }
+
+    public static String getFooter() {
+        StringBuilder str = new StringBuilder();
+        str.append("</body>\n" +
+        "</html>");
+        return str.toString();
+    }
+    
+    public static String addScripts(String ... scripts) {
+        StringBuilder str = new StringBuilder();
+        for (String script : scripts) {
+           str.append("<script src=\""+ script + "\"></script>");
+        }
+        return str.toString();
+    }
 }

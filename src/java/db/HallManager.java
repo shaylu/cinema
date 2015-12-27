@@ -10,25 +10,22 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Company;
+import models.Hall;
 
 /**
  *
  * @author efrat
  */
-public class CopanyManager implements DBEntityManager<Company>  {
+public class HallManager implements DBEntityManager<Hall>{
 
     private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companies (\n" +
-"  comp_id INT AUTO_INCREMENT ,\n" +
-"  name VARCHAR(50) NOT NULL,\n" +
-"  address VARCHAR(250) NOT NULL,\n" +
-"  about_text VARCHAR(500) NULL,\n" +
-"  PRIMARY KEY (comp_id),\n" +
-"  UNIQUE INDEX comp_id_UNIQUE (comp_id ASC))";
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS hall (\n" +
+"  hall_id INT NOT NULL,\n" +
+"  num_of_seats INT ZEROFILL NOT NULL,\n" +
+"  PRIMARY KEY (hall_id))";
 
-    private final static String INSERT_TABLE = "INSERT INTO company (name, address, about_text) values(?,?,?)";
-    private final static String DELET_COMPANY = "DELET from company WHERE name = (?)";
+    private final static String INSERT_TABLE = "INSERT INTO hall (id, num_of_seats) values(?,?)";
+    private final static String DELET_HALL = "DELET from hall WHERE hall_id = (?)";
     
     @Override
     public void createTable() {
@@ -36,7 +33,7 @@ public class CopanyManager implements DBEntityManager<Company>  {
     }
 
     @Override
-    public boolean addEntity(Company entity) {
+    public boolean addEntity(Hall entity) {
         Connection conn = null;
         boolean result;
 
@@ -44,9 +41,8 @@ public class CopanyManager implements DBEntityManager<Company>  {
             conn = DBHelper.getConnection();
             PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
             
-            statement.setString(1, entity.getName());
-            statement.setString(2, entity.getAddress());
-            statement.setString(3, entity.getAboutText());
+            statement.setInt(1, entity.getId());
+            statement.setInt(2, entity.getNumOfSeats());
 
             statement.execute();
             result = true;
@@ -64,22 +60,22 @@ public class CopanyManager implements DBEntityManager<Company>  {
             }
         }
 
-        return result;
-    }
+        return result;    }
 
     @Override
-    public void update(Company entity) {
+    public void update(Hall entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Company entity) {
-                 Connection conn = null;
+    public void delete(Hall entity) {
+        
+        Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(DELET_COMPANY);
-            statement.setString(1, entity.getName());
+            PreparedStatement statement = conn.prepareStatement(DELET_HALL);
+            statement.setInt(1, entity.getId());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;

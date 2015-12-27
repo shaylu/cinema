@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package db;
+import models.Hall;
 import models.MovieCategory;
 
 /**
@@ -17,6 +18,8 @@ public class DBManager {
 
     private MovieCategoryManager movieCategoryManager;
     private CopanyManager companyManager;
+    private HallManager hallManager;
+    private OrderManager orderManager;
 
     public static DBManager getInstance() {
         return instance;
@@ -25,6 +28,8 @@ public class DBManager {
     private DBManager() {
         movieCategoryManager = new MovieCategoryManager();
         companyManager = new CopanyManager();
+        hallManager = new HallManager(); 
+        orderManager = new OrderManager();
         initDataBase();
     }
 
@@ -32,6 +37,8 @@ public class DBManager {
         createDB();
         movieCategoryManager.createTable();
         companyManager.createTable();
+        hallManager.createTable();
+        orderManager.createTable();
     }
 
     

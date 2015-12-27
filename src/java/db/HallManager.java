@@ -6,7 +6,7 @@
 package db;
 
 import com.mysql.jdbc.Connection;
-import java.sql.PreparedStatement;
+import com.mysql.jdbc.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,19 +14,15 @@ import models.Hall;
 
 /**
  *
- * @author efrat
+ * @author Liraz
  */
-public class HallManager implements DBEntityManager<Hall>{
+public class HallManager implements DBEntityManager<Hall> {
 
-    private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS hall (\n" +
-"  hall_id INT NOT NULL,\n" +
-"  num_of_seats INT ZEROFILL NOT NULL,\n" +
-"  PRIMARY KEY (hall_id))";
-
-    private final static String INSERT_TABLE = "INSERT INTO hall (id, num_of_seats) values(?,?)";
+    private static final Logger LOGGER = Logger.getLogger(HallManager.class.getName());
+    private final static String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS hall (hall_id INT NOT NULL AUTO_INCREMENT, num_of_seats INT ZEROFILL NOT NULL, PRIMARY KEY (hall_id))";
+    private final static String INSERT_TABLE = "INSERT INTO hall (hall_id, num_of_seats) values(?,?)";
     private final static String DELET_HALL = "DELET from hall WHERE hall_id = (?)";
-    
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -39,14 +35,12 @@ public class HallManager implements DBEntityManager<Hall>{
 
         try {
             conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
-            
+            PreparedStatement statement = (PreparedStatement) conn.prepareStatement(INSERT_TABLE);
+
             statement.setInt(1, entity.getId());
             statement.setInt(2, entity.getNumOfSeats());
-
             statement.execute();
             result = true;
-            
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
             LOGGER.log(Level.SEVERE, null, ex);
@@ -60,7 +54,8 @@ public class HallManager implements DBEntityManager<Hall>{
             }
         }
 
-        return result;    }
+        return result;
+    }
 
     @Override
     public void update(Hall entity) {
@@ -69,12 +64,11 @@ public class HallManager implements DBEntityManager<Hall>{
 
     @Override
     public void delete(Hall entity) {
-        
         Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(DELET_HALL);
+            java.sql.PreparedStatement statement = conn.prepareStatement(DELET_HALL);
             statement.setInt(1, entity.getId());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {
@@ -89,7 +83,6 @@ public class HallManager implements DBEntityManager<Hall>{
                 }
             }
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

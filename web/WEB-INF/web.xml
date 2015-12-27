@@ -20,5 +20,4 @@
         <servlet-name>myrest1</servlet-name>
         <url-pattern>/app/*</url-pattern>
     </servlet-mapping>
-  
 </web-app>

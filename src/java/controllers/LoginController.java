@@ -30,7 +30,6 @@ import javax.ws.rs.core.UriBuilder;
  */
 @Path("admin")
 public class LoginController {
-    @POST
     @GET
     @Path("")
     public String getLogin(@Context ServletContext context, @QueryParam("user") String user, @QueryParam("pass") String pass, @Context HttpServletResponse response) {

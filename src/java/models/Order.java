@@ -120,8 +120,12 @@ public class Order implements DBEntity {
         return phoneNumber;
     }
 
-    public Show getShow() {
-        return show;
+    /**
+     *
+     * @return
+     */
+    public int getShowId() {
+        return show.id;
     }
 
     public int getNumOfSeats() {

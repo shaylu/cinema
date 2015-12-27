@@ -20,7 +20,7 @@ public class DBHelper {
     public static String MySqlHost = "jdbc:mysql://localhost:3306/cinema_city";
     public static String MySqlHost2 = "jdbc:mysql://localhost:3306";
     public static String MySqlUsername = "root";
-    public static String MySqlPassword = "password";
+    public static String MySqlPassword = "1234";
     public static final String CREATE_DB = "CREATE DATABASE IF NOT EXISTS cinema_city";
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {

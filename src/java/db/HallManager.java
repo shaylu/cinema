@@ -10,18 +10,18 @@ import com.mysql.jdbc.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.MovieCategory;
+import models.Hall;
 
 /**
  *
- * @author Dell
+ * @author Liraz
  */
-public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
+public class HallManager implements DBEntityManager<Hall> {
 
-    private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS movies_categories (cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL)";
-    private final static String INSERT_TABLE = "INSERT INTO Movies_categories(name) values(?)";
-    private final static String DELET_CATEGORY = "DELET from movies_categories WHERE name = (?)";
+    private static final Logger LOGGER = Logger.getLogger(HallManager.class.getName());
+    private final static String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS hall (hall_id INT NOT NULL AUTO_INCREMENT, num_of_seats INT ZEROFILL NOT NULL, PRIMARY KEY (hall_id))";
+    private final static String INSERT_TABLE = "INSERT INTO hall (hall_id, num_of_seats) values(?,?)";
+    private final static String DELET_HALL = "DELET from hall WHERE hall_id = (?)";
 
     @Override
     public void createTable() {
@@ -29,7 +29,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
     }
 
     @Override
-    public boolean addEntity(MovieCategory entity) {
+    public boolean addEntity(Hall entity) {
         Connection conn = null;
         boolean result;
 
@@ -37,7 +37,8 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
             conn = DBHelper.getConnection();
             PreparedStatement statement = (PreparedStatement) conn.prepareStatement(INSERT_TABLE);
 
-            statement.setString(1, entity.getName());
+            statement.setInt(1, entity.getId());
+            statement.setInt(2, entity.getNumOfSeats());
             statement.execute();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
@@ -57,18 +58,18 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
     }
 
     @Override
-    public void update(MovieCategory entity) {
+    public void update(Hall entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(MovieCategory entity) {
+    public void delete(Hall entity) {
         Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            PreparedStatement statement = (PreparedStatement) conn.prepareStatement(DELET_CATEGORY);
-            statement.setString(1, entity.getName());
+            java.sql.PreparedStatement statement = conn.prepareStatement(DELET_HALL);
+            statement.setInt(1, entity.getId());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
@@ -82,8 +83,6 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
                 }
             }
         }
-
-       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

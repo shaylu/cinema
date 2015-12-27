@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package db;
+import models.Hall;
 import models.MovieCategory;
 
 /**
@@ -12,10 +13,13 @@ import models.MovieCategory;
  */
 public class DBManager {
 
-
     private static final DBManager instance = new DBManager();
 
     private MovieCategoryManager movieCategoryManager;
+    private CopanyManager companyManager;
+    private HallManager hallManager;
+    private OrderManager orderManager;
+    private MovieManager movieManager;
 
     public static DBManager getInstance() {
         return instance;
@@ -23,20 +27,30 @@ public class DBManager {
 
     private DBManager() {
         movieCategoryManager = new MovieCategoryManager();
+        companyManager = new CopanyManager();
+        hallManager = new HallManager(); 
+        orderManager = new OrderManager();
+        movieManager = new MovieManager();
         initDataBase();
     }
 
     private void initDataBase() {
+        
         createDB();
         movieCategoryManager.createTable();
+        companyManager.createTable();
+        hallManager.createTable();
+        orderManager.createTable();
+        movieManager.createTable();
     }
 
-    
     private void createDB() {
         DBHelper.executeUpdateStatment(db.DBHelper.CREATE_DB);
     }
-    
-    public boolean addEntity(MovieCategory movieCategory){
+
+    public boolean addEntity(MovieCategory movieCategory) {
         return movieCategoryManager.addEntity(movieCategory);
     }
 }
+
+

@@ -21,6 +21,10 @@ public class Hall implements DBEntity {
         this.num_of_seats = num_of_seats;
     }
 
+    public Hall() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void setId(int hall_id) {
         this.id = hall_id;
     }

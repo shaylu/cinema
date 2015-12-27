@@ -18,7 +18,7 @@ public class DBManager {
     private MovieCategoryManager movieCategoryManager;
     private MovieManager movieManager;
     private HallManager hallManager;
-
+  
     public static DBManager getInstance() {
         return instance;
     }

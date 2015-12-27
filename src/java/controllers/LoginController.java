@@ -33,7 +33,7 @@ public class LoginController {
     @GET
     @Path("")
     public String getLogin(@Context ServletContext context, @QueryParam("user") String user, @QueryParam("pass") String pass, @Context HttpServletResponse response) {
-        if (!user.equals("") && !pass.equals("")) {
+        if (user != null && !user.equals("") && pass != null && !pass.equals("")) {
             // login
             login(user, pass);
             response.setContentType("application/json");

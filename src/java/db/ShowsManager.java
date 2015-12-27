@@ -20,7 +20,7 @@ import models.Show;
 public class ShowsManager implements DBEntityManager<Show> {
 
     private static final Logger LOGGER = Logger.getLogger(ShowsManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS shows (\n" +
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS shows(\n" +
 "  show_id INT NOT NULL ,\n" +
 "  movie_id INT NOT NULL,\n" +
 "  hall_id INT NOT NULL,\n" +
@@ -32,9 +32,10 @@ public class ShowsManager implements DBEntityManager<Show> {
 "  INDEX hall_id_idx (hall_id ASC),\n" +
 "  CONSTRAINT movie_id FOREIGN KEY (movie_id) REFERENCES movies (movie_id),\n" +
 "  CONSTRAINT hall_id FOREIGN KEY (hall_id) REFERENCES hall (hall_id)\n)";
+    
     private final static String INSERT_TABLE = "INSERT INTO shows (show_id, mov_id, hall_id, show_date,"
             + " num_of_seats_left, price_per_seat ) values(?,?,?,?,?,?)";
-    private final static String DELET_SHOW = "DELET from shows WHERE hall_id = (?)";
+    private final static String DELET_SHOW = "DELET from shows WHERE show_id = (?)";
 
     @Override
     public void createTable() {

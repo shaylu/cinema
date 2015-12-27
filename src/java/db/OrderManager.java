@@ -20,7 +20,7 @@ import models.Order;
 public class OrderManager implements DBEntityManager<Order> {
 
     private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS orders  ( order_id INT AUTO_INCREMENT,\n"
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS orders(order_id INT AUTO_INCREMENT,\n"
             + "  client_id VARCHAR(9) NOT NULL,\n"
             + "  fname VARCHAR(45) NOT NULL,\n"
             + "  lname VARCHAR(45) NOT NULL,\n"
@@ -99,7 +99,26 @@ public class OrderManager implements DBEntityManager<Order> {
 
     @Override
     public void delete(Order entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               
+        Connection conn = null;
+        boolean result = false;
+        try {
+            conn = DBHelper.getConnection();
+            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_ORDER);
+            statement.setInt(1, entity.getId());
+            statement.execute();
+        } catch (ClassNotFoundException | SQLException ex) {
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
 }

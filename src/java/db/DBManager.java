@@ -20,6 +20,9 @@ public class DBManager {
     private HallManager hallManager;
     private OrderManager orderManager;
     private MovieManager movieManager;
+    private ShowsManager showManager;
+    private PromotionManager promotionManager;
+    private PromotionCategoryManager promotionCategoryManager;
 
     public static DBManager getInstance() {
         return instance;
@@ -27,10 +30,13 @@ public class DBManager {
 
     private DBManager() {
         movieCategoryManager = new MovieCategoryManager();
+        showManager = new ShowsManager();
         companyManager = new CopanyManager();
         hallManager = new HallManager(); 
         orderManager = new OrderManager();
         movieManager = new MovieManager();
+        promotionManager = new PromotionManager();
+        promotionCategoryManager = new PromotionCategoryManager();    
         initDataBase();
     }
 
@@ -39,9 +45,12 @@ public class DBManager {
         createDB();
         movieCategoryManager.createTable();
         companyManager.createTable();
+        showManager.createTable();
         hallManager.createTable();
         orderManager.createTable();
         movieManager.createTable();
+        promotionManager.createTable();
+        promotionCategoryManager.createTable();
     }
 
     private void createDB() {

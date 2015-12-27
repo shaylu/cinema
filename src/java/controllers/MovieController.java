@@ -50,7 +50,7 @@ public class MovieController {
                 + "   </HEAD>\n"
                 + "<BODY>\n"
                 + "   <H1>Hi</H1>\n"
-                + "   <P>This is very minimal \"hello world\" HTML document.</P> \n"
+                + "   <P>This is very minimal \"Shay you are my bitch\" HTML document.</P> \n"
                 + "</BODY>\n"
                 + "</HTML>";
 

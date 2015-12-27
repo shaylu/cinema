@@ -16,6 +16,7 @@ public class DBManager {
     private static final DBManager instance = new DBManager();
 
     private MovieCategoryManager movieCategoryManager;
+    private CopanyManager companyManager;
 
     public static DBManager getInstance() {
         return instance;
@@ -23,12 +24,14 @@ public class DBManager {
 
     private DBManager() {
         movieCategoryManager = new MovieCategoryManager();
+        companyManager = new CopanyManager();
         initDataBase();
     }
 
     private void initDataBase() {
         createDB();
         movieCategoryManager.createTable();
+        companyManager.createTable();
     }
 
     

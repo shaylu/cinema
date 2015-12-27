@@ -80,7 +80,7 @@ public class UsersManager implements DBEntityManager<User> {
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_REVIEW);
+            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_USER);
             statement.setString(1, entity.getFldUserName());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {

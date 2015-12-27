@@ -20,21 +20,22 @@ import models.Show;
 public class ShowsManager implements DBEntityManager<Show> {
 
     private static final Logger LOGGER = Logger.getLogger(ShowsManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS shows (\n"
-            + "  show_id INT NOT NULL ,\n"
-            + "  movie_id INT NOT NULL,\n"
-            + "  hall_id INT NOT NULL,\n"
-            + "  show_date DATE NOT NULL,\n"
-            + "  num_of_seats_left INT ZEROFILL NOT NULL,\n"
-            + "  price_per_seat DOUBLE ZEROFILL NOT NULL,\n"
-            + "  PRIMARY KEY (show_id),\n"
-            + "  INDEX movie_id_idx (movie_id ASC),\n"
-            + "  INDEX hall_id_idx (hall_id ASC),\n"
-            + "  CONSTRAINT movie_id FOREIGN KEY (movie_id) REFERENCES movies (movie_id),\n"
-            + "  CONSTRAINT hall_id FOREIGN KEY (hall_id) REFERENCES hall (hall_id)\n)";
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS shows(\n" +
+"  show_id INT NOT NULL ,\n" +
+"  movie_id INT NOT NULL,\n" +
+"  hall_id INT NOT NULL,\n" +
+"  show_date DATE NOT NULL,\n" +
+"  num_of_seats_left INT ZEROFILL NOT NULL,\n" +
+"  price_per_seat DOUBLE ZEROFILL NOT NULL,\n" +
+"  PRIMARY KEY (show_id),\n" +
+"  INDEX movie_id_idx (movie_id ASC),\n" +
+"  INDEX hall_id_idx (hall_id ASC),\n" +
+"  CONSTRAINT movie_id FOREIGN KEY (movie_id) REFERENCES movies (movie_id),\n" +
+"  CONSTRAINT hall_id FOREIGN KEY (hall_id) REFERENCES hall (hall_id)\n)";
+    
     private final static String INSERT_TABLE = "INSERT INTO shows (show_id, mov_id, hall_id, show_date,"
             + " num_of_seats_left, price_per_seat ) values(?,?,?,?,?,?)";
-    private final static String DELET_SHOW = "DELET from shows WHERE hall_id = (?)";
+    private final static String DELET_SHOW = "DELET from shows WHERE show_id = (?)";
 
     @Override
     public void createTable() {

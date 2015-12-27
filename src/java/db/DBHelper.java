@@ -1,0 +1,50 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package db;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author Dell
+ */
+public class DBHelper {
+
+    public static String MySqlClassName = "com.mysql.jdbc.Driver";
+    public static String MySqlHost = "jdbc:mysql://localhost:3306/cinema_city";
+    public static String MySqlHost2 = "jdbc:mysql://localhost:3306";
+    public static String MySqlUsername = "root";
+    public static String MySqlPassword = "1234";
+  
+
+    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(MySqlClassName);
+        com.mysql.jdbc.Connection conn = null;
+        conn = (com.mysql.jdbc.Connection) DriverManager.getConnection(MySqlHost, MySqlUsername, MySqlPassword);
+        return conn;
+    }
+
+    static void executeUpdateStatment(String sql) {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            Statement stmt = (Statement) conn.createStatement();
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
+
+}

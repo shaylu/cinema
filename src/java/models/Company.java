@@ -5,11 +5,13 @@
  */
 package models;
 
+import db.DBEntity;
+
 /**
  *
  * @author Dell
  */
-public class Company {
+public class Company implements DBEntity{
     protected int id;
     protected String name;
     protected String address;

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package db;
-
+import models.Hall;
 import models.MovieCategory;
 
 /**
@@ -16,25 +16,32 @@ public class DBManager {
     private static final DBManager instance = new DBManager();
 
     private MovieCategoryManager movieCategoryManager;
-    private MovieManager movieManager;
+    private CopanyManager companyManager;
     private HallManager hallManager;
-  
+    private OrderManager orderManager;
+    private MovieManager movieManager;
+
     public static DBManager getInstance() {
         return instance;
     }
 
     private DBManager() {
         movieCategoryManager = new MovieCategoryManager();
+        companyManager = new CopanyManager();
+        hallManager = new HallManager(); 
+        orderManager = new OrderManager();
         movieManager = new MovieManager();
-        hallManager = new HallManager();
         initDataBase();
     }
 
     private void initDataBase() {
+        
         createDB();
         movieCategoryManager.createTable();
-        movieManager.createTable();
+        companyManager.createTable();
         hallManager.createTable();
+        orderManager.createTable();
+        movieManager.createTable();
     }
 
     private void createDB() {
@@ -45,3 +52,5 @@ public class DBManager {
         return movieCategoryManager.addEntity(movieCategory);
     }
 }
+
+

@@ -19,7 +19,7 @@ import models.Movie;
  */
 public class MovieManager implements DBEntityManager<Movie> {
 
-    private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MovieManager.class.getName());
     private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS movies (movie_id INT AUTO_INCREMENT ,\n"
             + "  name VARCHAR(45) NOT NULL,\n"
             + "  realse_date DATE NULL,\n"
@@ -33,7 +33,7 @@ public class MovieManager implements DBEntityManager<Movie> {
             + "  INDEX cat_id_idx (cat_id ASC),\n"
             + "  CONSTRAINT cat_id FOREIGN KEY (cat_id) REFERENCES movies_categories (cat_id))";
 
-    private final static String INSERT_TABLE = "INSERT INTO movie(name, realse_date, mov_length, cat_id, plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
+    private final static String INSERT_TABLE = "INSERT INTO movies (name, realse_date, mov_length, cat_id, plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     private final static String DELET_MOVIE = "DELET from movies WHERE name = (?)";
 
     @Override
@@ -52,11 +52,11 @@ public class MovieManager implements DBEntityManager<Movie> {
             conn = DBHelper.getConnection();
             PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
-            
+
             statement.setString(1, entity.getName());
             statement.setString(2, dateformatSql.format(entity.getRelease_date()));
-            statement.setString(3, Integer.toString(entity.getMovie_length()));
-            statement.setString(4, Integer.toString(entity.getCategory().getId()));
+            statement.setInt(3, (entity.getMovie_length()));
+            statement.setInt(4, entity.getCategory().getId());
             statement.setString(5, entity.getPlot());
             statement.setString(6, entity.getPoster());
             statement.setString(7, entity.getTrailer());
@@ -77,7 +77,7 @@ public class MovieManager implements DBEntityManager<Movie> {
         }
 
         return result;
-    //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -87,7 +87,7 @@ public class MovieManager implements DBEntityManager<Movie> {
 
     @Override
     public void delete(Movie entity) {
-         Connection conn = null;
+        Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();

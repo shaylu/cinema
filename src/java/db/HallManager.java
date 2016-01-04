@@ -24,8 +24,12 @@ public class HallManager implements DBEntityManager<Hall> {
     private final static String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS hall (hall_id INT NOT NULL AUTO_INCREMENT, num_of_seats INT ZEROFILL NOT NULL, PRIMARY KEY (hall_id))";
     private final static String INSERT_TABLE = "INSERT INTO hall (hall_id, num_of_seats) values(?,?)";
     private final static String DELET_HALL = "DELET from hall WHERE hall_id = (?)";
-   private final static String UPDATE_HALL = "UPDATE HALL SET  num_of_seats = ? WHERE hall_id = ?";
+    private final static String UPDATE_HALL = "UPDATE HALL SET  num_of_seats = ? WHERE hall_id = ?";
     private final static String SELECT_ALL_HALLS = "SELECT * FROM hall";
+
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
 
     @Override
     public void createTable() {
@@ -63,7 +67,7 @@ public class HallManager implements DBEntityManager<Hall> {
 
     @Override
     public boolean update(Hall entity) {
-  Connection conn = null;
+        Connection conn = null;
         boolean result;
 
         try {
@@ -71,7 +75,7 @@ public class HallManager implements DBEntityManager<Hall> {
             PreparedStatement statement = (PreparedStatement) conn.prepareStatement(UPDATE_HALL);
 
             statement.setInt(1, entity.getNumOfSeats());
-            statement.setInt(2,entity.getId());
+            statement.setInt(2, entity.getId());
             statement.executeUpdate();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
@@ -87,7 +91,7 @@ public class HallManager implements DBEntityManager<Hall> {
             }
         }
 
-        return result;      
+        return result;
 
 //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

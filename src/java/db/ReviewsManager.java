@@ -36,7 +36,11 @@ public class ReviewsManager implements DBEntityManager<Review> {
     private final static String UPDATE_REVIWE = "UPDATE reviews SET rev_id = ?, order_id = ?, rank = ?, review_text = ?,"
             + " review_date = ? WHERE rev_id = ?";
     private final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on 'R.order_id = O.id' ";//"SELECT * FROM cinema_city.reviews";
-    
+
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -101,25 +105,21 @@ public class ReviewsManager implements DBEntityManager<Review> {
             }
         }
     }
-    
-        public ArrayList<Review> allReviews() {
-        
-            Connection conn = null;
+
+    public ArrayList<Review> allReviews() {
+
         ArrayList<Review> ListToReturn = new ArrayList<>();
-        boolean result = false;
         ResultSet rs = null;
 
-        try{
+        try {
             rs = DBHelper.executeQueryStatment(SELECT_ALLREVIWES);
-            while(rs.next()){
+            while (rs.next()) {
                 ListToReturn.add(getShowByResultSetLine(rs));
             }
-            result = true;
-        }catch(SQLException ex){
-            result = false;
+        } catch (SQLException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
-        
+
         return ListToReturn;
     }
 

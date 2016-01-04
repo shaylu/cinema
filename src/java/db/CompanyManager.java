@@ -21,7 +21,7 @@ import models.Company;
 public class CompanyManager implements DBEntityManager<Company> {
 
     private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companys (\n"
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companies (\n"
             + "  comp_id INT AUTO_INCREMENT ,\n"
             + "  name VARCHAR(50) NOT NULL,\n"
             + "  address VARCHAR(250) NOT NULL,\n"
@@ -29,12 +29,15 @@ public class CompanyManager implements DBEntityManager<Company> {
             + "  PRIMARY KEY (comp_id),\n"
             + "  UNIQUE INDEX comp_id_UNIQUE (comp_id ASC))";
 
-    private final static String INSERT_TABLE = "INSERT INTO companys (name, address, about_text) values(?,?,?)";
-    private final static String DELET_COMPANY = "DELET from companys WHERE name = (?)";
-    private final static String UPDATE_COMPANY = "UPDATE companys SET name = ?, address = ?, about_text = ?"
+    private final static String INSERT_TABLE = "INSERT INTO companies (name, address, about_text) values(?,?,?)";
+    private final static String DELET_COMPANY = "DELET from companies WHERE name = (?)";
+    private final static String UPDATE_COMPANY = "UPDATE companies SET name = ?, address = ?, about_text = ?"
             + " WHERE comp_id = ?";
-    private final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companys";
+    private final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companies";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -126,7 +129,7 @@ public class CompanyManager implements DBEntityManager<Company> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Company getCampanyByResultSetLine(ResultSet rs) throws SQLException {
+    public static Company getCampanyByResultSetLine(ResultSet rs) throws SQLException {
         Company CompanyToReturn = new Company();
         CompanyToReturn.setId(rs.getInt("comp_id"));
         CompanyToReturn.setName(rs.getString("name"));
@@ -137,10 +140,7 @@ public class CompanyManager implements DBEntityManager<Company> {
     }
 
     public ArrayList<Company> getAllCampany() {
-
-        Connection conn = null;
         ArrayList<Company> ListToReturn = new ArrayList<>();
-        boolean result = false;
         ResultSet rs = null;
 
         try {
@@ -148,9 +148,8 @@ public class CompanyManager implements DBEntityManager<Company> {
             while (rs.next()) {
                 ListToReturn.add(getCampanyByResultSetLine(rs));
             }
-            result = true;
+          
         } catch (SQLException ex) {
-            result = false;
             LOGGER.log(Level.SEVERE, null, ex);
         }
 

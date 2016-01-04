@@ -11,39 +11,33 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Show;
+import models.User;
 
 /**
  *
  * @author Liraz
  */
-public class ShowsManager implements DBEntityManager<Show> {
+public class UsersManager implements DBEntityManager<User> {
 
-    private static final Logger LOGGER = Logger.getLogger(ShowsManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS shows(\n" +
-"  show_id INT NOT NULL ,\n" +
-"  movie_id INT NOT NULL,\n" +
-"  hall_id INT NOT NULL,\n" +
-"  show_date DATE NOT NULL,\n" +
-"  num_of_seats_left INT ZEROFILL NOT NULL,\n" +
-"  price_per_seat DOUBLE ZEROFILL NOT NULL,\n" +
-"  PRIMARY KEY (show_id),\n" +
-"  INDEX movie_id_idx (movie_id ASC),\n" +
-"  INDEX hall_id_idx (hall_id ASC),\n" +
-"  CONSTRAINT movie_id FOREIGN KEY (movie_id) REFERENCES movies (movie_id),\n" +
-"  CONSTRAINT hall_id FOREIGN KEY (hall_id) REFERENCES hall (hall_id)\n)";
-    
-    private final static String INSERT_TABLE = "INSERT INTO shows (show_id, mov_id, hall_id, show_date,"
-            + " num_of_seats_left, price_per_seat ) values(?,?,?,?,?,?)";
-    private final static String DELET_SHOW = "DELET from shows WHERE show_id = (?)";
+    private static final Logger LOGGER = Logger.getLogger(UsersManager.class.getName());
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (\n"
+            + "  fld_user_id INT NOT NULL AUTO_INCREMENT,\n"
+            + "  fld_password VARCHAR(50) NOT NULL,\n"
+            + "  fld_fname VARCHAR(50) NOT NULL,\n"
+            + "   fld_lname VARCHAR(50) NOT NULL,\n"
+            + "  PRIMARY KEY (fld_user_id))";
+    private final static String INSERT_TABLE = "INSERT INTO users (fld_user_id, fld_password, fld_fname, fld_lname)"
+            + " values(?,?,?,?,?)";
+    private final static String DELET_USER = "DELET from users WHERE fld_user_id = (?)";
 
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
+//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean addEntity(Show entity) {
+    public boolean addEntity(User entity) {
         Connection conn = null;
         boolean result;
 
@@ -52,12 +46,10 @@ public class ShowsManager implements DBEntityManager<Show> {
             PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
 
-            statement.setInt(1, entity.getId());
-            statement.setInt(2, (entity.getMovie().getId()));
-            statement.setInt(3, entity.getHall().getId());
-            statement.setString(4, dateformatSql.format(entity.getShowDate()));
-            statement.setInt(5, entity.getNumOfSeatsLeft());
-            statement.setDouble(6, entity.getPricePerSeat());
+            statement.setInt(1, entity.getFldUserId());
+            statement.setString(2, entity.getFldPassword());
+            statement.setString(3, entity.getFldFname());
+            statement.setString(4, entity.getFldLname());
             statement.execute();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
@@ -74,22 +66,22 @@ public class ShowsManager implements DBEntityManager<Show> {
         }
 
         return result;
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void update(Show entity) {
+    public void update(User entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Show entity) {
+    public void delete(User entity) {
         Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_SHOW);
-            statement.setInt(1, entity.getId());
+            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_USER);
+            statement.setString(1, entity.getFldUserName());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
@@ -103,6 +95,7 @@ public class ShowsManager implements DBEntityManager<Show> {
                 }
             }
         }
+// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

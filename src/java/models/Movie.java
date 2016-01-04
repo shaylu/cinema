@@ -25,21 +25,14 @@ public class Movie implements DBEntity {
     protected String trailer;
     protected boolean is_recomanded;
 
-    public Movie(int id, String name, Date release_date, int movie_length, int cat_id, String plot, String poster, String trailer, boolean is_recomanded, List<MovieCategory> categories) {
-        this.id = id;
+    public Movie(String name, Date release_date, int movie_length, String plot, String poster, String trailer) {
+        
         this.name = name;
         this.release_date = release_date;
         this.movie_length = movie_length;
-
-//        try {
-//            this.category = categories.stream().filter(x -> x.id == id).findFirst().get();
-//        } catch (Exception e) {
-//            this.category = null;
-//        }
         this.plot = plot;
         this.poster = poster;
         this.trailer = trailer;
-        this.is_recomanded = is_recomanded;
     }
 
     public Movie() {

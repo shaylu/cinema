@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ import models.MovieCategory;
 public class MovieManager implements DBEntityManager<Movie> {
 
     private static final Logger LOGGER = Logger.getLogger(MovieManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS movies (movie_id INT AUTO_INCREMENT ,\n"
+    public final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS movies (movie_id INT AUTO_INCREMENT ,\n"
             + "  name VARCHAR(45) NOT NULL,\n"
             + "  realse_date DATE NULL,\n"
             + "  mov_length DOUBLE ZEROFILL NULL,\n"
@@ -48,10 +49,23 @@ public class MovieManager implements DBEntityManager<Movie> {
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
-
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public void addMoviesToDataBase(){
+
+        boolean isAddToDB = true;
+        // Creating Star Wars: The Force Awakens
+        Date release_date = new Date(17/12/2015);
+        String plot = "Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a rag-tag group of heroes can stop them, along with the help of the Resistance.";
+        String posterLink = "http://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
+        String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
+       // back here
+        Movie starWarsTheForceAwakens = new Movie("Star Wars: The Force Awakens", release_date, 131, plot, posterLink,trailer);
+
+        isAddToDB = addEntity(starWarsTheForceAwakens);
+        
+    }
+    
     @Override
     public boolean addEntity(Movie entity) {
         Connection conn = null;

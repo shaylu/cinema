@@ -70,7 +70,7 @@ public class ReviewsManager implements DBEntityManager<Review> {
     }
 
     @Override
-    public void update(Review entity) {
+    public boolean update(Review entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

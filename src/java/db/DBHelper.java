@@ -8,6 +8,7 @@ package db;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -33,11 +34,11 @@ public class DBHelper {
     static void executeUpdateStatment(String sql) {
         Connection conn = null;
         try {
-            if (!sql.equals(CREATE_DB))
+            if (!sql.equals(CREATE_DB)) {
                 conn = getConnection();
-            else
+            } else {
                 conn = getDataBaseConnection(); // for use when db wasn't created yet
-            
+            }
             Statement stmt = (Statement) conn.createStatement();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
@@ -59,4 +60,26 @@ public class DBHelper {
         return conn;
     }
 
+    static ResultSet executeQueryStatment(String sql) {
+        ResultSet resultSetToReturn = null;
+        Connection conn = null;
+        try {
+            if (!sql.equals(CREATE_DB)) {
+                conn = getConnection();
+            } else {
+                conn = getDataBaseConnection(); // for use when db wasn't created yet
+            }
+            Statement stmt = (Statement) conn.createStatement();
+            resultSetToReturn = stmt.executeQuery(sql);
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return resultSetToReturn;
+    }
 }

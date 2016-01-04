@@ -13,7 +13,7 @@ public interface DBEntityManager<T extends DBEntity> {
     
     void createTable();
     boolean addEntity(T entity);
-    void update(T entity);
+    boolean update(T entity);
     void delete(T entity);
     
 }

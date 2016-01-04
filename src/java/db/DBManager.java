@@ -34,7 +34,7 @@ public class DBManager {
         movieCategoryManager = new MovieCategoryManager();
         showManager = new ShowsManager();
         companyManager = new CopanyManager();
-        hallManager = new HallManager(); 
+        hallManager = new HallManager();
         orderManager = new OrderManager();
         movieManager = new MovieManager();
         promotionManager = new PromotionManager();
@@ -65,5 +65,3 @@ public class DBManager {
         return movieCategoryManager.addEntity(movieCategory);
     }
 }
-
-

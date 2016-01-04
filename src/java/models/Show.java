@@ -30,6 +30,10 @@ public class Show implements DBEntity {
         this.price_per_seate = price_per_seate;
     }
 
+    public Show() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void setId(int show_id) {
         this.id = show_id;
     }

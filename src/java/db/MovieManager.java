@@ -7,11 +7,15 @@ package db;
 
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Movie;
+import models.MovieCategory;
 
 /**
  *
@@ -33,8 +37,13 @@ public class MovieManager implements DBEntityManager<Movie> {
             + "  INDEX cat_id_idx (cat_id ASC),\n"
             + "  CONSTRAINT cat_id FOREIGN KEY (cat_id) REFERENCES movies_categories (cat_id))";
 
-    private final static String INSERT_TABLE = "INSERT INTO movies (name, realse_date, mov_length, cat_id, plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
+    private final static String INSERT_TABLE = "INSERT INTO movies (name, realse_date, mov_length, cat_id,"
+            + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     private final static String DELET_MOVIE = "DELET from movies WHERE name = (?)";
+    private final static String UPDATE_MOVIE = "UPDATE movies SET name = ?, realse_date = ? , mov_length = ?,"
+            + " cat_id = ? , plot = ?, poster = ? ,trailer,is_recommended = ? WHERE movie_id = ?";
+    private final static String SELECT_ALL_MOVIES = "SELECT * FROM movies M inner "
+            + "Join movies_categories C on M.cat_id = C.id ";
 
     @Override
     public void createTable() {
@@ -55,7 +64,7 @@ public class MovieManager implements DBEntityManager<Movie> {
 
             statement.setString(1, entity.getName());
             statement.setString(2, dateformatSql.format(entity.getRelease_date()));
-            statement.setInt(3, (entity.getMovie_length()));
+            statement.setDouble(3, (entity.getMovie_length()));
             statement.setInt(4, entity.getCategory().getId());
             statement.setString(5, entity.getPlot());
             statement.setString(6, entity.getPoster());
@@ -81,8 +90,41 @@ public class MovieManager implements DBEntityManager<Movie> {
     }
 
     @Override
-    public void update(Movie entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(Movie entity) {
+        Connection conn = null;
+        boolean result;
+
+        try {
+            conn = DBHelper.getConnection();
+            PreparedStatement statement = conn.prepareStatement(UPDATE_MOVIE);
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
+
+            statement.setString(1, entity.getName());
+            statement.setString(2, dateformatSql.format(entity.getRelease_date()));
+            statement.setDouble(3, (entity.getMovie_length()));
+            statement.setInt(4, entity.getCategory().getId());
+            statement.setString(5, entity.getPlot());
+            statement.setString(6, entity.getPoster());
+            statement.setString(7, entity.getTrailer());
+            statement.setString(8, Boolean.toString(entity.is_recomanded()));
+            statement.executeUpdate();
+            result = true;
+        } catch (ClassNotFoundException | SQLException ex) {
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return result;
+
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -108,6 +150,38 @@ public class MovieManager implements DBEntityManager<Movie> {
         }
 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ArrayList<Movie> allMovies() {
+        ArrayList<Movie> allMovies = new ArrayList<Movie>();
+        ResultSet rs = null;
+        try {
+            rs = DBHelper.executeQueryStatment(SELECT_ALL_MOVIES);
+            while (rs.next()) {
+                Movie movie = getMovieByResultSetLine(rs);
+                allMovies.add(movie);
+            }
+        } catch (Exception e) {
+        }
+        return allMovies;
+    }
+
+    public static Movie getMovieByResultSetLine(ResultSet rs) {
+        Movie movie = new Movie();
+        try {
+            movie.setId(rs.getInt("movie_id"));
+            movie.setName(rs.getString("name"));
+            movie.setRelease_date(rs.getDate("realse_date"));
+            movie.setMovie_length(rs.getDouble("mov_length"));
+            movie.setCategory(new MovieCategory(rs.getInt("M.cat_id"), rs.getString("C.name")));
+            movie.setPlot(rs.getString("plot"));
+            movie.setPoster(rs.getString("poster"));
+            movie.setTrailer(rs.getString("trailer"));
+            movie.setIs_recomanded(rs.getBoolean("is_recommended"));
+
+        } catch (Exception e) {
+        }
+        return movie;
     }
 
 }

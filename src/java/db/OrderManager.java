@@ -44,7 +44,11 @@ public class OrderManager implements DBEntityManager<Order> {
     private final static String INSERT_TABLE = "INSERT INTO orders (client_id, fname, lname, email, phone, show_id, num_of_seats,"
             + "total_payment, credit_card_last_digit, exp_date_month, exp_date_year, order_date) values(?,?,?,?,?,?,?,?,?,?,?,?)";
     private final static String DELET_ORDER = "DELET from orders WHERE order_id = (?)";
-
+    private final static String UPDATE_ORDER = "UPDATE orders SET client_id = ?, fname = ? , lname = ? , email = ?,"
+            + " phone = ? , show_id = ?, num_of_seats = ? ,total_payment = ?, credit_card_last_digit = ?,"
+            + " exp_date_month = ?, exp_date_year = ?, order_date = ? WHERE movie_id = ?";
+    private final static String SELECT_ALL_ORDER = "SELECT * FROM cinema_city.orders";
+    
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -94,7 +98,32 @@ public class OrderManager implements DBEntityManager<Order> {
 
     @Override
     public boolean update(Order entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection conn = null;
+        boolean result = false;
+
+        try {
+            conn = DBHelper.getConnection();
+            java.sql.PreparedStatement statement = conn.prepareStatement(UPDATE_ORDER);
+
+//            statement.setString(1, entity.getName());
+//            statement.setString(2, entity.getAddress());
+//            statement.setString(3, entity.getAboutText());
+            statement.executeUpdate();
+            result = true;
+        } catch (ClassNotFoundException | SQLException ex) {
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+       return result; 
     }
 
     @Override

@@ -131,7 +131,8 @@ public class CopanyManager implements DBEntityManager<Company>  {
             }
         }
 
-       return result;    }
+       return result;  
+    }
 
     @Override
     public void delete(Company entity) {

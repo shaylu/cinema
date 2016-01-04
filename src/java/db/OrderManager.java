@@ -185,9 +185,7 @@ public class OrderManager implements DBEntityManager<Order> {
     
     public ArrayList<Order> getAllOrders(){
         
-        Connection conn = null;
         ArrayList<Order> ListToReturn = new ArrayList<>();
-        boolean result = false;
         ResultSet rs = null;
 
         try{
@@ -195,9 +193,7 @@ public class OrderManager implements DBEntityManager<Order> {
             while(rs.next()){
                 ListToReturn.add(getOrderByResultSet(rs));
             }
-            result = true;
         }catch(SQLException ex){
-            result = false;
             LOGGER.log(Level.SEVERE, null, ex);
         }
         

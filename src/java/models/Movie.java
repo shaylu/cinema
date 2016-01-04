@@ -25,7 +25,7 @@ public class Movie implements DBEntity {
     protected String trailer;
     protected boolean is_recomanded;
 
-    public Movie(String name, Date release_date, int movie_length, String plot, String poster, String trailer) {
+    public Movie(String name, Date release_date, int movie_length, String plot, String poster, String trailer, MovieCategory category,boolean is_recomanded) {
         
         this.name = name;
         this.release_date = release_date;
@@ -33,6 +33,8 @@ public class Movie implements DBEntity {
         this.plot = plot;
         this.poster = poster;
         this.trailer = trailer;
+        this.category = category;
+        this.is_recomanded = is_recomanded;
     }
 
     public Movie() {

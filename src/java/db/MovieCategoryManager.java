@@ -57,7 +57,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
     }
 
     @Override
-    public void update(MovieCategory entity) {
+    public boolean update(MovieCategory entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

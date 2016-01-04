@@ -68,7 +68,7 @@ public class CopanyManager implements DBEntityManager<Company>  {
     }
 
     @Override
-    public void update(Company entity) {
+    public boolean update(Company entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

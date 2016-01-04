@@ -85,7 +85,7 @@ public class PromotionManager implements DBEntityManager<Promotion> {
     }
 
     @Override
-    public void update(Promotion entity) {
+    public boolean update(Promotion entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

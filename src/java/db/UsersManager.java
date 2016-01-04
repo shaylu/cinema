@@ -70,7 +70,7 @@ public class UsersManager implements DBEntityManager<User> {
     }
 
     @Override
-    public void update(User entity) {
+    public boolean update(User entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

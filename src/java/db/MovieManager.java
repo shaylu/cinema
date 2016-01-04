@@ -33,9 +33,11 @@ public class MovieManager implements DBEntityManager<Movie> {
             + "  INDEX cat_id_idx (cat_id ASC),\n"
             + "  CONSTRAINT cat_id FOREIGN KEY (cat_id) REFERENCES movies_categories (cat_id))";
 
-    private final static String INSERT_TABLE = "INSERT INTO movies (name, realse_date, mov_length, cat_id, plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
+    private final static String INSERT_TABLE = "INSERT INTO movies (name, realse_date, mov_length, cat_id,"
+            + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     private final static String DELET_MOVIE = "DELET from movies WHERE name = (?)";
-
+     private final static String UPDATE_MOVIE = "UPDATE movies SET name = ?, realse_date = ? , mov_length = ?,"
+             + " cat_id = ? , plot = ?, poster = ? ,trailer,is_recommended = ? WHERE movie_id = ?";
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -81,8 +83,41 @@ public class MovieManager implements DBEntityManager<Movie> {
     }
 
     @Override
-    public void update(Movie entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(Movie entity) {
+          Connection conn = null;
+        boolean result;
+
+        try {
+            conn = DBHelper.getConnection();
+            PreparedStatement statement = conn.prepareStatement(UPDATE_MOVIE);
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
+
+            statement.setString(1, entity.getName());
+            statement.setString(2, dateformatSql.format(entity.getRelease_date()));
+            statement.setInt(3, (entity.getMovie_length()));
+            statement.setInt(4, entity.getCategory().getId());
+            statement.setString(5, entity.getPlot());
+            statement.setString(6, entity.getPoster());
+            statement.setString(7, entity.getTrailer());
+            statement.setString(8, Boolean.toString(entity.is_recomanded()));
+            statement.executeUpdate();
+            result = true;
+        } catch (ClassNotFoundException | SQLException ex) {
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+       return result;
+        
+       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

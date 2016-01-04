@@ -78,7 +78,7 @@ public class ShowsManager implements DBEntityManager<Show> {
     }
 
     @Override
-    public void update(Show entity) {
+    public boolean update(Show entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -104,5 +104,4 @@ public class ShowsManager implements DBEntityManager<Show> {
             }
         }
     }
-
 }

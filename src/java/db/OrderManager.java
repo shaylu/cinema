@@ -93,7 +93,7 @@ public class OrderManager implements DBEntityManager<Order> {
     }
 
     @Override
-    public void update(Order entity) {
+    public boolean update(Order entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

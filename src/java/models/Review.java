@@ -20,6 +20,46 @@ public class Review implements DBEntity {
     protected String text;
     protected Date date;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setRank(double rank) {
+        this.rank = rank;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public double getRank() {
+        return rank;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
     public Review(int id, Order order, double rank, String text, Date date) {
         this.id = id;
         this.order = order;

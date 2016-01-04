@@ -8,49 +8,52 @@ package db;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Company;
+import models.Review;
 
 /**
  *
- * @author efrat
+ * @author Liraz
  */
-public class CopanyManager implements DBEntityManager<Company>  {
+public class ReviewsManager implements DBEntityManager<Review> {
 
-    private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companies (\n" +
-"  comp_id INT AUTO_INCREMENT ,\n" +
-"  name VARCHAR(50) NOT NULL,\n" +
-"  address VARCHAR(250) NOT NULL,\n" +
-"  about_text VARCHAR(500) NULL,\n" +
-"  PRIMARY KEY (comp_id),\n" +
-"  UNIQUE INDEX comp_id_UNIQUE (comp_id ASC))";
+    private static final Logger LOGGER = Logger.getLogger(ReviewsManager.class.getName());
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS reviews (\n"
+            + "  rev_id INT NOT NULL AUTO_INCREMENT,\n"
+            + "  order_id INT NOT NULL,\n"
+            + "  rank DOUBLE ZEROFILL NULL,\n"
+            + "  review_text VARCHAR(500) NULL,\n"
+            + "  review_date DATE NOT NULL,\n"
+            + "  PRIMARY KEY (rev_id), INDEX order_id_idx (order_id ASC),\n"
+            + "  CONSTRAINT order_id FOREIGN KEY (order_id) REFERENCES orders (Order_id))";
+    private final static String INSERT_TABLE = "INSERT INTO reviews (rev_id, order_id, rank, review_text,"
+            + " review_date) values(?,?,?,?,?)";
+    private final static String DELET_REVIEW = "DELET from reviews WHERE rev_id = (?)";
 
-    private final static String INSERT_TABLE = "INSERT INTO company (name, address, about_text) values(?,?,?)";
-    private final static String DELET_COMPANY = "DELET from company WHERE name = (?)";
-    
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
     }
 
     @Override
-    public boolean addEntity(Company entity) {
+    public boolean addEntity(Review entity) {
         Connection conn = null;
         boolean result;
 
         try {
             conn = DBHelper.getConnection();
             PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
-            
-            statement.setString(1, entity.getName());
-            statement.setString(2, entity.getAddress());
-            statement.setString(3, entity.getAboutText());
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
 
+            statement.setInt(1, entity.getId());
+            statement.setInt(2, (entity.getOrder().getId()));
+            statement.setDouble(3, entity.getRank());
+            statement.setString(4, entity.getText());
+            statement.setString(5, dateformatSql.format(entity.getDate()));
             statement.execute();
             result = true;
-            
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
             LOGGER.log(Level.SEVERE, null, ex);
@@ -63,23 +66,22 @@ public class CopanyManager implements DBEntityManager<Company>  {
                 }
             }
         }
-
         return result;
     }
 
     @Override
-    public boolean update(Company entity) {
+    public boolean update(Review entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Company entity) {
-                 Connection conn = null;
+    public void delete(Review entity) {
+        Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(DELET_COMPANY);
-            statement.setString(1, entity.getName());
+            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_REVIEW);
+            statement.setInt(1, entity.getId());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
@@ -93,7 +95,5 @@ public class CopanyManager implements DBEntityManager<Company>  {
                 }
             }
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

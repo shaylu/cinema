@@ -58,7 +58,7 @@ public class HallManager implements DBEntityManager<Hall> {
     }
 
     @Override
-    public void update(Hall entity) {
+    public boolean update(Hall entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

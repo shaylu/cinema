@@ -8,49 +8,50 @@ package db;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Company;
+import models.User;
 
 /**
  *
- * @author efrat
+ * @author Liraz
  */
-public class CopanyManager implements DBEntityManager<Company>  {
+public class UsersManager implements DBEntityManager<User> {
 
-    private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companies (\n" +
-"  comp_id INT AUTO_INCREMENT ,\n" +
-"  name VARCHAR(50) NOT NULL,\n" +
-"  address VARCHAR(250) NOT NULL,\n" +
-"  about_text VARCHAR(500) NULL,\n" +
-"  PRIMARY KEY (comp_id),\n" +
-"  UNIQUE INDEX comp_id_UNIQUE (comp_id ASC))";
+    private static final Logger LOGGER = Logger.getLogger(UsersManager.class.getName());
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (\n"
+            + "  fld_user_id INT NOT NULL AUTO_INCREMENT,\n"
+            + "  fld_password VARCHAR(50) NOT NULL,\n"
+            + "  fld_fname VARCHAR(50) NOT NULL,\n"
+            + "   fld_lname VARCHAR(50) NOT NULL,\n"
+            + "  PRIMARY KEY (fld_user_id))";
+    private final static String INSERT_TABLE = "INSERT INTO users (fld_user_id, fld_password, fld_fname, fld_lname)"
+            + " values(?,?,?,?,?)";
+    private final static String DELET_USER = "DELET from users WHERE fld_user_id = (?)";
 
-    private final static String INSERT_TABLE = "INSERT INTO company (name, address, about_text) values(?,?,?)";
-    private final static String DELET_COMPANY = "DELET from company WHERE name = (?)";
-    
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
+//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean addEntity(Company entity) {
+    public boolean addEntity(User entity) {
         Connection conn = null;
         boolean result;
 
         try {
             conn = DBHelper.getConnection();
             PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
-            
-            statement.setString(1, entity.getName());
-            statement.setString(2, entity.getAddress());
-            statement.setString(3, entity.getAboutText());
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
 
+            statement.setInt(1, entity.getFldUserId());
+            statement.setString(2, entity.getFldPassword());
+            statement.setString(3, entity.getFldFname());
+            statement.setString(4, entity.getFldLname());
             statement.execute();
             result = true;
-            
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
             LOGGER.log(Level.SEVERE, null, ex);
@@ -65,21 +66,22 @@ public class CopanyManager implements DBEntityManager<Company>  {
         }
 
         return result;
+//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean update(Company entity) {
+    public boolean update(User entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void delete(Company entity) {
-                 Connection conn = null;
+    public void delete(User entity) {
+        Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(DELET_COMPANY);
-            statement.setString(1, entity.getName());
+            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_USER);
+            statement.setString(1, entity.getFldUserName());
             statement.execute();
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;
@@ -93,7 +95,7 @@ public class CopanyManager implements DBEntityManager<Company>  {
                 }
             }
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

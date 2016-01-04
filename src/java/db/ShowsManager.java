@@ -57,7 +57,7 @@ public class ShowsManager implements DBEntityManager<Show> {
             statement.setInt(3, entity.getHall().getId());
             statement.setString(4, dateformatSql.format(entity.getShowDate()));
             statement.setInt(5, entity.getNumOfSeatsLeft());
-            statement.setDouble(6, entity.getPricePerSeat());            
+            statement.setDouble(6, entity.getPricePerSeat());
             statement.execute();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
@@ -74,17 +74,17 @@ public class ShowsManager implements DBEntityManager<Show> {
         }
 
         return result;
-       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void update(Show entity) {
+    public boolean update(Show entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void delete(Show entity) {
-               Connection conn = null;
+        Connection conn = null;
         boolean result = false;
         try {
             conn = DBHelper.getConnection();
@@ -104,5 +104,4 @@ public class ShowsManager implements DBEntityManager<Show> {
             }
         }
     }
-
 }

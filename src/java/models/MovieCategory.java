@@ -27,10 +27,6 @@ public class MovieCategory implements DBEntity{
         this.name = name;
     }
 
-    public MovieCategory() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public int getId() {
         return id;
     }

@@ -43,6 +43,10 @@ public class ShowsManager implements DBEntityManager<Show> {
     private final static String SELECT_ALL_SHOWS = "select * from (shows S inner join hall H on H.hall_id=S.hall_id) "
             + "inner join movies M on S.movie_id = M.movie_id";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

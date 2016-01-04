@@ -31,6 +31,10 @@ public class PromotionCategoryManager implements DBEntityManager<PromotionCatego
     private final static String DELET_PROMOTIONCATEGORY = "DELET from promotion_categories WHERE promo_cat_id = (?)";
     private final static String SELECT_ALL_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

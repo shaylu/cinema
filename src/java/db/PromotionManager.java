@@ -51,6 +51,10 @@ public class PromotionManager implements DBEntityManager<Promotion> {
     private final static String SELECT_ALL_PROMOTION = "SELECT * FROM (promotions P inner join companys C "
             + "on P.comp_id = C.comp_id) inner join promotion_categories PC on PC.promo_cat_id = P.promo_cat_id";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

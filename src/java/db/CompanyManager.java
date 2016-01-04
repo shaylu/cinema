@@ -35,6 +35,9 @@ public class CompanyManager implements DBEntityManager<Company> {
             + " WHERE comp_id = ?";
     private final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companys";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

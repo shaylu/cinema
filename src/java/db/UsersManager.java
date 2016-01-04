@@ -38,6 +38,10 @@ public class UsersManager implements DBEntityManager<User> {
         fldUserId, fldPassword, fldUserName, fldFname, fldLname
     }
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -119,7 +123,7 @@ public class UsersManager implements DBEntityManager<User> {
                     rs.next();
                     return createUserFromRS(rs);
                 } catch (Exception e) {
-                    throw new Exception("failed to parse user record set."); 
+                    throw new Exception("failed to parse user record set.");
                 }
 
             } else {

@@ -50,7 +50,11 @@ public class OrderManager implements DBEntityManager<Order> {
             + " phone = ? , show_id = ?, num_of_seats = ? ,total_payment = ?, credit_card_last_digit = ?,"
             + " exp_date_month = ?, exp_date_year = ?, order_date = ? WHERE order_id = ?";
     private final static String SELECT_ALL_ORDER = "SELECT * FROM orders O inner join shows S on 'O.show_id = S.id' ";
-    
+
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -107,7 +111,7 @@ public class OrderManager implements DBEntityManager<Order> {
             conn = DBHelper.getConnection();
             java.sql.PreparedStatement statement = conn.prepareStatement(UPDATE_ORDER);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
-            
+
             statement.setString(1, entity.getClientId());
             statement.setString(2, entity.getFirstName());
             statement.setString(3, entity.getLastName());
@@ -136,12 +140,12 @@ public class OrderManager implements DBEntityManager<Order> {
             }
         }
 
-       return result; 
+        return result;
     }
 
     @Override
     public void delete(Order entity) {
-               
+
         Connection conn = null;
         boolean result = false;
         try {
@@ -162,10 +166,10 @@ public class OrderManager implements DBEntityManager<Order> {
             }
         }
     }
-        public static Order getOrderByResultSet(ResultSet rs) throws SQLException
-    {
+
+    public static Order getOrderByResultSet(ResultSet rs) throws SQLException {
         Order OrderToReturn = new Order();
-        
+
         OrderToReturn.setClientId(rs.getString("client_id"));
         OrderToReturn.setFirstName(rs.getString("fname"));
         OrderToReturn.setLastName(rs.getString("lname"));
@@ -182,21 +186,21 @@ public class OrderManager implements DBEntityManager<Order> {
         OrderToReturn.setOrderDate(rs.getDate("order_date"));
         return OrderToReturn;
     }
-    
-    public ArrayList<Order> getAllOrders(){
-        
+
+    public ArrayList<Order> getAllOrders() {
+
         ArrayList<Order> ListToReturn = new ArrayList<>();
         ResultSet rs = null;
 
-        try{
+        try {
             rs = DBHelper.executeQueryStatment(SELECT_ALL_ORDER);
-            while(rs.next()){
+            while (rs.next()) {
                 ListToReturn.add(getOrderByResultSet(rs));
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
-        
+
         return ListToReturn;
     }
 }

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package db;
+
 import java.util.ArrayList;
 import models.Hall;
 import models.MovieCategory;
@@ -40,13 +41,14 @@ public class DBManager {
         promotionManager = new PromotionManager();
         promotionCategoryManager = new PromotionCategoryManager();
         usersManager = new UsersManager();
-        
+
         initDataBase();
     }
 
     private void initDataBase() {
         createDB();
-        movieCategoryManager.createTable();
+        creatTables();
+        /*movieCategoryManager.createTable();
         companyManager.createTable();
         showManager.createTable();
         hallManager.createTable();
@@ -54,7 +56,7 @@ public class DBManager {
         movieManager.createTable();
         promotionManager.createTable();
         promotionCategoryManager.createTable();
-        usersManager.createTable();
+        usersManager.createTable();*/
     }
 
     private void createDB() {
@@ -63,5 +65,18 @@ public class DBManager {
 
     public boolean addEntity(MovieCategory movieCategory) {
         return movieCategoryManager.addEntity(movieCategory);
+    }
+
+    private void creatTables() {
+        String createAllTablesStr = movieCategoryManager.getCREATE_TABLE()
+                + companyManager.getCREATE_TABLE()
+                + showManager.getCREATE_TABLE()
+                + hallManager.getCREATE_TABLE()
+                + orderManager.getCREATE_TABLE()
+                + movieManager.getCREATE_TABLE()
+                + promotionManager.getCREATE_TABLE()
+                + promotionCategoryManager.getCREATE_TABLE()
+                + usersManager.getCREATE_TABLE();
+        DBHelper.executeUpdateStatment(createAllTablesStr);
     }
 }

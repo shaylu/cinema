@@ -27,41 +27,44 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
     private final static String UPDATE_MOVIECATAGORY = "UPDATE movies_categories SET name = ? WHERE cat_id = ?";
     private final static String SELECT_ALLCATAGORY = "SELECT * FROM cinema_city.movies_categories";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
     }
 
-    public MovieCategory getMovieCatagory(ResultSet rs) throws SQLException
-    {
+    public MovieCategory getMovieCatagory(ResultSet rs) throws SQLException {
         MovieCategory CatToReturn = new MovieCategory();
         CatToReturn.setId(rs.getInt("cat_id"));
         CatToReturn.setName(rs.getString("name"));
-        
+
         return CatToReturn;
     }
-    
-    public ArrayList<MovieCategory> getAllMovieCatagories(){
-        
+
+    public ArrayList<MovieCategory> getAllMovieCatagories() {
+
         Connection conn = null;
         ArrayList<MovieCategory> ListToReturn = new ArrayList<>();
         boolean result = false;
         ResultSet rs = null;
 
-        try{
+        try {
             rs = DBHelper.executeQueryStatment(SELECT_ALLCATAGORY);
-            while(rs.next()){
+            while (rs.next()) {
                 ListToReturn.add(getMovieCatagory(rs));
             }
             result = true;
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             result = false;
             LOGGER.log(Level.SEVERE, null, ex);
         }
-        
+
         return ListToReturn;
     }
-    
+
     @Override
     public boolean addEntity(MovieCategory entity) {
         Connection conn = null;
@@ -98,7 +101,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
      */
     @Override
     public boolean update(MovieCategory entity) {
-          
+
         Connection conn = null;
         boolean result = false;
 
@@ -122,7 +125,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
             }
         }
 
-       return result;
+        return result;
     }
 
     @Override
@@ -147,7 +150,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
             }
         }
 
-       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -45,6 +45,10 @@ public class MovieManager implements DBEntityManager<Movie> {
     private final static String SELECT_ALL_MOVIES = "SELECT * FROM movies M inner "
             + "Join movies_categories C on M.cat_id = C.id ";
 
+    public static String getCREATE_TABLE() {
+        return CREATE_TABLE;
+    }
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

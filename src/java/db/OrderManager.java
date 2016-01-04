@@ -162,7 +162,7 @@ public class OrderManager implements DBEntityManager<Order> {
             }
         }
     }
-        public Order getOrderByResultSet(ResultSet rs) throws SQLException
+        public static Order getOrderByResultSet(ResultSet rs) throws SQLException
     {
         Order OrderToReturn = new Order();
         

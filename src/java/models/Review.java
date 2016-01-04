@@ -20,6 +20,10 @@ public class Review implements DBEntity {
     protected String text;
     protected Date date;
 
+    public Review() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void setId(int id) {
         this.id = id;
     }

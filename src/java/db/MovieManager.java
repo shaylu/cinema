@@ -42,7 +42,7 @@ public class MovieManager implements DBEntityManager<Movie> {
     private final static String DELET_MOVIE = "DELET from movies WHERE name = (?)";
     private final static String UPDATE_MOVIE = "UPDATE movies SET name = ?, realse_date = ? , mov_length = ?,"
             + " cat_id = ? , plot = ?, poster = ? ,trailer,is_recommended = ? WHERE movie_id = ?";
-    private final static String ALL_MOVIES = "SELECT * FROM movies M inner "
+    private final static String SELECT_ALL_MOVIES = "SELECT * FROM movies M inner "
             + "Join movies_categories C on M.cat_id = C.id ";
 
     @Override
@@ -64,7 +64,7 @@ public class MovieManager implements DBEntityManager<Movie> {
 
             statement.setString(1, entity.getName());
             statement.setString(2, dateformatSql.format(entity.getRelease_date()));
-            statement.setInt(3, (entity.getMovie_length()));
+            statement.setDouble(3, (entity.getMovie_length()));
             statement.setInt(4, entity.getCategory().getId());
             statement.setString(5, entity.getPlot());
             statement.setString(6, entity.getPoster());
@@ -101,7 +101,7 @@ public class MovieManager implements DBEntityManager<Movie> {
 
             statement.setString(1, entity.getName());
             statement.setString(2, dateformatSql.format(entity.getRelease_date()));
-            statement.setInt(3, (entity.getMovie_length()));
+            statement.setDouble(3, (entity.getMovie_length()));
             statement.setInt(4, entity.getCategory().getId());
             statement.setString(5, entity.getPlot());
             statement.setString(6, entity.getPoster());
@@ -156,7 +156,7 @@ public class MovieManager implements DBEntityManager<Movie> {
         ArrayList<Movie> allMovies = new ArrayList<Movie>();
         ResultSet rs = null;
         try {
-            rs = DBHelper.executeQueryStatment(ALL_MOVIES);
+            rs = DBHelper.executeQueryStatment(SELECT_ALL_MOVIES);
             while (rs.next()) {
                 Movie movie = getMovieByResultSetLine(rs);
                 allMovies.add(movie);
@@ -166,13 +166,13 @@ public class MovieManager implements DBEntityManager<Movie> {
         return allMovies;
     }
 
-    private Movie getMovieByResultSetLine(ResultSet rs) {
+    public static Movie getMovieByResultSetLine(ResultSet rs) {
         Movie movie = new Movie();
         try {
             movie.setId(rs.getInt("movie_id"));
             movie.setName(rs.getString("name"));
             movie.setRelease_date(rs.getDate("realse_date"));
-            movie.setMovie_length(rs.getInt("mov_length"));
+            movie.setMovie_length(rs.getDouble("mov_length"));
             movie.setCategory(new MovieCategory(rs.getInt("M.cat_id"), rs.getString("C.name")));
             movie.setPlot(rs.getString("plot"));
             movie.setPoster(rs.getString("poster"));

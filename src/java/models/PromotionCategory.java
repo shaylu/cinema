@@ -21,6 +21,10 @@ public class PromotionCategory implements DBEntity {
         this.name = name;
     }
 
+    public PromotionCategory() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void setId(int id) {
         this.id = id;
     }

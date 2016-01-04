@@ -7,8 +7,8 @@ package db;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,22 +32,36 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
     }
 
-//    public ArrayList getAllMovieCatagories(){
-//        
-//        Connection conn = null;
-//
-//        boolean result = false;
-//       
-//        try{
-//            conn = DBHelper.getConnection();
-//            PreparedStatement statement = (PreparedStatement) conn.prepareStatement(SELECT_ALLCATAGORY);
-//            statement.executeQuery();
-//            result = true;
-//        }catch(ClassNotFoundException | SQLException ex){
-//            result = false;
-//            LOGGER.log(Level.SEVERE, null, ex);
-//        }
-//    }
+    public MovieCategory getMovieCatagory(ResultSet rs) throws SQLException
+    {
+        MovieCategory CatToReturn = new MovieCategory();
+        CatToReturn.setId(rs.getInt("cat_id"));
+        CatToReturn.setName(rs.getString("name"));
+        
+        return CatToReturn;
+    }
+    
+    public ArrayList<MovieCategory> getAllMovieCatagories(){
+        
+        Connection conn = null;
+        ArrayList<MovieCategory> ListToReturn = new ArrayList<>();
+        boolean result = false;
+        ResultSet rs = null;
+
+        try{
+            rs = DBHelper.executeQueryStatment(SELECT_ALLCATAGORY);
+            MovieCategory CatNode = new MovieCategory();
+            while(rs.next()){
+                ListToReturn.add(getMovieCatagory(rs));
+            }
+            result = true;
+        }catch(SQLException ex){
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+        
+        return ListToReturn;
+    }
     
     @Override
     public boolean addEntity(MovieCategory entity) {

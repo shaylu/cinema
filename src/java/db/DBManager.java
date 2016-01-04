@@ -5,6 +5,10 @@
  */
 package db;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+import static db.DBHelper.CREATE_DB;
+import static db.DBHelper.getConnection;
 import java.util.ArrayList;
 import models.Hall;
 import models.MovieCategory;
@@ -26,6 +30,7 @@ public class DBManager {
     private PromotionManager promotionManager;
     private PromotionCategoryManager promotionCategoryManager;
     private UsersManager usersManager;
+    private ReviewsManager reviewsManager;
 
     public static DBManager getInstance() {
         return instance;
@@ -41,6 +46,7 @@ public class DBManager {
         promotionManager = new PromotionManager();
         promotionCategoryManager = new PromotionCategoryManager();
         usersManager = new UsersManager();
+        reviewsManager = new ReviewsManager();
 
         initDataBase();
     }
@@ -48,15 +54,6 @@ public class DBManager {
     private void initDataBase() {
         createDB();
         creatTables();
-        /*movieCategoryManager.createTable();
-        companyManager.createTable();
-        showManager.createTable();
-        hallManager.createTable();
-        orderManager.createTable();
-        movieManager.createTable();
-        promotionManager.createTable();
-        promotionCategoryManager.createTable();
-        usersManager.createTable();*/
     }
 
     private void createDB() {
@@ -67,16 +64,51 @@ public class DBManager {
         return movieCategoryManager.addEntity(movieCategory);
     }
 
+    private void addCommand(String command, StringBuilder strBuilder) {
+        strBuilder.append(command);
+        strBuilder.append(";\n");
+    }
+
     private void creatTables() {
-        String createAllTablesStr = movieCategoryManager.getCREATE_TABLE()
-                + companyManager.getCREATE_TABLE()
-                + showManager.getCREATE_TABLE()
-                + hallManager.getCREATE_TABLE()
-                + orderManager.getCREATE_TABLE()
-                + movieManager.getCREATE_TABLE()
-                + promotionManager.getCREATE_TABLE()
-                + promotionCategoryManager.getCREATE_TABLE()
-                + usersManager.getCREATE_TABLE();
-        DBHelper.executeUpdateStatment(createAllTablesStr);
+        Connection conn = null;
+        try {
+
+            conn = DBHelper.getConnection(); // for use when db wasn't created yet
+            Statement stmt = (Statement) conn.createStatement();
+
+            stmt.executeUpdate(movieCategoryManager.getCREATE_TABLE());
+            stmt.executeUpdate(movieManager.getCREATE_TABLE());
+            stmt.executeUpdate(hallManager.getCREATE_TABLE());
+            stmt.executeUpdate(showManager.getCREATE_TABLE());
+            stmt.executeUpdate(orderManager.getCREATE_TABLE());
+            stmt.executeUpdate(reviewsManager.getCREATE_TABLE());
+            stmt.executeUpdate(companyManager.getCREATE_TABLE());
+            stmt.executeUpdate(promotionCategoryManager.getCREATE_TABLE());
+            stmt.executeUpdate(promotionManager.getCREATE_TABLE());
+            stmt.executeUpdate(usersManager.getCREATE_TABLE());
+
+        } catch (Exception e) {
+            System.out.println("Faield");
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        //StringBuilder createAllTablesStr = new StringBuilder();
+        //addCommand(movieCategoryManager.getCREATE_TABLE(), createAllTablesStr);
+//        addCommand(movieManager.getCREATE_TABLE(), createAllTablesStr);
+//        addCommand(hallManager.getCREATE_TABLE(), createAllTablesStr);
+        //  addCommand(showManager.getCREATE_TABLE(), createAllTablesStr);
+        //  addCommand(orderManager.getCREATE_TABLE(), createAllTablesStr);
+        //  addCommand(companyManager.getCREATE_TABLE(), createAllTablesStr);
+        // addCommand(promotionCategoryManager.getCREATE_TABLE(), createAllTablesStr);
+        //addCommand(promotionManager.getCREATE_TABLE(), createAllTablesStr);
+        //addCommand(usersManager.getCREATE_TABLE(), createAllTablesStr);
+        //System.out.println(createAllTablesStr.toString());
+        //DBHelper.executeUpdateStatment(createAllTablesStr.toString());
     }
 }

@@ -23,26 +23,16 @@ public class PromotionManager implements DBEntityManager<Promotion> {
 
     private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
     private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS promotions(\n"
-            + "  promo_id INT AUTO_INCREMENT,\n"
-            + "  comp_id INT NOT NULL,\n"
-            + "  promo_cat_id INT NOT NULL,\n"
+            + "  promo_id INT AUTO_INCREMENT PRIMARY KEY,comp_id INT NOT NULL,promo_cat_id INT NOT NULL,\n"
             + "  description VARCHAR(500) NULL,\n"
-            + "  exp_date DATE NULL,\n"
-            + "  promo_code VARCHAR(50) NULL,\n"
-            + "  image VARCHAR(50) NULL,\n"
-            + "  PRIMARY KEY (promo_id),\n"
+            + "  exp_date DATE NULL,promo_code VARCHAR(50) NULL,image VARCHAR(50) NULL,\n"
             + "  INDEX promo_comp_idx (comp_id ASC),\n"
             + "  INDEX promo_cat_id_idx (promo_cat_id ASC),\n"
-            + "  CONSTRAINT promo_comp\n"
-            + "    FOREIGN KEY (comp_id)\n"
-            + "    REFERENCES companies (comp_id)\n"
-            + "    ON DELETE NO ACTION\n"
-            + "    ON UPDATE NO ACTION,\n"
-            + "  CONSTRAINT promo_cat_id\n"
-            + "    FOREIGN KEY(promo_cat_id)\n"
-            + "    REFERENCES promotion_categories (promo_cat_id)\n"
-            + "    ON DELETE NO ACTION\n"
-            + "    ON UPDATE NO ACTION)";
+            + "  CONSTRAINT promo_comp FOREIGN KEY (comp_id)\n"
+            + "    REFERENCES companys (comp_id) ON DELETE NO ACTION\n"
+            + "    ON UPDATE NO ACTION, CONSTRAINT promo_cat_id\n"
+            + "    FOREIGN KEY(promo_cat_id) REFERENCES promotion_categories (promo_cat_id)\n"
+            + "    ON DELETE NO ACTION ON UPDATE NO ACTION)";
     private final static String INSERT_TABLE = "INSERT INTO promotions (comp_id, promo_cat_id, description, exp_date,"
             + "promo_code, image) values(?,?,?,?,?,?)";
     private final static String DELET_PROMOTION = "DELET from promotions WHERE promo_id = (?)";

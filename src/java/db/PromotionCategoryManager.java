@@ -24,7 +24,7 @@ public class PromotionCategoryManager implements DBEntityManager<PromotionCatego
     private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS promotion_categories(\n"
             + "  promo_cat_id INT AUTO_INCREMENT,\n"
             + "  name VARCHAR(100) NOT NULL,\n"
-            + "  PRIMARY KEY (promo_cat_id));";
+            + "  PRIMARY KEY (promo_cat_id))";
     private final static String INSERT_TABLE = "INSERT INTO promotion_categories (name) values(?)";
     private final static String UPDATE_PROMOTIONCATEGORY = "UPDATE promotion_categories SET name = ? "
             + "WHERE promo_cat_id = ?";

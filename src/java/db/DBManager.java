@@ -17,7 +17,7 @@ public class DBManager {
     private static final DBManager instance = new DBManager();
 
     private MovieCategoryManager movieCategoryManager;
-    private CopanyManager companyManager;
+    private CompanyManager companyManager;
     private HallManager hallManager;
     private OrderManager orderManager;
     private MovieManager movieManager;
@@ -33,7 +33,7 @@ public class DBManager {
     private DBManager() {
         movieCategoryManager = new MovieCategoryManager();
         showManager = new ShowsManager();
-        companyManager = new CopanyManager();
+        companyManager = new CompanyManager();
         hallManager = new HallManager();
         orderManager = new OrderManager();
         movieManager = new MovieManager();

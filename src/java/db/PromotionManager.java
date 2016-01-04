@@ -44,9 +44,11 @@ public class PromotionManager implements DBEntityManager<Promotion> {
     private final static String INSERT_TABLE = "INSERT INTO promotions (comp_id, promo_cat_id, description, exp_date,"
             + "promo_code, image) values(?,?,?,?,?,?)";
     private final static String DELET_PROMOTION = "DELET from promotions WHERE promo_id = (?)";
- private final static String UPDATE_PROMOTION = "UPDATE promotions SET comp_id = ?, promo_cat_id = ?, "
-         + "description = ?, exp_date = ?   WHERE promo_id = ?";
-  private final static String SELECT_ALL_PROMOTION ="SELECT * FROM promotions";
+    private final static String UPDATE_PROMOTION = "UPDATE promotions SET comp_id = ?, promo_cat_id = ?, "
+            + "description = ?, exp_date = ?, promo_code = ?, image = ?   WHERE promo_id = ?";
+    private final static String SELECT_ALL_PROMOTION = "SELECT * FROM (promotions P inner join companys C "
+            + "on P.comp_id = C.comp_id) inner join promotion_categories PC on PC.promo_cat_id = P.promo_cat_id";
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -88,7 +90,38 @@ public class PromotionManager implements DBEntityManager<Promotion> {
 
     @Override
     public boolean update(Promotion entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection conn = null;
+        boolean result;
+
+        try {
+            conn = DBHelper.getConnection();
+            PreparedStatement statement = (PreparedStatement) conn.prepareStatement(UPDATE_PROMOTION);
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
+
+            statement.setInt(1, entity.getCompanie().getId());
+            statement.setInt(2, entity.getPromoCategorie().getId());
+            statement.setString(3, entity.getDescription());
+            statement.setString(4, dateformatSql.format(entity.getDate()));
+            statement.setString(5, entity.getPromoCode());
+            statement.setString(6, entity.getImage());
+            statement.setInt(7,entity.getId());
+            statement.execute();
+            result = true;
+        } catch (ClassNotFoundException | SQLException ex) {
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return result;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -111,6 +144,7 @@ public class PromotionManager implements DBEntityManager<Promotion> {
                     LOGGER.log(Level.SEVERE, null, ex);
                 }
             }
-        }     }
+        }
+    }
 
 }

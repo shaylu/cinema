@@ -7,8 +7,10 @@ package db;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Promotion;
@@ -104,7 +106,7 @@ public class PromotionManager implements DBEntityManager<Promotion> {
             statement.setString(4, dateformatSql.format(entity.getDate()));
             statement.setString(5, entity.getPromoCode());
             statement.setString(6, entity.getImage());
-            statement.setInt(7,entity.getId());
+            statement.setInt(7, entity.getId());
             statement.executeUpdate();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
@@ -147,4 +149,34 @@ public class PromotionManager implements DBEntityManager<Promotion> {
         }
     }
 
+    public ArrayList<Promotion> getAllPromotion() {
+        ArrayList<Promotion> allPromotion = new ArrayList<Promotion>();
+        ResultSet rs = null;
+        try {
+            rs = DBHelper.executeQueryStatment(SELECT_ALL_PROMOTION);
+            while (rs.next()) {
+                Promotion promo = getPromotionByResultSetLine(rs);
+                allPromotion.add(promo);
+            }
+
+        } catch (Exception e) {
+        }
+        return allPromotion;
+    }
+
+    public static Promotion getPromotionByResultSetLine(ResultSet rs) {
+        Promotion promo = new Promotion();
+        try {
+            promo.setId(rs.getInt(" promo_id"));
+            promo.setCompanie(CompanyManager.getCampanyByResultSetLine(rs));
+            promo.setPromoCategorie(PromotionCategoryManager.getPromotionCategoryByResultSetLine(rs));
+            promo.setDescription(rs.getString("description"));
+            promo.setDate(rs.getDate("exp_date"));
+            promo.setPromoCode(rs.getString("promo_code"));
+            promo.setImage(rs.getString("image"));
+        } catch (Exception e) {
+        }
+        return promo;
+// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

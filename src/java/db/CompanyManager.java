@@ -126,7 +126,7 @@ public class CompanyManager implements DBEntityManager<Company> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Company getCampanyByResultSetLine(ResultSet rs) throws SQLException {
+    public static Company getCampanyByResultSetLine(ResultSet rs) throws SQLException {
         Company CompanyToReturn = new Company();
         CompanyToReturn.setId(rs.getInt("comp_id"));
         CompanyToReturn.setName(rs.getString("name"));
@@ -137,10 +137,7 @@ public class CompanyManager implements DBEntityManager<Company> {
     }
 
     public ArrayList<Company> getAllCampany() {
-
-        Connection conn = null;
         ArrayList<Company> ListToReturn = new ArrayList<>();
-        boolean result = false;
         ResultSet rs = null;
 
         try {
@@ -148,9 +145,8 @@ public class CompanyManager implements DBEntityManager<Company> {
             while (rs.next()) {
                 ListToReturn.add(getCampanyByResultSetLine(rs));
             }
-            result = true;
+          
         } catch (SQLException ex) {
-            result = false;
             LOGGER.log(Level.SEVERE, null, ex);
         }
 

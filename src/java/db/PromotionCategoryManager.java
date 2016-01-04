@@ -133,7 +133,7 @@ public class PromotionCategoryManager implements DBEntityManager<PromotionCatego
         return allPromotionCategory;
     }
 
-    public PromotionCategory getPromotionCategoryByResultSetLine(ResultSet rs) {
+    public static PromotionCategory getPromotionCategoryByResultSetLine(ResultSet rs) {
         PromotionCategory promoCat = new PromotionCategory();
         try {
             promoCat.setId(rs.getInt("promo_cat_id"));

@@ -15,9 +15,6 @@ public class MovieCategory implements DBEntity{
     protected int id;
     protected String name;
 
-    public MovieCategory(){
-        
-    }
     public MovieCategory(String name) {
         this.name = name;
     }
@@ -25,6 +22,13 @@ public class MovieCategory implements DBEntity{
     public MovieCategory(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    /**
+     *
+     */
+    public MovieCategory() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getId() {

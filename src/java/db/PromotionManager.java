@@ -44,7 +44,9 @@ public class PromotionManager implements DBEntityManager<Promotion> {
     private final static String INSERT_TABLE = "INSERT INTO promotions (comp_id, promo_cat_id, description, exp_date,"
             + "promo_code, image) values(?,?,?,?,?,?)";
     private final static String DELET_PROMOTION = "DELET from promotions WHERE promo_id = (?)";
-
+ private final static String UPDATE_PROMOTION = "UPDATE promotions SET comp_id = ?, promo_cat_id = ?, "
+         + "description = ?, exp_date = ?   WHERE promo_id = ?";
+  private final static String SELECT_ALL_PROMOTION ="SELECT * FROM promotions";
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

@@ -50,7 +50,6 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
 
         try{
             rs = DBHelper.executeQueryStatment(SELECT_ALLCATAGORY);
-            MovieCategory CatNode = new MovieCategory();
             while(rs.next()){
                 ListToReturn.add(getMovieCatagory(rs));
             }

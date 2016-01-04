@@ -15,7 +15,7 @@ import java.util.Date;
 public class Promotion implements DBEntity {
 
     protected int id;
-    protected Company companie;
+    protected Company company;
     protected PromotionCategory promoCategorie;
     protected String description;
     protected Date date;
@@ -24,7 +24,7 @@ public class Promotion implements DBEntity {
 
     public Promotion(int id, Company companie, PromotionCategory promoCategorie, String description, Date date, String promoCode, String image) {
         this.id = id;
-        this.companie = companie;
+        this.company = companie;
         this.promoCategorie = promoCategorie;
         this.description = description;
         this.date = date;
@@ -32,12 +32,16 @@ public class Promotion implements DBEntity {
         this.image = image;
     }
 
+    public Promotion() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getId() {
         return id;
     }
 
     public Company getCompanie() {
-        return companie;
+        return company;
     }
 
     public PromotionCategory getPromoCategorie() {
@@ -65,7 +69,7 @@ public class Promotion implements DBEntity {
     }
 
     public void setCompanie(Company company) {
-        this.companie = company;
+        this.company = company;
     }
 
     public void setPromoCategorie(PromotionCategory promoCategorie) {

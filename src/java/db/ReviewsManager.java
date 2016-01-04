@@ -31,7 +31,10 @@ public class ReviewsManager implements DBEntityManager<Review> {
     private final static String INSERT_TABLE = "INSERT INTO reviews (rev_id, order_id, rank, review_text,"
             + " review_date) values(?,?,?,?,?)";
     private final static String DELET_REVIEW = "DELET from reviews WHERE rev_id = (?)";
-
+    private final static String UPDATE_REVIWE = "UPDATE reviews SET order_id = ?, rank = ?, review_text = ?,"
+            + " review_date = ? WHERE rev_id = ?";
+    private final static String SELECT_ALLREVIWES = "SELECT * FROM cinema_city.reviews";
+    
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);

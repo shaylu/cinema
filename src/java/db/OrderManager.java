@@ -7,8 +7,10 @@ package db;
 
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Order;
@@ -46,8 +48,8 @@ public class OrderManager implements DBEntityManager<Order> {
     private final static String DELET_ORDER = "DELET from orders WHERE order_id = (?)";
     private final static String UPDATE_ORDER = "UPDATE orders SET client_id = ?, fname = ? , lname = ? , email = ?,"
             + " phone = ? , show_id = ?, num_of_seats = ? ,total_payment = ?, credit_card_last_digit = ?,"
-            + " exp_date_month = ?, exp_date_year = ?, order_date = ? WHERE movie_id = ?";
-    private final static String SELECT_ALL_ORDER = "SELECT * FROM cinema_city.orders";
+            + " exp_date_month = ?, exp_date_year = ?, order_date = ? WHERE order_id = ?";
+    private final static String SELECT_ALL_ORDER = "SELECT * FROM orders O inner join shows S on 'O.show_id = S.id' ";
     
     @Override
     public void createTable() {
@@ -104,10 +106,21 @@ public class OrderManager implements DBEntityManager<Order> {
         try {
             conn = DBHelper.getConnection();
             java.sql.PreparedStatement statement = conn.prepareStatement(UPDATE_ORDER);
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
+            
+            statement.setString(1, entity.getClientId());
+            statement.setString(2, entity.getFirstName());
+            statement.setString(3, entity.getLastName());
+            statement.setString(4, entity.getEmail());
+            statement.setString(5, entity.getPhoneNumber());
+            statement.setInt(6, entity.getShowId());
+            statement.setInt(7, entity.getNumOfSeats());
+            statement.setDouble(8, entity.getTotalPayment());
+            statement.setString(9, entity.getCreditCardLastDigit());
+            statement.setInt(10, entity.getExpDateMonth());
+            statement.setInt(11, entity.getExpDateYear());
+            statement.setString(12, dateformatSql.format(entity.getOrderDate()));
 
-//            statement.setString(1, entity.getName());
-//            statement.setString(2, entity.getAddress());
-//            statement.setString(3, entity.getAboutText());
             statement.executeUpdate();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
@@ -149,5 +162,45 @@ public class OrderManager implements DBEntityManager<Order> {
             }
         }
     }
+        public Order getOrderByResultSet(ResultSet rs) throws SQLException
+    {
+        Order OrderToReturn = new Order();
+        
+        OrderToReturn.setClientId(rs.getString("client_id"));
+        OrderToReturn.setFirstName(rs.getString("fname"));
+        OrderToReturn.setLastName(rs.getString("lname"));
+        OrderToReturn.setEmail(rs.getString("email"));
+        OrderToReturn.setPhoneNumber(rs.getString("phone"));
+        OrderToReturn.setShow(ShowsManager.getShowByResultSetLine(rs));
+        OrderToReturn.setNumOfSeats(rs.getInt("num_of_seats"));
+        OrderToReturn.setTotalPayment(rs.getDouble("total_payment"));
+        OrderToReturn.setCreditCardLastDigit(rs.getString("credit_card_last_digit"));
+        OrderToReturn.setExpDateMonth(rs.getInt("exp_date_month"));
+        OrderToReturn.setExpDateYear(rs.getInt("exp_date_year"));
+        OrderToReturn.setOrderDate(rs.getDate("order_date"));
 
+        OrderToReturn.setOrderDate(rs.getDate("order_date"));
+        return OrderToReturn;
+    }
+    
+    public ArrayList<Order> getAllOrders(){
+        
+        Connection conn = null;
+        ArrayList<Order> ListToReturn = new ArrayList<>();
+        boolean result = false;
+        ResultSet rs = null;
+
+        try{
+            rs = DBHelper.executeQueryStatment(SELECT_ALL_ORDER);
+            while(rs.next()){
+                ListToReturn.add(getOrderByResultSet(rs));
+            }
+            result = true;
+        }catch(SQLException ex){
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+        
+        return ListToReturn;
+    }
 }

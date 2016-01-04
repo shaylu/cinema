@@ -56,8 +56,15 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
         return result;
     }
 
+    /**
+     *
+     * @param entity
+     * @return
+     */
     @Override
     public void update(MovieCategory entity) {
+        
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

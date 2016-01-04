@@ -85,4 +85,5 @@ public class HallManager implements DBEntityManager<Hall> {
         }
     }
 
+    
 }

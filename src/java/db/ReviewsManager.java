@@ -7,8 +7,10 @@ package db;
 
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Review;
@@ -31,7 +33,10 @@ public class ReviewsManager implements DBEntityManager<Review> {
     private final static String INSERT_TABLE = "INSERT INTO reviews (rev_id, order_id, rank, review_text,"
             + " review_date) values(?,?,?,?,?)";
     private final static String DELET_REVIEW = "DELET from reviews WHERE rev_id = (?)";
-
+    private final static String UPDATE_REVIWE = "UPDATE reviews SET rev_id = ?, order_id = ?, rank = ?, review_text = ?,"
+            + " review_date = ? WHERE rev_id = ?";
+    private final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on 'R.order_id = O.id' ";//"SELECT * FROM cinema_city.reviews";
+    
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -95,5 +100,40 @@ public class ReviewsManager implements DBEntityManager<Review> {
                 }
             }
         }
+    }
+    
+        public ArrayList<Review> allReviews() {
+        
+            Connection conn = null;
+        ArrayList<Review> ListToReturn = new ArrayList<>();
+        boolean result = false;
+        ResultSet rs = null;
+
+        try{
+            rs = DBHelper.executeQueryStatment(SELECT_ALLREVIWES);
+            while(rs.next()){
+                ListToReturn.add(getShowByResultSetLine(rs));
+            }
+            result = true;
+        }catch(SQLException ex){
+            result = false;
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+        
+        return ListToReturn;
+    }
+
+    public static Review getShowByResultSetLine(ResultSet rs) {
+        Review review = new Review();
+        try {
+            review.setId(rs.getInt("rev_id"));
+            review.setOrder(OrderManager.getOrderByResultSet(rs));
+            review.setRank(rs.getDouble("rank"));
+            review.setText(rs.getString("review_text"));
+            review.setDate(rs.getDate("review_date"));
+
+        } catch (Exception e) {
+        }
+        return review;
     }
 }

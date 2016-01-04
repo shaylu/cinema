@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package db;
-
+import java.util.ArrayList;
 import models.Hall;
 import models.MovieCategory;
 
@@ -39,12 +39,12 @@ public class DBManager {
         movieManager = new MovieManager();
         promotionManager = new PromotionManager();
         promotionCategoryManager = new PromotionCategoryManager();
-       usersManager = new UsersManager();
+        usersManager = new UsersManager();
+        
         initDataBase();
     }
 
     private void initDataBase() {
-
         createDB();
         movieCategoryManager.createTable();
         companyManager.createTable();

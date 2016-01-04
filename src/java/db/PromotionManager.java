@@ -105,7 +105,7 @@ public class PromotionManager implements DBEntityManager<Promotion> {
             statement.setString(5, entity.getPromoCode());
             statement.setString(6, entity.getImage());
             statement.setInt(7,entity.getId());
-            statement.execute();
+            statement.executeUpdate();
             result = true;
         } catch (ClassNotFoundException | SQLException ex) {
             result = false;

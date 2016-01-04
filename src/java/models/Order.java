@@ -44,6 +44,10 @@ public class Order implements DBEntity {
         this.orderDate = orderDate;
     }
 
+    public Order() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public void setId(int id) {
         this.id = id;
     }

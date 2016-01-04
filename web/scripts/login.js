@@ -7,6 +7,13 @@
 $(function () {
     $("#frmLogin").submit(function (e) {
         e.preventDefault();
-        alert("Hello");
+        var user = $("#txtUsername").val();
+        var pass = $("#txtPassword").val();
+        var url = "admin/login";
+        $.ajax({url: url, data: {'user': user, 'pass': pass}, method: 'POST'}).fail(function (data) {
+            alert(data.responseText);
+        }).done(function (data) {
+            alert(data);
+        });
     });
 });

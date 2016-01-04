@@ -14,6 +14,7 @@ import java.util.List;
  * @author Dell
  */
 public class Movie implements DBEntity {
+
     protected int id;
     protected String name;
     protected Date release_date;
@@ -29,17 +30,20 @@ public class Movie implements DBEntity {
         this.name = name;
         this.release_date = release_date;
         this.movie_length = movie_length;
-        
+
 //        try {
 //            this.category = categories.stream().filter(x -> x.id == id).findFirst().get();
 //        } catch (Exception e) {
 //            this.category = null;
 //        }
-        
         this.plot = plot;
         this.poster = poster;
         this.trailer = trailer;
         this.is_recomanded = is_recomanded;
+    }
+
+    public Movie() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getId() {
@@ -113,6 +117,5 @@ public class Movie implements DBEntity {
     public void setIs_recomanded(boolean is_recomanded) {
         this.is_recomanded = is_recomanded;
     }
-    
-    
+
 }

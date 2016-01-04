@@ -7,8 +7,11 @@ package db;
 
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Movie;
@@ -36,8 +39,11 @@ public class MovieManager implements DBEntityManager<Movie> {
     private final static String INSERT_TABLE = "INSERT INTO movies (name, realse_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     private final static String DELET_MOVIE = "DELET from movies WHERE name = (?)";
-     private final static String UPDATE_MOVIE = "UPDATE movies SET name = ?, realse_date = ? , mov_length = ?,"
-             + " cat_id = ? , plot = ?, poster = ? ,trailer,is_recommended = ? WHERE movie_id = ?";
+    private final static String UPDATE_MOVIE = "UPDATE movies SET name = ?, realse_date = ? , mov_length = ?,"
+            + " cat_id = ? , plot = ?, poster = ? ,trailer,is_recommended = ? WHERE movie_id = ?";
+    private final static String ALL_MOVIES = "SELECT * FROM movies M , movies_categories C"
+            + "Join";
+
     @Override
     public void createTable() {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
@@ -84,7 +90,7 @@ public class MovieManager implements DBEntityManager<Movie> {
 
     @Override
     public boolean update(Movie entity) {
-          Connection conn = null;
+        Connection conn = null;
         boolean result;
 
         try {
@@ -115,9 +121,9 @@ public class MovieManager implements DBEntityManager<Movie> {
             }
         }
 
-       return result;
-        
-       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return result;
+
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -145,4 +151,22 @@ public class MovieManager implements DBEntityManager<Movie> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public ArrayList<Movie> allMovies() {
+        ResultSet rs = null;
+        try {
+         rs = DBHelper.executeQueryStatment(ALL_MOVIES);
+         while(rs.next()){
+             Movie movie = new Movie();
+             movie.setId(rs.getInt("movie_id"));
+             movie.setName(rs.getString("name"));
+             movie.setRelease_date(rs.getDate("realse_date"));
+             movie.setMovie_length(rs.getInt( "mov_length"));    
+             movie.setCategory(MovieCategoryManager.getMovieCategoryById(rs.getInt("cat_id")));
+             movie.setPlot(rs.);
+             movie.setIs_recomanded(rs.getBoolean("is_recomend"));
+             
+         }
+        } catch (Exception e) {
+        }
+    }
 }

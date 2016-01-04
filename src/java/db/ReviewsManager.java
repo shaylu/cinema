@@ -104,9 +104,7 @@ public class ReviewsManager implements DBEntityManager<Review> {
     
         public ArrayList<Review> allReviews() {
         
-            Connection conn = null;
         ArrayList<Review> ListToReturn = new ArrayList<>();
-        boolean result = false;
         ResultSet rs = null;
 
         try{
@@ -114,9 +112,7 @@ public class ReviewsManager implements DBEntityManager<Review> {
             while(rs.next()){
                 ListToReturn.add(getShowByResultSetLine(rs));
             }
-            result = true;
         }catch(SQLException ex){
-            result = false;
             LOGGER.log(Level.SEVERE, null, ex);
         }
         

@@ -99,9 +99,11 @@ public class AdminController {
     
     @GET
     @Path("categories")
-    public Response showCategories(@Context HttpServletRequest request){
+    public Response showCategories(@Context HttpServletRequest request) throws Exception{
         if (!isLogin(request))
             return Response.status(Response.Status.UNAUTHORIZED).build();
+        
+        throw new Exception();
     }
 
     private boolean isLogin(HttpServletRequest request) {

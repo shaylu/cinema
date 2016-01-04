@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Movie;
+import models.MovieCategory;
 
 /**
  *
@@ -41,8 +42,8 @@ public class MovieManager implements DBEntityManager<Movie> {
     private final static String DELET_MOVIE = "DELET from movies WHERE name = (?)";
     private final static String UPDATE_MOVIE = "UPDATE movies SET name = ?, realse_date = ? , mov_length = ?,"
             + " cat_id = ? , plot = ?, poster = ? ,trailer,is_recommended = ? WHERE movie_id = ?";
-    private final static String ALL_MOVIES = "SELECT * FROM movies M , movies_categories C"
-            + "Join";
+    private final static String ALL_MOVIES = "SELECT * FROM movies M inner "
+            + "Join movies_categories C on M.cat_id = C.id ";
 
     @Override
     public void createTable() {
@@ -152,21 +153,35 @@ public class MovieManager implements DBEntityManager<Movie> {
     }
 
     public ArrayList<Movie> allMovies() {
+        ArrayList<Movie> allMovies = new ArrayList<Movie>();
         ResultSet rs = null;
         try {
-         rs = DBHelper.executeQueryStatment(ALL_MOVIES);
-         while(rs.next()){
-             Movie movie = new Movie();
-             movie.setId(rs.getInt("movie_id"));
-             movie.setName(rs.getString("name"));
-             movie.setRelease_date(rs.getDate("realse_date"));
-             movie.setMovie_length(rs.getInt( "mov_length"));    
-             movie.setCategory(MovieCategoryManager.getMovieCategoryById(rs.getInt("cat_id")));
-             movie.setPlot(rs.);
-             movie.setIs_recomanded(rs.getBoolean("is_recomend"));
-             
-         }
+            rs = DBHelper.executeQueryStatment(ALL_MOVIES);
+            while (rs.next()) {
+                Movie movie = getMovieByResultSetLine(rs);
+                allMovies.add(movie);
+            }
         } catch (Exception e) {
         }
+        return allMovies;
     }
+
+    private Movie getMovieByResultSetLine(ResultSet rs) {
+        Movie movie = new Movie();
+        try {
+            movie.setId(rs.getInt("movie_id"));
+            movie.setName(rs.getString("name"));
+            movie.setRelease_date(rs.getDate("realse_date"));
+            movie.setMovie_length(rs.getInt("mov_length"));
+            movie.setCategory(new MovieCategory(rs.getInt("M.cat_id"), rs.getString("C.name")));
+            movie.setPlot(rs.getString("plot"));
+            movie.setPoster(rs.getString("poster"));
+            movie.setTrailer(rs.getString("trailer"));
+            movie.setIs_recomanded(rs.getBoolean("is_recommended"));
+
+        } catch (Exception e) {
+        }
+        return movie;
+    }
+
 }

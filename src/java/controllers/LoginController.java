@@ -30,6 +30,7 @@ import javax.ws.rs.core.UriBuilder;
  */
 @Path("admin")
 public class LoginController {
+
     @GET
     @Path("")
     public String getLogin(@Context ServletContext context, @QueryParam("user") String user, @QueryParam("pass") String pass, @Context HttpServletResponse response) {
@@ -37,14 +38,14 @@ public class LoginController {
             // login
             login(user, pass);
             response.setContentType("application/json");
-            
+
             Gson gson = new Gson();
-            JsonObject obj  = new JsonObject();
+            JsonObject obj = new JsonObject();
             obj.addProperty("user", user);
             obj.addProperty("pass", pass);
-            
+
             return obj.toString();
-            
+
         } else {
             StringBuilder res = new StringBuilder();
             res.append(LayoutHelper.getHeader());
@@ -66,6 +67,9 @@ public class LoginController {
     }
 
     private String login(String user, String pass) {
-        return "";
+        try {
+            
+        } catch (Exception ex) {
+        }
     }
 }

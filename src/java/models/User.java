@@ -7,6 +7,7 @@ package models;
 
 import db.DBEntity;
 import db.DBEntityManager;
+import java.sql.ResultSet;
 import org.w3c.dom.Entity;
 
 /**
@@ -68,5 +69,4 @@ public class User implements DBEntity {
     public void setFldLname(String fldLname) {
         this.fldLname = fldLname;
     }
-
 }

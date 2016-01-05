@@ -8,8 +8,12 @@ package controllers;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import db.MovieCategoryManager;
 import db.UsersManager;
+import db.mysql.DbManager;
 import html.LayoutHelper;
+import java.io.Console;
+import static java.lang.System.console;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import models.MovieCategory;
 import models.User;
 
 /**
@@ -40,6 +45,17 @@ import models.User;
  */
 @Path("admin")
 public class AdminController {
+
+    db.mysql.DbManager db;
+
+    public AdminController() {
+        try {
+            db = new DbManager();
+        } catch (Exception e) {
+            String txt;
+            txt = e.getMessage();
+        }
+    }
 
     @GET
     @Path("")
@@ -83,13 +99,13 @@ public class AdminController {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("Username", user);
                 session.setAttribute("UserID", userFromDB.getFldUserId());
-                
+
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("UserID", userFromDB.getFldUserId());
                 jsonObject.addProperty("Username", userFromDB.getFldUserName());
-                
+
                 return Response.status(Response.Status.OK).entity(jsonObject.toString()).build();
-                
+
             } catch (Exception ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Username or password is invalid.").build();
             }
@@ -98,56 +114,73 @@ public class AdminController {
         }
 
     }
-    
+
+    @GET
+    @Path("users/add_default")
+    public Response getLoginView(@Context HttpServletRequest request) throws URISyntaxException {
+        int result;
+        try {
+             result = db.getUsersManager().addDefaultValues();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to add default users, " + e.getMessage()).build();
+        }
+        
+        return Response.status(Response.Status.OK).entity("Added " + result + " new users to db.").build();
+    }
+
     // CATEGORIES 
-    
     @GET
     @Path("categories/all")
-    public Response getAllCategories(@Context HttpServletRequest request) throws Exception{
+    public Response getAllCategories(@Context HttpServletRequest request) throws Exception {
 //        if (!isLogin(request))
 //            return Response.status(Response.Status.UNAUTHORIZED).build();
-        
-       return Response.status(Response.Status.OK).entity("Categories!!!!!").build();
-    }
-    
-    @POST
-    @Path("categories/add")
-    public Response addNewCategory(@Context HttpServletRequest request, @FormParam("catName") String name) throws Exception{
-        if (!isLogin(request))
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        
+
         return Response.status(Response.Status.OK).entity("Categories!!!!!").build();
     }
-    
+
+    @POST
+    @Path("categories/add")
+    public Response addNewCategory(@Context HttpServletRequest request, @FormParam("catName") String name) throws Exception {
+//        if (!isLogin(request)) {
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+//        }
+
+        try {
+//            db.
+//            db_manager.getMovieCategoryManager().addEntity(new MovieCategory(name));
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).build();
+    }
+
     @GET
     @Path("categories")
     public Response adminCategories(@Context HttpServletRequest request) {
 //        if (!isLogin(request))
 //            return Response.status(Response.Status.UNAUTHORIZED).build();
-        
+
         views.admin.AdminCategoriesView view = new views.admin.AdminCategoriesView();
         return Response.status(Response.Status.OK).entity(view.getView()).build();
     }
-    
-    
+
     // MOVIES
-   
     @GET
     @Path("movies")
     public Response adminMovies(@Context HttpServletRequest request) {
 //        if (!isLogin(request))
 //            return Response.status(Response.Status.UNAUTHORIZED).build();
         ArrayList<models.MovieCategory> categories = new ArrayList<>();
-        
-        
+
         views.admin.AdminMoviesView view = new views.admin.AdminMoviesView(categories);
         return Response.status(Response.Status.OK).entity(view.getView()).build();
     }
-    
+
     private boolean isLogin(HttpServletRequest request) {
         return request.getSession().getAttribute("UserID") != null;
     }
-    
+
     @POST
     @Path("movies/add")
     public Response addNewMovie(
@@ -160,10 +193,10 @@ public class AdminController {
             @FormParam("poster") String poster,
             @FormParam("trailer") String trailer,
             @FormParam("is_recommanded") boolean is_recommanded
-        ) throws Exception {
+    ) throws Exception {
 //        if (!isLogin(request))
 //            return Response.status(Response.Status.UNAUTHORIZED).build();
-        
+
         return Response.status(Response.Status.OK).entity("movies!!!!!").build();
     }
 }

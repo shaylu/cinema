@@ -21,13 +21,8 @@ import models.Company;
 public class CompanyManager implements DBEntityManager<Company> {
 
     private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companies (\n"
-            + "  comp_id INT AUTO_INCREMENT ,\n"
-            + "  name VARCHAR(50) NOT NULL,\n"
-            + "  address VARCHAR(250) NOT NULL,\n"
-            + "  about_text VARCHAR(500) NULL,\n"
-            + "  PRIMARY KEY (comp_id),\n"
-            + "  UNIQUE INDEX comp_id_UNIQUE (comp_id ASC))";
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companys (comp_id INT AUTO_INCREMENT PRIMARY KEY"
+            + " ,name VARCHAR(50) NOT NULL,address VARCHAR(250) NOT NULL, about_text VARCHAR(500) NULL)";
 
     private final static String INSERT_TABLE = "INSERT INTO companies (name, address, about_text) values(?,?,?)";
     private final static String DELET_COMPANY = "DELET from companies WHERE name = (?)";

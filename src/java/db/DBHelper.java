@@ -42,6 +42,7 @@ public class DBHelper {
             Statement stmt = (Statement) conn.createStatement();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
+                 
         } finally {
             try {
                 if (conn != null) {

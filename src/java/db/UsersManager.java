@@ -22,12 +22,9 @@ public class UsersManager implements DBEntityManager<User> {
 
     private static final Logger LOGGER = Logger.getLogger(UsersManager.class.getName());
     private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (\n"
-            + "  fldUserId INT NOT NULL AUTO_INCREMENT,\n"
-            + "  fldPassword VARCHAR(50) NOT NULL,\n"
-            + "  fldUserName VARCHAR(50) NOT NULL UNIQUE,\n"
-            + "  fldFname VARCHAR(50) NOT NULL,\n"
-            + "  fldLname VARCHAR(50) NOT NULL,\n"
-            + "  PRIMARY KEY (fld_user_id))";
+            + "  fldUserId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,fldPassword VARCHAR(50) NOT NULL,\n"
+            + "  fldUserName VARCHAR(50) NOT NULL UNIQUE,fldFname VARCHAR(50) NOT NULL,\n"
+            + "  fldLname VARCHAR(50) NOT NULL)";
     private final static String INSERT_TABLE = "INSERT INTO users (fld_user_id, fld_password, fld_fname, fld_lname)"
             + " values(?,?,?,?,?)";
     private final static String DELET_USER = "DELET from users WHERE fld_user_id = (?)";

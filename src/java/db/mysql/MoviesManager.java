@@ -25,7 +25,7 @@ public class MoviesManager extends DbManagerEntity {
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.id ";
     public static final String SELECT_MOVIE_BY_ID = "";
-    
+    public static final String GET_MOVIE_QUERY ="SELECT * FROM movies WHER movie_id = ?";
     public enum ShowTime {
 
         DONT_CARE, MORNING, NOON, EVENING, NEXT_3_HOURS;

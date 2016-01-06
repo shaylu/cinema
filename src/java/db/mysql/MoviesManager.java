@@ -24,6 +24,7 @@ public class MoviesManager extends DbManagerEntity {
     public static final String INSERT_QUERY = "INSERT INTO movies (name, realse_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.id ";
+    public static final String SELECT_MOVIE_BY_ID = "";
     
     public enum ShowTime {
 
@@ -53,6 +54,7 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public Movie getMovie(int id) {
+        
         throw new UnsupportedOperationException();
     }
 

@@ -7,6 +7,7 @@ package db.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -37,6 +38,15 @@ public class DbManager implements AutoCloseable {
     public DbManager() throws ClassNotFoundException, SQLException, Exception {
         initDb();
         usersManager = new UsersManager(this);
+        movieCategoriesManager = new MovieCategoriesManager(this);
+        moviesManager = new MoviesManager(this);
+        hallsManager = new HallsManager(this);
+        showsManager = new ShowsManager(this);
+        ordersManager = new OrdersManager(this);
+        promoCompaniesManager = new PromoCompaniesManager(this);
+        promoCategoriesManager = new PromoCategoriesManager(this);
+        promosManager = new PromosManager(this);
+        reviewsManager = new ReviewsManager(this);
     }
 
     public MovieCategoriesManager getMovieCategoriesManager() {
@@ -91,7 +101,7 @@ public class DbManager implements AutoCloseable {
         Class.forName(MySqlClassName);
         return DriverManager.getConnection(MySqlHost + db_name, MySqlUsername, MySqlPassword);
     }
-    
+
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName(MySqlClassName);
         return DriverManager.getConnection(MySqlHost + DbName, MySqlUsername, MySqlPassword);
@@ -105,11 +115,10 @@ public class DbManager implements AutoCloseable {
 
         return result;
     }
-    
 
     private void createSchema() throws SQLException, InterruptedException, ClassNotFoundException {
         executeSql("", "CREATE SCHEMA IF NOT EXISTS CinemaCity;");
-        executeSql(DbName, "CREATE TABLE IF NOT EXISTS movie_categories (cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL);");
+        executeSql(DbName, "CREATE TABLE IF NOT EXISTS movie_categories (cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL UNIQUE);");
         executeSql(DbName, "CREATE TABLE IF NOT EXISTS movies (movie_id INT AUTO_INCREMENT ,\n"
                 + "  name VARCHAR(45) NOT NULL,\n"
                 + "  release_date DATE NULL,\n"

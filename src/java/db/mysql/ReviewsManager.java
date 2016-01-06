@@ -10,5 +10,7 @@ package db.mysql;
  * @author shay.lugasi
  */
 public class ReviewsManager extends DbManagerEntity {
-    
+    public ReviewsManager(DbManager manager) {
+        this.manager = manager;
+    }
 }

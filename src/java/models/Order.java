@@ -14,19 +14,19 @@ import java.util.Date;
  */
 public class Order implements DBEntity {
 
-    protected int id;
-    protected String clientId;
-    protected String firstName;
-    protected String lastName;
-    protected String email;
-    protected String phoneNumber;
-    protected Show show;
-    protected int numOfSeats;
-    protected double totalPayment;
-    protected String creditCardLastDigit;
-    protected int expDateMonth;
-    protected int expDateYear;
-    protected Date orderDate;
+    public int id;
+    public String clientId;
+    public String firstName;
+    public String lastName;
+    public String email;
+    public String phoneNumber;
+    public Show show;
+    public int numOfSeats;
+    public double totalPayment;
+    public String creditCardLastDigit;
+    public int expDateMonth;
+    public int expDateYear;
+    public Date orderDate;
 
     public Order(int id, String clientId, String firstName, String lastName, String email, String phoneNumber, Show show, int numOfSeats, double totalPayment, String creditCardLastDigit, int expDateMonth, int expDateYear, Date orderDate) {
         this.id = id;

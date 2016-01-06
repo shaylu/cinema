@@ -10,5 +10,7 @@ package db.mysql;
  * @author shay.lugasi
  */
 public class MoviesManager extends DbManagerEntity {
-    
+    public MoviesManager(DbManager manager) {
+        this.manager = manager;
+    }
 }

@@ -13,8 +13,8 @@ import db.DBEntity;
  */
 public class Hall implements DBEntity {
 
-    protected int id;
-    protected int num_of_seats;
+    public int id;
+    public int num_of_seats;
 
     public Hall(int id, int num_of_seats) {
         this.id = id;

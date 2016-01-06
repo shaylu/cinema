@@ -10,5 +10,7 @@ package db.mysql;
  * @author shay.lugasi
  */
 public class PromoCategoriesManager extends DbManagerEntity {
-    
+    public PromoCategoriesManager(DbManager manager) {
+        this.manager = manager;
+    }
 }

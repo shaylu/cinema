@@ -14,11 +14,11 @@ import java.util.Date;
  */
 public class Review implements DBEntity {
 
-    protected int id;
-    protected Order order;
-    protected double rank;
-    protected String text;
-    protected Date date;
+    public int id;
+    public Order order;
+    public double rank;
+    public String text;
+    public Date date;
 
     public Review() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

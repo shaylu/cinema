@@ -15,15 +15,15 @@ import java.util.List;
  */
 public class Movie implements DBEntity {
 
-    protected int id;
-    protected String name;
-    protected Date release_date;
-    protected double movie_length;
-    protected MovieCategory category;
-    protected String plot;
-    protected String poster;
-    protected String trailer;
-    protected boolean is_recomanded;
+    public int id;
+    public String name;
+    public Date release_date;
+    public double movie_length;
+    public MovieCategory category;
+    public String plot;
+    public String poster;
+    public String trailer;
+    public boolean is_recomanded;
 
     public Movie(String name, Date release_date, int movie_length, String plot, String poster, String trailer, MovieCategory category,boolean is_recomanded) {
         

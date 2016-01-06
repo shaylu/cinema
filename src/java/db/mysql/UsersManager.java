@@ -7,6 +7,7 @@ package db.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
@@ -18,9 +19,22 @@ public class UsersManager extends DbManagerEntity {
 
     private static final String INSERT_QUERY = "INSERT INTO users (fldUserName, fldPassword, fldFname, fldLname)"
             + " values(?,?,?,?)";
+    private static final String LOGIN = "SELECT fldUserId FROM users WHERE fldUserName = (?) AND fldPassword = (?)";
+    private static final String GET_USER_ID = "SELECT fldUserId FROM users WHERE fldUserName = (?)";
 
     public UsersManager(DbManager manager) {
         this.manager = manager;
+    }
+
+    public boolean userExist(String username, String password) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(LOGIN);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet rs = statement.executeQuery();
+            int numberRows = getNumberRows(rs);
+            return numberRows > 0;
+        }
     }
 
     public int add(String username, String password, String fname, String lname) throws ClassNotFoundException, SQLException {
@@ -40,5 +54,19 @@ public class UsersManager extends DbManagerEntity {
         result += add("efrat", "efrat", "Efrat", "Shaul");
         result += add("shay", "shay", "Shay", "Lugassy");
         return result;
+    }
+
+    public int getUserId(String username) throws ClassNotFoundException, SQLException, Exception {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_USER_ID);
+            statement.setString(1, username);
+            ResultSet rs = statement.executeQuery();
+            try {
+                rs.next();
+                return rs.getInt("fldUserId");
+            } catch (Exception e) {
+                throw e;
+            }
+        }
     }
 }

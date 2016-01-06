@@ -14,6 +14,16 @@ $(function () {
             alert(data.responseText);
         }).done(function (data) {
             alert(data);
+            document.location = "admin/home";
+        });
+    });
+    
+    $("#createDefault").click(function() {
+        var url = "admin/users/add_default";
+        $.ajax({url: url, method: 'POST'}).fail(function (data) {
+            alert(data.responseText);
+        }).done(function (data) {
+            alert(data);
         });
     });
 });

@@ -10,5 +10,7 @@ package db.mysql;
  * @author shay.lugasi
  */
 public class HallsManager extends DbManagerEntity {
-    
+    public HallsManager(DbManager manager) {
+        this.manager = manager;
+    }
 }

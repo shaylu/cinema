@@ -14,12 +14,12 @@ import java.util.Date;
  */
 public class Show implements DBEntity {
 
-    protected int id;
-    protected Movie movie;
-    protected Hall hall;
-    protected Date date;
-    protected int num_of_sets_left;
-    protected double price_per_seate;
+    public int id;
+    public Movie movie;
+    public Hall hall;
+    public Date date;
+    public int num_of_sets_left;
+    public double price_per_seate;
 
     public Show(int id, Movie movie, Hall hall, Date date, int num_of_sets_left, double price_per_seate) {
         this.id = id;

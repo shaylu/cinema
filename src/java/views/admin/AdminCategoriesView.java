@@ -18,6 +18,7 @@ public class AdminCategoriesView implements ICinemaView {
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
+        res.append("<p><button id=\"btnAddDefualtCategories\">Add Default Categories</button></p>");
         res.append("<h1>Admin > Categories</h1>\n"
                 + "<h2>Categories</h2>\n"
                 + "<div id=\"divAllCategories\"></div>\n"

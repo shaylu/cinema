@@ -13,8 +13,8 @@ import db.DBEntity;
  */
 public class PromotionCategory implements DBEntity {
 
-    protected int id;
-    protected String name;
+    public int id;
+    public String name;
 
     public PromotionCategory(int id, String name) {
         this.id = id;

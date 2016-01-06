@@ -29,7 +29,11 @@ public class MoviesManager extends DbManagerEntity {
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "";
     public static final String GET_MOVIE_QUERY = "SELECT * FROM movies WHERE movie_id = ?";
-    private final static String DELET_MOVIE = "DELETE from movies WHERE movie_id = (?)";
+    public final static String DELET_MOVIE = "DELETE from movies WHERE movie_id = (?)";
+    public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies where cat_id = ? and trailer != null and name like '%?'  ";
+    public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies where cat_id = ? and trailer = null and name like '%?'  ";
+    public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies where trailer != null and name like '%?'  ";
+    public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies where trailer = null and name like '%?'  ";
 
     public enum ShowTime {
 
@@ -68,40 +72,6 @@ public class MoviesManager extends DbManagerEntity {
         }
     }
 
-    public List<Movie> getAll() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean delete(int mov_id) throws SQLException, ClassNotFoundException {
-        boolean result = false;
-        try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(DELET_MOVIE);
-            statement.setInt(1, mov_id);
-            statement.executeUpdate(DELET_MOVIE);
-            result = true;
-        }
-        return result;
-    }
-
-    public List<Movie> getRecommended() throws SQLException, ClassNotFoundException {
-        ArrayList<Movie> result = new ArrayList<>();
-        try (Connection conn = manager.getConnection()) {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_ALL);
-            while (rs.next()) {
-                Movie mc = createMovieFromMySql(rs);
-                result.add(mc);
-            }
-        }
-        return result;
-    }
-
-    // if cat_id == 0 then it dosen't matter what category
-    // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
-    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended, ShowTime show_time) {
-        throw new UnsupportedOperationException();
-    }
-
     public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
         Movie result = new Movie();
         result.setId(rs.getInt("movie_id"));
@@ -116,4 +86,61 @@ public class MoviesManager extends DbManagerEntity {
 
         return result;
     }
+
+    public List<Movie> getAll() throws ClassNotFoundException, SQLException {
+        ArrayList<Movie> result = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(SELECT_ALL);
+            while (rs.next()) {
+                Movie mc = createMovieFromMySql(rs);
+                result.add(mc);
+            }
+        }
+        return result;
+    }
+
+    public boolean delete(int mov_id) throws SQLException, ClassNotFoundException {
+        boolean result = false;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(DELET_MOVIE);
+            statement.setInt(1, mov_id);
+            statement.executeUpdate(DELET_MOVIE);
+            result = true;
+        }
+        return result;
+    }
+
+    public List<Movie> getRecommended() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    // if cat_id == 0 then it dosen't matter what category
+    // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
+    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
+        try (Connection conn = manager.getConnection()) {
+
+            if (cat_id != 0 && has_trailer) {
+                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
+                statement.setInt(1, cat_id);
+                statement.setBoolean(2, is_recommended);
+                 statement.setString(3, keyword);
+            } else if (cat_id != 0 && !has_trailer) {
+                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
+                statement.setInt(1, cat_id);
+                statement.setBoolean(2, is_recommended);
+                 statement.setString(3, keyword);
+            } else if (cat_id == 0 && has_trailer) {
+                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
+                statement.setBoolean(1, is_recommended);
+                 statement.setString(2, keyword);
+            } else if (cat_id == 0 && !has_trailer) {
+                 PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
+                statement.setBoolean(1, is_recommended);
+                 statement.setString(2, keyword);
+            }
+        }
+        throw new UnsupportedOperationException();
+    }
+
 }

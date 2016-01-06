@@ -46,6 +46,7 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     // if cat_id == 0 then it dosen't matter what category
+    // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
     public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended, ShowTime show_time) {
         throw new UnsupportedOperationException();
     }

@@ -5,11 +5,13 @@
  */
 package db.mysql;
 
+import static db.OrderManager.getOrderByResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import models.Order;
@@ -89,17 +91,25 @@ public class OrdersManager extends DbManagerEntity {
         OrderToReturn.setExpDateMonth(rs.getInt("exp_date_month"));
         OrderToReturn.setExpDateYear(rs.getInt("exp_date_year"));
         OrderToReturn.setOrderDate(rs.getDate("order_date"));
-
-        OrderToReturn.setOrderDate(rs.getDate("order_date"));
         return OrderToReturn;
     }
 
     public List<Order> getAll() throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
+        
+        ArrayList<Order> ListToReturn = new ArrayList<Order>();
+        
+        try (Connection conn = manager.getConnection()){
+            PreparedStatement statement = conn.prepareStatement(SELECT_ALL);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ListToReturn.add(getOrderByResultSet(rs));
+            }
+        }
+        return ListToReturn;
     }
 
     public List<Order> getAllByMovie(int movie_id) throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException();
     }
 
     public List<Order> getAllByShow(int show_id) throws ClassNotFoundException, SQLException {

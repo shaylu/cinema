@@ -31,7 +31,6 @@ public class Show implements DBEntity {
     }
 
     public Show() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void setId(int show_id) {

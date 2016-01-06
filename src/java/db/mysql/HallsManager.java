@@ -5,17 +5,14 @@
  */
 package db.mysql;
 
-import static db.mysql.MovieCategoriesManager.INSERT_QUERY;
-import static db.mysql.MovieCategoriesManager.SELECT_ALL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import models.Hall;
-import models.MovieCategory;
 
 /**
  *
@@ -23,50 +20,63 @@ import models.MovieCategory;
  */
 public class HallsManager extends DbManagerEntity {
 
-    public final static String INSERT_OUERY = "INSERT INTO hall  (num_of_seats) values(?)";
-    public final static String DELET_HALL = "DELET from hall WHERE hall_id = (?)";
-    public final static String UPDATE_HALL = "UPDATE HALL SET  num_of_seats = ? WHERE hall_id = ?";
-    public final static String SELECT_ALL_HALLS = "SELECT * FROM hall";
+    public static final String INSERT_QUERY = "INSERT INTO halls (hall_id, num_of_seats) values(?,?);";
+    public static final String GET_BY_ID = "SELECT TOP 1 * FROM halls WHERE hall_id = (?);";
+    public static final String GET_ALL = "SELECT * FROM halls;";
 
-    public HallsManager(DbManager manager) {
+    public HallsManager(DbManager manager) throws ClassNotFoundException, SQLException {
         this.manager = manager;
     }
 
-    public int add(int numOfSeats) throws ClassNotFoundException, SQLException {
+    public int add(int id, int num_of_seats) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
-            statement.setInt(1, numOfSeats);
+            statement.setInt(1, id);
+            statement.setInt(2, num_of_seats);
             return statement.executeUpdate();
+        }
+    }
+
+    public Hall get(int id) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_BY_ID);
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+
+            rs.next();
+            Hall result = createHallFromMySql(rs);
+            return result;
+        }
+    }
+
+    public List<Hall> getaAll() throws ClassNotFoundException, SQLException {
+
+        try (Connection conn = manager.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(GET_ALL);
+            List<Hall> result = new ArrayList<>();
+            while (rs.next()) {
+                result.add(createHallFromMySql(rs));
+            }
+
+            return result;
         }
     }
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {
         int result = 0;
-        result += add(30);
-        result += add(110);
-        result += add(70);
-        result += add(50);
+        result += add(1, 100);
+        result += add(2, 35);
+        result += add(3, 50);
+        result += add(4, 80);
+        result += add(5, 100);
         return result;
     }
 
-    public List<Hall> getAll() throws ClassNotFoundException, SQLException {
-
-        ArrayList<Hall> result = new ArrayList<>();
-        try (Connection conn = manager.getConnection()) {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_ALL);
-            while (rs.next()) {
-                Hall mc = createHallFromMySql(rs);
-                result.add(mc);
-            }
-        }
-
-        return result;
-    }
-
-    private Hall createHallFromMySql(ResultSet rs) throws SQLException {
+    public Hall createHallFromMySql(ResultSet rs) throws SQLException {
         Hall result = new Hall();
-        result.setId(rs.getInt("Hall_id"));
+        result.setId(rs.getInt("hall_id"));
         result.setNumOfSeats(rs.getInt("num_of_seats"));
         return result;
     }

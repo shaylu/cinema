@@ -22,6 +22,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
 
     public static final String INSERT_QUERY = "INSERT INTO movie_categories (name) values(?)";
     public static final String SELECT_ALL = "SELECT * FROM movie_categories";
+    public static final String SELECT_MOVIE_CATEGORY = "SELECT * FROM movie_categories WHERE cat_id = (?)";
 
     public MovieCategoriesManager(DbManager manager) {
         this.manager = manager;
@@ -54,6 +55,18 @@ public class MovieCategoriesManager extends DbManagerEntity {
                 MovieCategory mc = createMovieCtaegoryFromMySql(rs);
                 result.add(mc);
             }
+        }
+
+        return result;
+    }
+
+    public MovieCategory getMovieCategoryById(int id) throws SQLException, ClassNotFoundException {
+        MovieCategory result;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_CATEGORY);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery(SELECT_MOVIE_CATEGORY);
+            result = createMovieCtaegoryFromMySql(rs);
         }
 
         return result;

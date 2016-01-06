@@ -42,6 +42,7 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public List<Movie> getRecommended() {
+        //
         throw new UnsupportedOperationException();
     }
 

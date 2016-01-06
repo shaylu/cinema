@@ -6,27 +6,20 @@
 package models;
 
 import db.DBEntity;
+import java.sql.ResultSet;
 
-/**
- *
- * @author Dell
- */
 public class MovieCategory implements DBEntity{
+
+    public static MovieCategory getMovieCategory(ResultSet rs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     protected int id;
     protected String name;
 
     public MovieCategory(String name) {
         this.name = name;
     }
-    
-    public MovieCategory(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
-    /**
-     *
-     */
     public MovieCategory() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

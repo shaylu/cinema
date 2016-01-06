@@ -24,11 +24,11 @@ public class CompanyManager implements DBEntityManager<Company> {
     private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS companys (comp_id INT AUTO_INCREMENT PRIMARY KEY"
             + " ,name VARCHAR(50) NOT NULL,address VARCHAR(250) NOT NULL, about_text VARCHAR(500) NULL)";
 
-    private final static String INSERT_TABLE = "INSERT INTO companys (name, address, about_text) values(?,?,?)";
-    private final static String DELET_COMPANY = "DELET from companys WHERE name = (?)";
-    private final static String UPDATE_COMPANY = "UPDATE companys SET name = ?, address = ?, about_text = ?"
+    private final static String INSERT_TABLE = "INSERT INTO companies (name, address, about_text) values(?,?,?)";
+    private final static String DELET_COMPANY = "DELET from companies WHERE name = (?)";
+    private final static String UPDATE_COMPANY = "UPDATE companies SET name = ?, address = ?, about_text = ?"
             + " WHERE comp_id = ?";
-    private final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companys";
+    private final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companies";
 
     public static String getCREATE_TABLE() {
         return CREATE_TABLE;

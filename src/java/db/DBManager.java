@@ -64,11 +64,6 @@ public class DBManager {
         return movieCategoryManager.addEntity(movieCategory);
     }
 
-    private void addCommand(String command, StringBuilder strBuilder) {
-        strBuilder.append(command);
-        strBuilder.append(";\n");
-    }
-
     private void creatTables() {
         Connection conn = null;
         try {

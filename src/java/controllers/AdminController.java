@@ -12,6 +12,8 @@ import db.UsersManager;
 import html.LayoutHelper;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -97,19 +99,71 @@ public class AdminController {
 
     }
     
+    // CATEGORIES 
+    
     @GET
-    @Path("categories")
-    public Response showCategories(@Context HttpServletRequest request) throws Exception{
+    @Path("categories/all")
+    public Response getAllCategories(@Context HttpServletRequest request) throws Exception{
+//        if (!isLogin(request))
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+        
+       return Response.status(Response.Status.OK).entity("Categories!!!!!").build();
+    }
+    
+    @POST
+    @Path("categories/add")
+    public Response addNewCategory(@Context HttpServletRequest request, @FormParam("catName") String name) throws Exception{
         if (!isLogin(request))
             return Response.status(Response.Status.UNAUTHORIZED).build();
         
-        throw new Exception();
+        return Response.status(Response.Status.OK).entity("Categories!!!!!").build();
     }
-
+    
+    @GET
+    @Path("categories")
+    public Response adminCategories(@Context HttpServletRequest request) {
+//        if (!isLogin(request))
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+        
+        views.admin.AdminCategoriesView view = new views.admin.AdminCategoriesView();
+        return Response.status(Response.Status.OK).entity(view.getView()).build();
+    }
+    
+    
+    // MOVIES
+   
+    @GET
+    @Path("movies")
+    public Response adminMovies(@Context HttpServletRequest request) {
+//        if (!isLogin(request))
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+        ArrayList<models.MovieCategory> categories = new ArrayList<>();
+        
+        
+        views.admin.AdminMoviesView view = new views.admin.AdminMoviesView(categories);
+        return Response.status(Response.Status.OK).entity(view.getView()).build();
+    }
+    
     private boolean isLogin(HttpServletRequest request) {
-        if (request.getSession().getAttribute("UserID") != null)
-            return true;
-        else
-            return false;
+        return request.getSession().getAttribute("UserID") != null;
+    }
+    
+    @POST
+    @Path("movies/add")
+    public Response addNewMovie(
+            @Context HttpServletRequest request,
+            @FormParam("name") String name,
+            @FormParam("release_date") Date release_date,
+            @FormParam("mov_length") int mov_length,
+            @FormParam("cat_id") int cat_id,
+            @FormParam("plot") String plot,
+            @FormParam("poster") String poster,
+            @FormParam("trailer") String trailer,
+            @FormParam("is_recommanded") boolean is_recommanded
+        ) throws Exception {
+//        if (!isLogin(request))
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+        
+        return Response.status(Response.Status.OK).entity("movies!!!!!").build();
     }
 }

@@ -26,6 +26,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
     private final static String DELET_CATEGORY = "DELET from movies_categories WHERE name = (?)";
     private final static String UPDATE_MOVIECATAGORY = "UPDATE movies_categories SET name = ? WHERE cat_id = ?";
     private final static String SELECT_ALLCATAGORY = "SELECT * FROM cinema_city.movies_categories";
+    private final static String SELECT_CATEGORYBYNAME = "SELECT cat_id from movies_categories where name = ?";
 
     public static String getCREATE_TABLE() {
         return CREATE_TABLE;
@@ -36,15 +37,25 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
     }
 
-    public MovieCategory getMovieCatagory(ResultSet rs) throws SQLException {
+    public static MovieCategory getMovieCategory(ResultSet rs) throws SQLException {
         MovieCategory CatToReturn = new MovieCategory();
         CatToReturn.setId(rs.getInt("cat_id"));
         CatToReturn.setName(rs.getString("name"));
 
         return CatToReturn;
     }
+    
+    public static MovieCategory getMovieCategoryByName(String catName) throws SQLException{
+       // Action, Comedy,Drama,Sci-Fi
+       MovieCategory movieCatToReturn = new MovieCategory();
+       ResultSet rs = null;
 
-    public ArrayList<MovieCategory> getAllMovieCatagories() {
+       rs = DBHelper.executeQueryStatment(SELECT_ALLCATAGORY);
+       movieCatToReturn = getMovieCategory(rs);
+       return movieCatToReturn;
+    }
+
+    public ArrayList<MovieCategory> getAllMovieCategories() {
 
         Connection conn = null;
         ArrayList<MovieCategory> ListToReturn = new ArrayList<>();
@@ -54,7 +65,7 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
         try {
             rs = DBHelper.executeQueryStatment(SELECT_ALLCATAGORY);
             while (rs.next()) {
-                ListToReturn.add(getMovieCatagory(rs));
+                ListToReturn.add(getMovieCategory(rs));
             }
             result = true;
         } catch (SQLException ex) {
@@ -94,11 +105,6 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
         return result;
     }
 
-    /**
-     *
-     * @param entity
-     * @return
-     */
     @Override
     public boolean update(MovieCategory entity) {
 
@@ -149,8 +155,6 @@ public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
                 }
             }
         }
-
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

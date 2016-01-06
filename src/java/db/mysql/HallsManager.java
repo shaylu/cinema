@@ -23,7 +23,6 @@ import models.MovieCategory;
  */
 public class HallsManager extends DbManagerEntity {
 
-    // public final static String CREATE_TABLE = " CREATE TABLE IF NOT EXISTS hall (hall_id INT NOT NULL AUTO_INCREMENT, num_of_seats INT ZEROFILL NOT NULL, PRIMARY KEY (hall_id))";
     public final static String INSERT_OUERY = "INSERT INTO hall  (num_of_seats) values(?)";
     public final static String DELET_HALL = "DELET from hall WHERE hall_id = (?)";
     public final static String UPDATE_HALL = "UPDATE HALL SET  num_of_seats = ? WHERE hall_id = ?";

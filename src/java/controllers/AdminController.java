@@ -47,9 +47,9 @@ import models.User;
  */
 @Path("admin")
 public class AdminController {
-    
+
     private static db.mysql.DbManager db;
-    
+
     static {
         try {
             db = new DbManager();
@@ -58,14 +58,17 @@ public class AdminController {
             txt = e.getMessage();
         }
     }
-    
+
     public AdminController() {
-        
+
     }
-    
+
+    // ========================================================
+    // ADMIN
+    // ========================================================
     @GET
     @Path("")
-    public Response getLoginView(@QueryParam("user") String user, @QueryParam("pass") String pass, @Context HttpServletResponse response, @Context HttpServletRequest request) throws URISyntaxException {
+    public Response admin(@QueryParam("user") String user, @QueryParam("pass") String pass, @Context HttpServletResponse response, @Context HttpServletRequest request) throws URISyntaxException {
         if (request.getAttribute("UserID") != null) {
             // already logged in
             // jump to admin home screen
@@ -85,30 +88,30 @@ public class AdminController {
                     + "  <input type=\"submit\" value=\"Login\" />\n"
                     + "</form>");
             res.append("<button id=\"createDefault\" name=\"createDefault\">Create Defualt Users</button>");
-            
-            res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/login.js"));
+
+            res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../scripts/login.js"));
             res.append(LayoutHelper.getFooter());
-            
+
             return Response.status(Response.Status.OK).entity(res.toString()).build();
         }
     }
-    
+
     @GET
     @Path("home")
     public Response home(@Context HttpServletRequest request) throws Exception {
         if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
         res.append(LayoutHelper.getAdminMenu());
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js"));
         res.append(LayoutHelper.getFooter());
-        
+
         return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(res.toString()).build();
     }
-    
+
     @POST
     @Path("login")
     public Response login(@Context HttpServletRequest request, @FormParam("user") String user, @FormParam("pass") String pass) throws Exception {
@@ -116,18 +119,18 @@ public class AdminController {
             // login
             try {
                 boolean userExist = db.getUsersManager().userExist(user, pass);
-                
+
                 if (!userExist) {
                     throw new Exception("User or Password is invalid.");
                 }
-                
+
                 int userId = db.getUsersManager().getUserId(user);
 
                 // login, create session
                 HttpSession session = request.getSession(true);
                 session.setAttribute("Username", user);
                 session.setAttribute("UserID", userId);
-                
+
                 return Response.status(Response.Status.OK).entity("Success.").build();
             } catch (Exception ex) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
@@ -136,7 +139,11 @@ public class AdminController {
             return Response.status(Response.Status.BAD_REQUEST).entity("Required paramas are missing.").build();
         }
     }
+
     
+    // ========================================================
+    // USERS
+    // ========================================================
     @POST
     @Path("users/add_default")
     public Response getLoginView(@Context HttpServletRequest request) throws URISyntaxException {
@@ -146,65 +153,68 @@ public class AdminController {
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failed to add default users, " + e.getMessage()).build();
         }
-        
+
         return Response.status(Response.Status.OK).entity("Added " + result + " new users to db.").build();
     }
 
-    // CATEGORIES 
+    
+    // ========================================================
+    // CATEGORIES
+    // ========================================================
     @GET
     @Path("categories/all")
     public Response getAllCategories(@Context HttpServletRequest request) throws Exception {
         if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         Gson gson = new Gson();
         String json = null;
-        
+
         try {
             List<MovieCategory> categories = db.getMovieCategoriesManager().getAll();
             json = gson.toJson(categories);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all categories, " + e.getMessage()).build();
         }
-        
+
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
+
     @POST
     @Path("categories/add_default")
     public Response addNewCategory(@Context HttpServletRequest request) throws Exception {
         if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         int result;
-        
+
         try {
             result = db.getMovieCategoriesManager().addDefaultValues();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
         }
-        
+
         return Response.status(Response.Status.OK).entity("Added " + result + " new categories to db.").build();
     }
-    
+
     @POST
     @Path("categories/add")
     public Response addNewCategory(@Context HttpServletRequest request, @FormParam("name") String name) throws Exception {
         if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         try {
             db.getMovieCategoriesManager().add(name);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
         }
-        
+
         return Response.status(Response.Status.OK).entity("Added new categories to db.").build();
     }
-    
+
     @GET
     @Path("categories")
     public Response adminCategories(@Context HttpServletRequest request) throws URISyntaxException {
@@ -213,34 +223,38 @@ public class AdminController {
             URI targetURIForRedirection = new URI("/admin");
             return Response.seeOther(targetURIForRedirection).build();
         }
-        
+
         views.admin.AdminCategoriesView view = new views.admin.AdminCategoriesView();
         return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
     }
 
+    
+    // ========================================================
     // MOVIES
+    // ========================================================
     @GET
     @Path("movies")
     public Response adminMovies(@Context HttpServletRequest request) {
-        if (!isLogin(request))
+        if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
-       
+        }
+
         List<MovieCategory> categories = null;
-        
+
         try {
-             categories = db.getMovieCategoriesManager().getAll();
+            categories = db.getMovieCategoriesManager().getAll();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
-        
+
         views.admin.AdminMoviesView view = new views.admin.AdminMoviesView(categories);
         return Response.status(Response.Status.OK).entity(view.getView()).build();
     }
-    
+
     private boolean isLogin(HttpServletRequest request) {
         return request.getSession().getAttribute("UserID") != null;
     }
-    
+
     @POST
     @Path("movies/add")
     public Response addNewMovie(

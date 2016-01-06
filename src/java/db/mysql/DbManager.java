@@ -214,6 +214,7 @@ public class DbManager implements AutoCloseable {
                 + "  fldFname VARCHAR(50) NOT NULL,\n"
                 + "  fldLname VARCHAR(50) NOT NULL,\n"
                 + "  PRIMARY KEY (fldUserId))");
+        executeSql(DbName, "CREATE OR REPLACE VIEW next_three_hours AS SELECT m.movie_id FROM movies as m INNER JOIN shows as s ON s.movie_id = m.movie_id WHERE s.show_date >= NOW() AND s.show_date <= NOW() + INTERVAL 3 HOUR;");
     }
 
 }

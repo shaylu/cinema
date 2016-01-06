@@ -16,10 +16,11 @@ import org.w3c.dom.Entity;
  */
 public class User implements DBEntity {
 
-    protected int fldUserId;
+    public int fldUserId;
     protected String fldPassword;
-    protected String fldUserName;
-    protected String fldFname;
+    public String fldUserName;
+    public String fldFname;
+    public String fldLname;
 
     public User(int fldUserId, String fldPassword, String fldUserName, String fldFname, String fldLname) {
         this.fldUserId = fldUserId;
@@ -28,7 +29,6 @@ public class User implements DBEntity {
         this.fldFname = fldFname;
         this.fldLname = fldLname;
     }
-    protected String fldLname;
 
     public int getFldUserId() {
         return fldUserId;

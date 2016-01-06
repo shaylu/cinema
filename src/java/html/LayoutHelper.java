@@ -42,16 +42,27 @@ public class LayoutHelper {
 
     public static String getFooter() {
         StringBuilder str = new StringBuilder();
-        str.append("</body>\n" +
-        "</html>");
+        str.append("</body>\n"
+                + "</html>");
         return str.toString();
     }
-    
-    public static String addScripts(String ... scripts) {
+
+    public static String addScripts(String... scripts) {
         StringBuilder str = new StringBuilder();
         for (String script : scripts) {
-           str.append("<script src=\""+ script + "\"></script>");
+            str.append("<script src=\"" + script + "\"></script>");
         }
+        return str.toString();
+    }
+
+    public static String getAdminMenu() {
+        StringBuilder str = new StringBuilder();
+        str.append("<div><a href=\"categories\">Movie Categories</a></div>");
+        str.append("<div><a href=\"\">Movies</a></div>");
+        str.append("<div><a href=\"\">Halls</a></div>");
+        str.append("<div><a href=\"\">Promotions Categories</a></div>");
+        str.append("<div><a href=\"\">Promotions Companies</a></div>");
+        str.append("<div><a href=\"\">Promotions</a></div>");
         return str.toString();
     }
 }

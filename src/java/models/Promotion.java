@@ -14,13 +14,13 @@ import java.util.Date;
  */
 public class Promotion implements DBEntity {
 
-    protected int id;
-    protected Company company;
-    protected PromotionCategory promoCategorie;
-    protected String description;
-    protected Date date;
-    protected String promoCode;
-    protected String image;
+    public int id;
+    public Company company;
+    public PromotionCategory promoCategorie;
+    public String description;
+    public Date date;
+    public String promoCode;
+    public String image;
 
     public Promotion(int id, Company companie, PromotionCategory promoCategorie, String description, Date date, String promoCode, String image) {
         this.id = id;

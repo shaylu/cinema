@@ -12,7 +12,7 @@ $(function () {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    $("#divAllCategories").text(data);
+                    $("#divAllCategories").text(JSON.stringify(data));
                 });
     };
 
@@ -23,13 +23,25 @@ $(function () {
     $("#addCategory").submit(function (e) {
         e.preventDefault();
         var url = "categories/add";
-        var name = $("#addCategory txtCatName").val();
-        $.ajax({url: url, data: {'catName': name}, method: 'POST'})
+        var name = $("#addCategory #txtCatName").val();
+        $.ajax({url: url, data: {'name': name}, method: 'POST'})
                 .fail(function (data) {
                     alert(data.responseText);
                 })
                 .done(function (data) {
                     alert("Category Added!");
+                    refreshCategories();
+                });
+    });
+
+    $("#btnAddDefualtCategories").click(function () {
+        var url = "categories/add_default";
+        $.ajax({url: url, method: 'POST'})
+                .fail(function (data) {
+                    alert(data.responseText);
+                })
+                .done(function (data) {
+                    alert("categories added successfully.");
                     refreshCategories();
                 });
     });

@@ -12,10 +12,10 @@ import db.DBEntity;
  * @author Dell
  */
 public class Company implements DBEntity{
-    protected int id;
-    protected String name;
-    protected String address;
-    protected String aboutText;
+    public int id;
+    public String name;
+    public String address;
+    public String aboutText;
 
     public Company(int id, String name, String address, String aboutText) {
         this.id = id;

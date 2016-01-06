@@ -35,8 +35,8 @@ public class DBManager {
     public static DBManager getInstance() {
         return instance;
     }
-
-    private DBManager() {
+    
+    public DBManager() {
         movieCategoryManager = new MovieCategoryManager();
         showManager = new ShowsManager();
         companyManager = new CompanyManager();
@@ -58,10 +58,6 @@ public class DBManager {
 
     private void createDB() {
         DBHelper.executeUpdateStatment(db.DBHelper.CREATE_DB);
-    }
-
-    public boolean addEntity(MovieCategory movieCategory) {
-        return movieCategoryManager.addEntity(movieCategory);
     }
 
     private void creatTables() {
@@ -106,4 +102,42 @@ public class DBManager {
         //System.out.println(createAllTablesStr.toString());
         //DBHelper.executeUpdateStatment(createAllTablesStr.toString());
     }
+
+    public MovieCategoryManager getMovieCategoryManager() {
+        return movieCategoryManager;
+    }
+
+    public CompanyManager getCompanyManager() {
+        return companyManager;
+    }
+
+    public HallManager getHallManager() {
+        return hallManager;
+    }
+
+    public OrderManager getOrderManager() {
+        return orderManager;
+    }
+
+    public MovieManager getMovieManager() {
+        return movieManager;
+    }
+
+    public ShowsManager getShowManager() {
+        return showManager;
+    }
+
+    public PromotionManager getPromotionManager() {
+        return promotionManager;
+    }
+
+    public PromotionCategoryManager getPromotionCategoryManager() {
+        return promotionCategoryManager;
+    }
+
+    public UsersManager getUsersManager() {
+        return usersManager;
+    }
+    
+    
 }

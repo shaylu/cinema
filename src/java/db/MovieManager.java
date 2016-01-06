@@ -215,7 +215,7 @@ public class MovieManager implements DBEntityManager<Movie> {
             movie.setName(rs.getString("name"));
             movie.setRelease_date(rs.getDate("realse_date"));
             movie.setMovie_length(rs.getDouble("mov_length"));
-            movie.setCategory(MovieCategory.getMovieCategory(rs));
+//            movie.setCategory(MovieCategory.getMovieCategory(rs));
             movie.setPlot(rs.getString("plot"));
             movie.setPoster(rs.getString("poster"));
             movie.setTrailer(rs.getString("trailer"));

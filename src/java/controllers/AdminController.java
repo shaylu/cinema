@@ -38,6 +38,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import models.Hall;
 import models.MovieCategory;
 import models.User;
 
@@ -273,4 +274,76 @@ public class AdminController {
 
         return Response.status(Response.Status.OK).entity("movies!!!!!").build();
     }
+    
+    
+    // ========================================================
+    // HALLS
+    // ========================================================
+    @GET
+    @Path("halls")
+    public Response adminHalls(@Context HttpServletRequest request) throws URISyntaxException {
+        if (!isLogin(request)) {
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+            URI targetURIForRedirection = new URI("/admin");
+            return Response.seeOther(targetURIForRedirection).build();
+        }
+
+        views.admin.AdminHallsView view = new views.admin.AdminHallsView();
+        return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
+    }
+    
+    @POST
+    @Path("halls/add")
+    public Response addNewHall(@Context HttpServletRequest request, @FormParam("hall_id") int hall_id, @FormParam("num_of_seats") int num_of_seats) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            db.getHallsManager().add(hall_id, num_of_seats);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new hall, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added new hall to db.").build();
+    }
+    
+    @GET
+    @Path("halls/all")
+    public Response getAllHalls(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        Gson gson = new Gson();
+        String json = null;
+
+        try {
+            List<Hall> halls = db.getHallsManager().getaAll();
+            json = gson.toJson(halls);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all halls, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+    
+    @POST
+    @Path("halls/add_default")
+    public Response addDefaultHalls(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        int result;
+
+        try {
+            result = db.getHallsManager().addDefaultValues();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add halls, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added " + result + " new halls to db.").build();
+    }
+    
 }

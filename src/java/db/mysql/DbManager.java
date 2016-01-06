@@ -132,7 +132,7 @@ public class DbManager implements AutoCloseable {
                 + "  INDEX cat_id_idx (cat_id ASC),\n"
                 + "  CONSTRAINT cat_id FOREIGN KEY (cat_id) REFERENCES movie_categories (cat_id))");
         executeSql(DbName, "CREATE TABLE IF NOT EXISTS halls ("
-                + "hall_id INT NOT NULL AUTO_INCREMENT,"
+                + "hall_id INT NOT NULL UNIQUE,"
                 + "num_of_seats INT ZEROFILL NOT NULL,"
                 + "PRIMARY KEY (hall_id));");
         executeSql(DbName, "CREATE TABLE IF NOT EXISTS shows(\n"

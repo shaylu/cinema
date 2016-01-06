@@ -102,13 +102,13 @@ public class MoviesManager extends DbManagerEntity {
         throw new UnsupportedOperationException();
     }
 
-    public Movie createMovieFromMySql(ResultSet rs) throws SQLException {
+    public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
         Movie result = new Movie();
         result.setId(rs.getInt("movie_id"));
         result.setName(rs.getString("M.name"));
         result.setRelease_date(rs.getDate("release_date"));
         result.setName(rs.getString("mov_length"));
-        result.setCategory(manager.getMovieCategoriesManager().createMovieCtaegoryFromMySql(rs));
+        result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("C.cat_id")));
         result.setPlot(rs.getString("plot"));
         result.setPoster(rs.getString("poster"));
         result.setTrailer(rs.getString("trailer"));

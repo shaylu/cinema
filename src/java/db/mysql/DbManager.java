@@ -47,9 +47,7 @@ public class DbManager implements AutoCloseable {
         promoCategoriesManager = new PromoCategoriesManager(this);
         promosManager = new PromosManager(this);
         reviewsManager = new ReviewsManager(this);
-        createSchema();
         
-        movieCategoriesManager.addDefaultValues();
     }
 
     public MovieCategoriesManager getMovieCategoriesManager() {
@@ -94,6 +92,8 @@ public class DbManager implements AutoCloseable {
 
     private void initDb() throws Exception {
         createSchema();
+        movieCategoriesManager.addDefaultValues();
+        moviesManager.addDefaultValues();
     }
 
     @Override

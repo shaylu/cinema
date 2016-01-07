@@ -5,13 +5,11 @@
  */
 package db.mysql;
 
-import static db.mysql.MovieCategoriesManager.INSERT_QUERY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +22,7 @@ import models.Movie;
  */
 public class MoviesManager extends DbManagerEntity {
 
-    public static final String INSERT_QUERY = "INSERT INTO movies (name, realse_date, mov_length, cat_id,"
+    public static final String INSERT_QUERY = "INSERT INTO movies (name, release_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "";
@@ -51,7 +49,7 @@ public class MoviesManager extends DbManagerEntity {
             SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
 
             statement.setString(1, name);
-            statement.setString(2, dateformatSql.format(release_date));
+            statement.setDate(2, new java.sql.Date(release_date.getTime()));
             statement.setDouble(3, mov_length);
             statement.setInt(4, cat_id);
             statement.setString(5, plot);
@@ -128,31 +126,38 @@ public class MoviesManager extends DbManagerEntity {
     // if cat_id == 0 then it dosen't matter what category
     // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
 
-    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended)
-            throws SQLException, ClassNotFoundException {
+    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
+        PreparedStatement statement = null;
         try (Connection conn = manager.getConnection()) {
 
             if (cat_id != 0 && has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
+                statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
                 statement.setString(3, keyword);
             } else if (cat_id != 0 && !has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
+                statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
                 statement.setString(3, keyword);
             } else if (cat_id == 0 && has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
+                statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
                 statement.setBoolean(1, is_recommended);
                 statement.setString(2, keyword);
             } else if (cat_id == 0 && !has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
+                statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
                 statement.setBoolean(1, is_recommended);
                 statement.setString(2, keyword);
             }
         }
-        throw new UnsupportedOperationException();
-    }
 
+        ArrayList<Movie> result = new ArrayList<>();
+        ResultSet rs = statement.executeQuery();
+        while (rs.next()) {
+            Movie movie = createMovieFromMySql(rs);
+            result.add(movie);
+        }
+
+        return result;
+    }
 }

@@ -27,14 +27,14 @@ public class OrdersManager extends DbManagerEntity {
     public static final String SELECT_ALL = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id ";
     private final static String DELET_QUERY = "DELET from orders WHERE order_id = (?)";
     public static final String SELECT_ORDER_BY_ID = "SELECT client_id,fname,lname,email,phone,show_id,num_of_seats,total_payment,credit_card_last_digit,exp_date_month,exp_date_year"
-    + "FROM cinemacity.orders WHERE order_id = ? ";
-    
+            + "FROM cinemacity.orders WHERE order_id = ? ";
+
     public OrdersManager(DbManager manager) {
         this.manager = manager;
     }
 
     public int add(String client_id, String fname, String lname, String email, String phone, int show_id, int num_of_seats, double total_payment, String credit_card_last_digits, int exp_month, int exp_year, Date order_date) throws ClassNotFoundException, SQLException {
-                
+
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
@@ -57,17 +57,17 @@ public class OrdersManager extends DbManagerEntity {
 
     public int delete(int order_id) throws ClassNotFoundException, SQLException {
 
-        try (Connection conn = manager.getConnection()){
+        try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(DELET_QUERY);
             statement.setInt(1, order_id);
             return statement.executeUpdate();
-        } 
+        }
     }
 
     public Order get(int order_id) throws ClassNotFoundException, SQLException {
-            
+
         Order orderToReturn;
-        try (Connection conn = manager.getConnection()){
+        try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_ID);
             statement.setInt(1, order_id);
             ResultSet rs = statement.executeQuery();
@@ -75,8 +75,8 @@ public class OrdersManager extends DbManagerEntity {
         }
         return orderToReturn;
     }
-    
-        public Order getOrderByResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
+
+    public Order getOrderByResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
         Order OrderToReturn = new Order();
 
         OrderToReturn.setClientId(rs.getString("client_id"));
@@ -95,10 +95,10 @@ public class OrdersManager extends DbManagerEntity {
     }
 
     public List<Order> getAll() throws ClassNotFoundException, SQLException {
-        
+
         ArrayList<Order> ListToReturn = new ArrayList<Order>();
-        
-        try (Connection conn = manager.getConnection()){
+
+        try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_ALL);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -109,7 +109,7 @@ public class OrdersManager extends DbManagerEntity {
     }
 
     public List<Order> getAllByMovie(int movie_id) throws ClassNotFoundException, SQLException {
-                throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     public List<Order> getAllByShow(int show_id) throws ClassNotFoundException, SQLException {
@@ -120,4 +120,8 @@ public class OrdersManager extends DbManagerEntity {
         throw new UnsupportedOperationException();
     }
 
+    public Order getOrderById(int id) {
+        Order orderToReturn = new Order();
+        return orderToReturn;
+    }
 }

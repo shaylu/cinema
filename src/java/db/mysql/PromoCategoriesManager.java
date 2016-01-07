@@ -6,6 +6,7 @@
 package db.mysql;
 
 import static db.mysql.MovieCategoriesManager.SELECT_ALL;
+import static db.mysql.PromoCompaniesManager.SELECT_COMPANY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import models.Company;
 import models.MovieCategory;
 import models.PromotionCategory;
 
@@ -25,7 +27,7 @@ public class PromoCategoriesManager extends DbManagerEntity {
     public final static String INSERT_QUERY = "INSERT INTO promotion_categories (name) values(?)";
     public final static String DELET_PROMOTIONCATEGORY = "DELET from promotion_categories WHERE promo_cat_id = (?)";
     public final static String SELECT_ALL_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories";
-
+public final static String SELECT_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories WHERE promo_cat_id = ?";
     public PromoCategoriesManager(DbManager manager) {
         this.manager = manager;
     }
@@ -70,6 +72,18 @@ public class PromoCategoriesManager extends DbManagerEntity {
         result.setName(rs.getString("name"));
         return result;
 
+    }
+    
+    public PromotionCategory getPromotionCategoryById(int id) throws ClassNotFoundException, SQLException{
+          PromotionCategory result;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_PROMORIONCATEGORY);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery(SELECT_PROMORIONCATEGORY);
+            result = createPromotionCategoryFromMySql(rs);
+        }
+
+        return result;
     }
 
 }

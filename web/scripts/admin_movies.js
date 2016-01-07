@@ -23,27 +23,33 @@ $(function () {
     $("#addMovie").submit(function (e) {
         e.preventDefault();
         var url = "movies/add";
-        var name = $("#addMovie txtMovieName").val();
-        var date = $("#addMovie dateReleaseDate").val();
-        var movie_length = $("#addMovie numMovieLength").val();
-        var cat_id = $("#addMovie selCatID").val();
-        var plot = $("#addMovie txtPlot").val();
-        var poster = $("#addMovie txtPoster").val();
-        var trailer = $("#addMovie txtTrailer").val();
-        var is_recommanded = $("#addMovie chkIsRecommanded").val() === "true";
+        var name = $("#addMovie #txtMovieName").val();
+        var date = $("#addMovie #dateReleaseDate").val();
+        var movie_length = $("#addMovie #numMovieLength").val();
+        var cat_id = $("#addMovie #selCatID").val();
+        var plot = $("#addMovie #txtPlot").val();
+        var poster = $("#addMovie #txtPoster").val();
+        var trailer = $("#addMovie #txtTrailer").val();
+        var is_recommanded = $("#addMovie #chkIsRecommanded").prop('checked');
 
         $.ajax({
             url: url,
             data:
                     {
-                        'catName': name
+                        'name': name,
+                        'release_date': date,
+                        'mov_length': movie_length,
+                        'cat_id': cat_id,
+                        'plot': plot,
+                        'poster': poster,
+                        'trailer': trailer,
+                        'is_recommanded': is_recommanded
                     },
             method: 'POST'})
                 .fail(function (data) {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    alert("Category Added!");
                     refreshCategories();
                 });
     });

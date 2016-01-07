@@ -6,7 +6,9 @@
 package controllers;
 
 import db.DBManager;
+import db.mysql.DbManager;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -38,9 +40,9 @@ public class MovieController {
     @GET
     @Path("liraz")
     @Produces(MediaType.TEXT_HTML)
-    public String liraz() throws ServletException, IOException {
+    public String liraz() throws ServletException, IOException, SQLException, Exception {
         System.out.println("Shay you are my bitch");
-        DBManager.getInstance();
+        DbManager db = new DbManager();
         return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
                 + "<HTML>\n"
                 + "   <HEAD>\n"

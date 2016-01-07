@@ -83,7 +83,7 @@ public class ReviewsManager extends DbManagerEntity {
         return result;
     }
 
-    private Review createReviewFromMySql(ResultSet rs) throws SQLException {
+    private Review createReviewFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         Review result = new Review();
         result.setId(rs.getInt("rev_id"));

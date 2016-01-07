@@ -27,7 +27,8 @@ public class PromoCategoriesManager extends DbManagerEntity {
     public final static String INSERT_QUERY = "INSERT INTO promotion_categories (name) values(?)";
     public final static String DELET_PROMOTIONCATEGORY = "DELET from promotion_categories WHERE promo_cat_id = (?)";
     public final static String SELECT_ALL_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories";
-public final static String SELECT_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories WHERE promo_cat_id = ?";
+    public final static String SELECT_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories WHERE promo_cat_id = ?";
+
     public PromoCategoriesManager(DbManager manager) {
         this.manager = manager;
     }
@@ -49,7 +50,6 @@ public final static String SELECT_PROMORIONCATEGORY = "SELECT * FROM  promotion_
         result += add("");
         return result;
     }
-  
 
     public List<PromotionCategory> getAll() throws ClassNotFoundException, SQLException {
 
@@ -73,9 +73,9 @@ public final static String SELECT_PROMORIONCATEGORY = "SELECT * FROM  promotion_
         return result;
 
     }
-    
-    public PromotionCategory getPromotionCategoryById(int id) throws ClassNotFoundException, SQLException{
-          PromotionCategory result;
+
+    public PromotionCategory getPromotionCategoryById(int id) throws ClassNotFoundException, SQLException {
+        PromotionCategory result;
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_PROMORIONCATEGORY);
             statement.setInt(1, id);

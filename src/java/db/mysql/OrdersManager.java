@@ -28,6 +28,9 @@ public class OrdersManager extends DbManagerEntity {
     private final static String DELET_QUERY = "DELET from orders WHERE order_id = (?)";
     public static final String SELECT_ORDER_BY_ID = "SELECT client_id,fname,lname,email,phone,show_id,num_of_seats,total_payment,credit_card_last_digit,exp_date_month,exp_date_year"
             + "FROM cinemacity.orders WHERE order_id = ? ";
+    public static final String SELECT_ORDER_BY_SHOW_ID = "SELECT * FROM orders WHERE show_id = ?";
+    public static final String SELECT_ORDER_BY_CLIENT_ID = "SELECT * FROM orders client_id = ?";
+    public static final String SELECT_ORDER = "SELECT * FROM orders WHERE order_id = ?";
 
     public OrdersManager(DbManager manager) {
         this.manager = manager;
@@ -71,12 +74,12 @@ public class OrdersManager extends DbManagerEntity {
             PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_ID);
             statement.setInt(1, order_id);
             ResultSet rs = statement.executeQuery();
-            orderToReturn = getOrderByResultSet(rs);
+            orderToReturn = createOrderFromMySql(rs);
         }
         return orderToReturn;
     }
 
-    public Order getOrderByResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
+    public Order createOrderFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
         Order OrderToReturn = new Order();
 
         OrderToReturn.setClientId(rs.getString("client_id"));
@@ -102,26 +105,50 @@ public class OrdersManager extends DbManagerEntity {
             PreparedStatement statement = conn.prepareStatement(SELECT_ALL);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                ListToReturn.add(getOrderByResultSet(rs));
+                ListToReturn.add(createOrderFromMySql(rs));
             }
         }
         return ListToReturn;
     }
 
-    public List<Order> getAllByMovie(int movie_id) throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
-    }
-
     public List<Order> getAllByShow(int show_id) throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
+        ArrayList<Order> ListToReturn = new ArrayList<Order>();
+
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_SHOW_ID);
+            statement.setInt(1, show_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ListToReturn.add(createOrderFromMySql(rs));
+            }
+        }
+        return ListToReturn;
     }
 
     public List<Order> getAllByClientId(String client_id) throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
+
+        ArrayList<Order> ListToReturn = new ArrayList<Order>();
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_CLIENT_ID);
+            statement.setString(1, client_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ListToReturn.add(createOrderFromMySql(rs));
+            }
+        }
+        return ListToReturn;
     }
 
-    public Order getOrderById(int id) {
+    public Order getOrderById(int id) throws SQLException, ClassNotFoundException {
         Order orderToReturn = new Order();
+        
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_ORDER);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery(SELECT_ORDER);
+            orderToReturn = createOrderFromMySql(rs);
+        }
+       
         return orderToReturn;
     }
 }

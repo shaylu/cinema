@@ -34,6 +34,7 @@ public class MoviesManager extends DbManagerEntity {
     public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies where cat_id = ? and trailer = null and name like '%?'  ";
     public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies where trailer != null and name like '%?'  ";
     public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies where trailer = null and name like '%?'  ";
+    public final static String RECOMMENDED_QUERY = "SELECT * FROM movies WHERE is_recommended = true;";
 
     public enum ShowTime {
 
@@ -111,33 +112,44 @@ public class MoviesManager extends DbManagerEntity {
         return result;
     }
 
-    public List<Movie> getRecommended() throws SQLException, ClassNotFoundException {
-        return null;
-    }
+    public ArrayList<Movie> getRecommended() throws SQLException, ClassNotFoundException {
 
+        ArrayList<Movie> moviesResult = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(RECOMMENDED_QUERY);
+            while (rs.next()) {
+                Movie mc = createMovieFromMySql(rs);
+                moviesResult.add(mc);
+            }
+        }
+        return moviesResult;
+    }
     // if cat_id == 0 then it dosen't matter what category
     // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
-    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
+
+    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended)
+            throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
 
             if (cat_id != 0 && has_trailer) {
                 PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
-                 statement.setString(3, keyword);
+                statement.setString(3, keyword);
             } else if (cat_id != 0 && !has_trailer) {
                 PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
-                 statement.setString(3, keyword);
+                statement.setString(3, keyword);
             } else if (cat_id == 0 && has_trailer) {
                 PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
                 statement.setBoolean(1, is_recommended);
-                 statement.setString(2, keyword);
+                statement.setString(2, keyword);
             } else if (cat_id == 0 && !has_trailer) {
-                 PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
+                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
                 statement.setBoolean(1, is_recommended);
-                 statement.setString(2, keyword);
+                statement.setString(2, keyword);
             }
         }
         throw new UnsupportedOperationException();

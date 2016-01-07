@@ -5,6 +5,8 @@
  */
 package db.mysql;
 
+import com.mysql.jdbc.exceptions.MySQLDataException;
+import static db.MovieCategoryManager.getMovieCategoryByName;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import models.Movie;
+import models.MovieCategory;
 
 /**
  *
@@ -160,4 +163,31 @@ public class MoviesManager extends DbManagerEntity {
 
         return result;
     }
+
+    // public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended)
+    public int addDefaultValues() throws SQLException, ClassNotFoundException {
+
+        int result = 0;
+        // Creating Star Wars: The Force Awakens
+        Date release_date = new Date(17 / 12 / 2015);
+        String plot = "Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a rag-tag group of heroes can stop them, along with the help of the Resistance.";
+        String posterLink = "http://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
+        String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
+        MovieCategory category = getMovieCategoryByName("Action");
+
+        result += add("Star Wars: The Force Awakens", release_date, 131, 1, plot, posterLink, trailer, true);
+
+        //Creating Krampus
+        release_date = new Date(04 / 12 / 2105);
+        plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
+        posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
+        trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
+        category = getMovieCategoryByName("Comedy");
+
+        result += add("Krampus", release_date, 98, 2, plot, posterLink, trailer, true);
+
+        return result;
+
+    }
 }
+

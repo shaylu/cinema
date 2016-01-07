@@ -24,7 +24,7 @@ import models.Movie;
  */
 public class MoviesManager extends DbManagerEntity {
 
-    public static final String INSERT_QUERY = "INSERT INTO movies (name, realse_date, mov_length, cat_id,"
+    public static final String INSERT_QUERY = "INSERT INTO movies (name, release_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "";
@@ -50,7 +50,7 @@ public class MoviesManager extends DbManagerEntity {
             SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
 
             statement.setString(1, name);
-            statement.setString(2, dateformatSql.format(release_date));
+            statement.setDate(2, new java.sql.Date(release_date.getTime()));
             statement.setDouble(3, mov_length);
             statement.setInt(4, cat_id);
             statement.setString(5, plot);

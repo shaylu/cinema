@@ -17,6 +17,7 @@ import static java.lang.System.console;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -261,17 +262,27 @@ public class AdminController {
     public Response addNewMovie(
             @Context HttpServletRequest request,
             @FormParam("name") String name,
-            @FormParam("release_date") Date release_date,
+            @FormParam("release_date") String release_date,
             @FormParam("mov_length") int mov_length,
             @FormParam("cat_id") int cat_id,
             @FormParam("plot") String plot,
             @FormParam("poster") String poster,
             @FormParam("trailer") String trailer,
-            @FormParam("is_recommanded") boolean is_recommanded
+            @FormParam("is_recommanded") String is_recommanded
     ) throws Exception {
-//        if (!isLogin(request))
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
+        if (!isLogin(request))
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = formatter.parse(release_date);
+            boolean is_reco = is_recommanded.toLowerCase().equals("true") ? true : false;
 
+            db.getMoviesManager().add(name, date, mov_length, cat_id, plot, poster, trailer, is_reco);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to add movie, " + e.getMessage()).build();
+        }
+        
         return Response.status(Response.Status.OK).entity("movies!!!!!").build();
     }
     

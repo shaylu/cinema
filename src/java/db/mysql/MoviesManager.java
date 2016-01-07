@@ -118,29 +118,38 @@ public class MoviesManager extends DbManagerEntity {
     // if cat_id == 0 then it dosen't matter what category
     // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
     public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
+        PreparedStatement statement = null;
         try (Connection conn = manager.getConnection()) {
 
             if (cat_id != 0 && has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
+                statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
-                 statement.setString(3, keyword);
+                statement.setString(3, keyword);
             } else if (cat_id != 0 && !has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
+                statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
-                 statement.setString(3, keyword);
+                statement.setString(3, keyword);
             } else if (cat_id == 0 && has_trailer) {
-                PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
+                statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
                 statement.setBoolean(1, is_recommended);
-                 statement.setString(2, keyword);
+                statement.setString(2, keyword);
             } else if (cat_id == 0 && !has_trailer) {
-                 PreparedStatement statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
+                statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
                 statement.setBoolean(1, is_recommended);
-                 statement.setString(2, keyword);
+                statement.setString(2, keyword);
             }
         }
-        throw new UnsupportedOperationException();
+        
+        ArrayList<Movie> result = new ArrayList<>();
+        ResultSet rs = statement.executeQuery();
+        while (rs.next()) {
+            Movie movie = createMovieFromMySql(rs);
+            result.add(movie);
+        }
+        
+        return result;
     }
 
 }

@@ -40,6 +40,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import models.Company;
 import models.Hall;
 import models.Movie;
 import models.MovieCategory;
@@ -54,7 +55,6 @@ import models.User;
 public class AdminController {
 
 //    private static db.mysql.DbManager db;
-
 //    static {
 //        try {
 //            db = new DbManager();
@@ -63,7 +63,6 @@ public class AdminController {
 //            txt = e.getMessage();
 //        }
 //    }
-
     public AdminController() {
 
     }
@@ -145,6 +144,15 @@ public class AdminController {
         }
     }
 
+//    @POST
+//    @Path("filldb")
+//    public Response fillDb(@Context HttpServletRequest request, @FormParam("user") String user, @FormParam("pass") String pass) throws Exception {
+//        DbManager db = ControllerHelper.getDb();
+//        db.getMovieCategoriesManager().addDefaultValues();
+//        db.getMoviesManager().addDefaultValues();
+//        db.getHallsManager().addDefaultValues();
+//        db.getShowsManager().addDefaultValues();
+//    }
     // ========================================================
     // USERS
     // ========================================================
@@ -252,25 +260,25 @@ public class AdminController {
         views.admin.AdminMoviesView view = new views.admin.AdminMoviesView(categories);
         return Response.status(Response.Status.OK).entity(view.getView()).build();
     }
-    
+
     @GET
     @Path("movies/all")
     public Response getAllMovies(@Context HttpServletRequest request) {
         if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-        
+
         Gson gson = new Gson();
         List<Movie> movies = null;
         String json = null;
-        
+
         try {
             movies = ControllerHelper.getDb().getMoviesManager().getAll();
             json = gson.toJson(movies);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
-        
+
         return Response.status(Response.Status.OK).entity(json).build();
     }
 
@@ -381,7 +389,6 @@ public class AdminController {
     // ========================================================
     // SHOWS
     // ========================================================
-    
     @GET
     @Path("shows")
     public Response adminShows(@Context HttpServletRequest request) throws URISyntaxException {
@@ -390,10 +397,10 @@ public class AdminController {
             URI targetURIForRedirection = new URI("/admin");
             return Response.seeOther(targetURIForRedirection).build();
         }
-        
+
         List<Movie> movies = null;
         List<Integer> halls = new ArrayList<>();
-        
+
         try {
             movies = ControllerHelper.getDb().getMoviesManager().getAll();
             for (Hall hall : ControllerHelper.getDb().getHallsManager().getaAll()) {
@@ -417,7 +424,7 @@ public class AdminController {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date date = formatter.parse(date_str);
-            
+
             Hall hall = ControllerHelper.getDb().getHallsManager().getHallById(hall_id);
             int seats = hall.getNumOfSeats();
             ControllerHelper.getDb().getShowsManager().add(movie_id, hall_id, seats, date_str, time_str, price);
@@ -464,5 +471,75 @@ public class AdminController {
         }
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new halls to db.").build();
+    }
+
+    // ========================================================
+    // COMPANIES
+    // ========================================================
+    @GET
+    @Path("companies")
+    public Response adminCompanies(@Context HttpServletRequest request) throws URISyntaxException {
+        if (!isLogin(request)) {
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+            URI targetURIForRedirection = new URI("/admin");
+            return Response.seeOther(targetURIForRedirection).build();
+        }
+
+        views.admin.AdminCompaniesView view = new views.admin.AdminCompaniesView();
+        return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
+    }
+
+    @POST
+    @Path("companies/add")
+    public Response addCompany(@Context HttpServletRequest request, @FormParam("name") String name, @FormParam("address") String address, @FormParam("about") String about) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            ControllerHelper.getDb().getPromoCompaniesManager().add(name, address, about);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new company, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added new company to db.").build();
+    }
+
+    @GET
+    @Path("companies/all")
+    public Response getAllCompanies(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        Gson gson = new Gson();
+        String json = null;
+
+        try {
+            List<Company> companies = ControllerHelper.getDb().getPromoCompaniesManager().getAll();
+            json = gson.toJson(companies);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all companies, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+
+    @POST
+    @Path("companies/add_default")
+    public Response compAddDefault(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        int result;
+
+        try {
+            result = ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add companies, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added " + result + " new companies to db.").build();
     }
 }

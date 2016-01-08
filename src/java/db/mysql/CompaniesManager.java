@@ -5,9 +5,6 @@
  */
 package db.mysql;
 
-import static db.mysql.MovieCategoriesManager.INSERT_QUERY;
-import static db.mysql.MovieCategoriesManager.SELECT_ALL;
-import static db.mysql.MovieCategoriesManager.SELECT_MOVIE_CATEGORY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,19 +23,19 @@ public class CompaniesManager extends DbManagerEntity {
 
     public final static String INSERT_TABLE = "INSERT INTO companies (name, address, about_text) values(?,?,?)";
     public final static String DELET_COMPANY = "DELET from companies WHERE name = (?)";
-    public final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companies";
+    public final static String SELECT_ALLCOMPANY = "SELECT * FROM companies";
     public final static String SELECT_COMPANY = "SELECT * FROM companies WHERE comp_id = ?";
 
     public CompaniesManager(DbManager manager) {
         this.manager = manager;
     }
 
-    public int add(String name, String address, String abutText) throws ClassNotFoundException, SQLException {
+    public int add(String name, String address, String aboutText) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
+            PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
             statement.setString(1, name);
             statement.setString(2, address);
-            statement.setString(3, abutText);
+            statement.setString(3, aboutText);
             return statement.executeUpdate();
         }
     }
@@ -57,7 +54,7 @@ public class CompaniesManager extends DbManagerEntity {
         ArrayList<Company> result = new ArrayList<>();
         try (Connection conn = manager.getConnection()) {
             Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_ALL);
+            ResultSet rs = statement.executeQuery(SELECT_ALLCOMPANY);
             while (rs.next()) {
                 Company mc = createCompanyFromMySql(rs);
                 result.add(mc);

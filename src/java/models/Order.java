@@ -47,6 +47,10 @@ public class Order implements DBEntity {
     public Order() {
     }
 
+    public Show getShow() {
+        return show;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

@@ -46,7 +46,7 @@ public class PromosManager extends DbManagerEntity {
             statement.setString(3, description);
             statement.setDate(4, new java.sql.Date(exp_date.getTime()));
             statement.setString(5, promo_code);
-            statement.setString(5, image);
+            statement.setString(6, image);
 
             return statement.executeUpdate();
         }

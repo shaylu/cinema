@@ -61,9 +61,9 @@ public class LayoutHelper {
         str.append("<div><a href=\"movies\">Movies</a></div>");
         str.append("<div><a href=\"halls\">Halls</a></div>");
         str.append("<div><a href=\"shows\">Shows</a></div>");
-        str.append("<div><a href=\"\">Promotions Categories</a></div>");
-        str.append("<div><a href=\"\">Promotions Companies</a></div>");
-        str.append("<div><a href=\"\">Promotions</a></div>");
+        str.append("<div><a href=\"promotions/categories\">Promotions Categories</a></div>");
+        str.append("<div><a href=\"companies\">Promotions Companies</a></div>");
+        str.append("<div><a href=\"promotions\">Promotions</a></div>");
         return str.toString();
     }
 }

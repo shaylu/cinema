@@ -6,7 +6,7 @@
 package db.mysql;
 
 import static db.mysql.MovieCategoriesManager.SELECT_ALL;
-import static db.mysql.PromoCompaniesManager.SELECT_COMPANY;
+import static db.mysql.CompaniesManager.SELECT_COMPANY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

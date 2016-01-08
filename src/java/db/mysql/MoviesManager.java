@@ -181,8 +181,7 @@ public class MoviesManager extends DbManagerEntity {
         result += add("Star Wars: The Force Awakens", release_date, 131, 1, plot, posterLink, trailer, true);
 
         //Creating Krampus
-        release_date = new Date
-        
+       release_date = formatter.parse("2016-04-23");
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
         posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";

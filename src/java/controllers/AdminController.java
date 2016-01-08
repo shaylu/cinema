@@ -542,4 +542,7 @@ public class AdminController {
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new companies to db.").build();
     }
+    
+    
+    
 }

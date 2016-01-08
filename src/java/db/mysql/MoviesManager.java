@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import models.Movie;
+import models.MovieCategory;
 
 /**
  *
@@ -26,7 +27,7 @@ public class MoviesManager extends DbManagerEntity {
 
     public static final String INSERT_QUERY = "INSERT INTO movies (name, release_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
-    public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.cat_id ";
+    public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "";
     public static final String GET_MOVIE_QUERY = "SELECT * FROM movies WHERE movie_id = ?";
     public final static String DELET_MOVIE = "DELETE from movies WHERE movie_id = (?)";
@@ -74,15 +75,19 @@ public class MoviesManager extends DbManagerEntity {
 
     public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
         Movie result = new Movie();
-        result.setId(rs.getInt("movie_id"));
+        result.setId(rs.getInt("M.movie_id"));
         result.setName(rs.getString("M.name"));
-        result.setRelease_date(rs.getDate("release_date"));
-        result.setName(rs.getString("mov_length"));
-        result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("C.cat_id")));
-        result.setPlot(rs.getString("plot"));
-        result.setPoster(rs.getString("poster"));
-        result.setTrailer(rs.getString("trailer"));
-        result.setIs_recomanded(rs.getBoolean("is_recommended"));
+        result.setRelease_date(rs.getDate("M.release_date"));
+        result.setMovie_length(rs.getInt("M.mov_length"));
+        
+        int cat_id = rs.getInt("C.cat_id");
+        MovieCategory category = manager.getMovieCategoriesManager().getMovieCategoryById(cat_id);
+        result.setCategory(category);
+        
+        result.setPlot(rs.getString("M.plot"));
+        result.setPoster(rs.getString("M.poster"));
+        result.setTrailer(rs.getString("M.trailer"));
+        result.setIs_recomanded(rs.getBoolean("M.is_recommended"));
 
         return result;
     }

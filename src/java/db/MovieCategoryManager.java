@@ -21,12 +21,12 @@ import models.MovieCategory;
 public class MovieCategoryManager implements DBEntityManager<MovieCategory> {
 
     private static final Logger LOGGER = Logger.getLogger(MovieCategoryManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS movies_categories (cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL)";
-    private final static String INSERT_TABLE = "INSERT INTO movies_categories(name) values(?)";
-    private final static String DELET_CATEGORY = "DELET from movies_categories WHERE name = (?)";
-    private final static String UPDATE_MOVIECATAGORY = "UPDATE movies_categories SET name = ? WHERE cat_id = ?";
-    private final static String SELECT_ALLCATAGORY = "SELECT * FROM cinema_city.movies_categories";
-    private final static String SELECT_CATEGORYBYNAME = "SELECT cat_id from movies_categories where name = ?";
+    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS movie_categories (cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL)";
+    private final static String INSERT_TABLE = "INSERT INTO movie_categories(name) values(?)";
+    private final static String DELET_CATEGORY = "DELET from movie_categories WHERE name = (?)";
+    private final static String UPDATE_MOVIECATAGORY = "UPDATE movie_categories SET name = ? WHERE cat_id = ?";
+    private final static String SELECT_ALLCATAGORY = "SELECT * FROM cinema_city.movie_categories";
+    private final static String SELECT_CATEGORYBYNAME = "SELECT cat_id from movie_categories where name = ?";
 
     public static String getCREATE_TABLE() {
         return CREATE_TABLE;

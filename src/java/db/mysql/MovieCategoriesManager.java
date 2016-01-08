@@ -65,7 +65,8 @@ public class MovieCategoriesManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_CATEGORY);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(SELECT_MOVIE_CATEGORY);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             result = createMovieCtaegoryFromMySql(rs);
         }
 

@@ -22,14 +22,14 @@ import models.MovieCategory;
  *
  * @author shay.lugasi
  */
-public class PromoCompaniesManager extends DbManagerEntity {
+public class CompaniesManager extends DbManagerEntity {
 
     public final static String INSERT_TABLE = "INSERT INTO companies (name, address, about_text) values(?,?,?)";
     public final static String DELET_COMPANY = "DELET from companies WHERE name = (?)";
     public final static String SELECT_ALLCOMPANY = "SELECT * FROM cinema_city.companies";
     public final static String SELECT_COMPANY = "SELECT * FROM companies WHERE comp_id = ?";
 
-    public PromoCompaniesManager(DbManager manager) {
+    public CompaniesManager(DbManager manager) {
         this.manager = manager;
     }
 

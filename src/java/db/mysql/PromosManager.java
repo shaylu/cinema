@@ -39,7 +39,7 @@ public class PromosManager extends DbManagerEntity {
     public int add(int comp_id, int promo_cat_id, String description, Date exp_date, String promo_code, String image) throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
-            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("yyyy-MM-dd");
             statement.setInt(1, comp_id);
             statement.setInt(2, promo_cat_id);
             statement.setString(3, description);

@@ -12,7 +12,8 @@ import db.mysql.DbManager;
  * @author Liraz
  */
 public class ControllerHelper {
-     protected static db.mysql.DbManager db;
+
+    protected static db.mysql.DbManager db;
 
     static {
         try {
@@ -23,5 +24,4 @@ public class ControllerHelper {
         }
     }
 
-    
 }

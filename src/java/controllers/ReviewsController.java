@@ -28,8 +28,8 @@ public class ReviewsController {
         Gson gson = new Gson();
         String json = null;
         try {
-            Order order = ControllerHelper.db.getOrdersManager().getOrderById(orderId);
-            Movie movieRes = ControllerHelper.db.getMoviesManager().getMovieById(order.getShowId());
+            Order order = ControllerHelper.getDb().getOrdersManager().getOrderById(orderId);
+            Movie movieRes = order.getShow().getMovie();
             json = gson.toJson(movieRes);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)

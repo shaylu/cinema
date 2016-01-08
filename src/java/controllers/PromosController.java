@@ -28,7 +28,7 @@ public class PromosController {
         Gson gson = new Gson();
         String json = null;
         try {
-            List<Promotion> promotions = ControllerHelper.db.getPromosManager().getAll();
+            List<Promotion> promotions = ControllerHelper.getDb().getPromosManager().getAll();
             json = gson.toJson(promotions);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)

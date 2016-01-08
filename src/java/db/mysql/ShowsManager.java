@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +42,11 @@ public class ShowsManager extends DbManagerEntity {
             statement.setInt(1, movie_id);
             statement.setInt(2, hall_id);
             statement.setInt(3, num_of_seats_left);
-            statement.setDate(4, new java.sql.Date(show_date.getTime()));
+            
+            long time = show_date.getTime();
+            Timestamp stamp = new Timestamp(time);
+            statement.setTimestamp(4, stamp);
+            
             statement.setDouble(5, price_per_seat);
 
             return statement.executeUpdate();

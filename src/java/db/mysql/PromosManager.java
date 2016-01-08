@@ -81,7 +81,8 @@ public class PromosManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_PROMOION);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(SELECT_PROMOION);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             promotionToReturn = createPromotionFromMySql(rs);
         }
 

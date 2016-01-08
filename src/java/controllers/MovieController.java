@@ -30,6 +30,11 @@ public class MovieController {
         Gson gson = new Gson();
         String json = null;
         try {
+            keyword = "j";
+            cat_id = 1;
+            has_trailer = true;
+            is_recommended = true;
+            
             List<Movie> movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
             json = gson.toJson(movies);
         } catch (Exception e) {

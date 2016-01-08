@@ -29,14 +29,13 @@ public class MoviesManager extends DbManagerEntity {
     public static final String INSERT_QUERY = "INSERT INTO movies (name, release_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
-    public static final String SELECT_MOVIE_BY_ID = "";
-    public static final String GET_MOVIE_QUERY = "SELECT * FROM movies M WHERE M.movie_id = ?";
+    public static final String SELECT_MOVIE_BY_ID = "SELECT * FROM movies M WHERE M.movie_id = ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
-    public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies M where cat_id = ? and trailer != null and name like '%?'  ";
-    public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies M where cat_id = ? and trailer = null and name like '%?'  ";
-    public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies M where trailer != null and name like '%?'  ";
-    public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where trailer = null and name like '%?'  ";
-    public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE is_recommended = true;";
+    public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies M where M.cat_id = ? and M.trailer = ? and M.name like ?  ";
+    public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies M where M.cat_id = ? and M.trailer = null and M.name like ? ";
+    public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies M where M.trailer != null and M.name like ?  ";
+    public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where M.trailer = null and M.name like ?  ";
+    public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE M.is_recommended = true;";
 
     public enum ShowTime {
 
@@ -66,7 +65,8 @@ public class MoviesManager extends DbManagerEntity {
 
     public Movie getMovieById(int id) throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(GET_MOVIE_QUERY);
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_BY_ID);
+            //for check :id = 1;
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             rs.next();
@@ -78,7 +78,7 @@ public class MoviesManager extends DbManagerEntity {
     public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         Movie result = new Movie();
-        result.setId(rs.getInt("M.movie_id"));  //fail!
+        result.setId(rs.getInt("M.movie_id"));  
         result.setName(rs.getString("M.name"));
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getDouble("M.mov_length"));
@@ -130,6 +130,9 @@ public class MoviesManager extends DbManagerEntity {
     // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
 
     public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
+        
+        ArrayList<Movie> result = new ArrayList<>();
+        
         PreparedStatement statement = null;
         try (Connection conn = manager.getConnection()) {
 
@@ -137,29 +140,29 @@ public class MoviesManager extends DbManagerEntity {
                 statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
-                statement.setString(3, keyword);
+                statement.setString(3,"%" + keyword);
             } else if (cat_id != 0 && !has_trailer) {
                 statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
                 statement.setInt(1, cat_id);
-                statement.setBoolean(2, is_recommended);
-                statement.setString(3, keyword);
+                //statement.setBoolean(2, is_recommended);
+                statement.setString(3,"%" + keyword);
             } else if (cat_id == 0 && has_trailer) {
                 statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
-                statement.setBoolean(1, is_recommended);
-                statement.setString(2, keyword);
+                //statement.setBoolean(1, is_recommended);
+                statement.setString(2, "%" + keyword);
             } else if (cat_id == 0 && !has_trailer) {
                 statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
-                statement.setBoolean(1, is_recommended);
-                statement.setString(2, keyword);
+                //statement.setBoolean(1, is_recommended);
+                statement.setString(2, "%" + keyword);
+            }
+            //NOT WORKING
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+            Movie movie = createMovieFromMySql(rs);
+            result.add(movie);
             }
         }
 
-        ArrayList<Movie> result = new ArrayList<>();
-        ResultSet rs = statement.executeQuery();
-        while (rs.next()) {
-            Movie movie = createMovieFromMySql(rs);
-            result.add(movie);
-        }
 
         return result;
     }

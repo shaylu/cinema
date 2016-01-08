@@ -79,7 +79,8 @@ public class PromoCategoriesManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_PROMORIONCATEGORY);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(SELECT_PROMORIONCATEGORY);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             result = createPromotionCategoryFromMySql(rs);
         }
 

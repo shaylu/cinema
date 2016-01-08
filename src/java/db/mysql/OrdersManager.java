@@ -62,9 +62,12 @@ public class OrdersManager extends DbManagerEntity {
     public int addDefaultValues() throws ClassNotFoundException, SQLException, ParseException {
         int result = 0;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        result += add("123456", "Mor", "Shalom", "morS@gmail.com", "05244781256", 1, 9, 45, "2588", 05, 2019, formatter.parse("2016-04-23"));
-        result += add("111444", "Inbar", "Gal", "inbargal@gmail.com", "0507778899", 2, 15, 36, "3669", 02, 2021, formatter.parse("2016-02-05"));
-        result += add("1234", "Raz", "Maor", "razmaor@gmail.com", "057874556", 1, 19, 42, "5987", 07, 2017, formatter.parse("2016-01-12"));
+
+        result += add("123456", "Mor", "Shalom", "morS@gmail.com", "05244781256", 1, 1, 25.5, "2588", 05, 2019, formatter.parse("2016-04-23"));
+        result += add("111444", "Inbar", "Gal", "inbargal@gmail.com", "0507778899", 2, 3, 88.5, "3669", 02, 2021, formatter.parse("2016-02-05"));
+        result += add("265487", "Raz", "Maor", "razmaor@gmail.com", "057874556", 3, 2, 44, "5987", 07, 2017, formatter.parse("2016-01-12"));
+        result += add("841576", "Ben", "Tapuzi", "tapuzi@gmail.com", "0505547123", 4, 2, 71, "5987", 07, 2017, formatter.parse("2016-01-12"));
+
         return result;
     }
 

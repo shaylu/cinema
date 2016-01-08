@@ -7,6 +7,8 @@ package models;
 
 import db.DBEntity;
 import java.util.Date;
+import org.joda.time.LocalTime;
+
 
 /**
  *
@@ -18,14 +20,16 @@ public class Show implements DBEntity {
     public Movie movie;
     public Hall hall;
     public Date date;
+    public LocalTime time;
     public int num_of_sets_left;
     public double price_per_seate;
 
-    public Show(int id, Movie movie, Hall hall, Date date, int num_of_sets_left, double price_per_seate) {
+    public Show(int id, Movie movie, Hall hall, Date date, LocalTime time, int num_of_sets_left, double price_per_seate) {
         this.id = id;
         this.movie = movie;
         this.hall = hall;
         this.date = date;
+        this.time = time;
         this.num_of_sets_left = num_of_sets_left;
         this.price_per_seate = price_per_seate;
     }
@@ -80,4 +84,14 @@ public class Show implements DBEntity {
     public double getPricePerSeat() {
         return this.price_per_seate;
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+    
+    
 }

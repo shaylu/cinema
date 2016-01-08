@@ -141,7 +141,7 @@ public class DbManager implements AutoCloseable {
                 + "num_of_seats INT ZEROFILL NOT NULL,"
                 + "PRIMARY KEY (hall_id));");
         executeSql(DbName, "CREATE TABLE IF NOT EXISTS shows(\n"
-                + "  show_id INT NOT NULL INT AUTO_INCREMENT PRIMARY KEY,\n"
+                + "  show_id INT NOT NULL AUTO_INCREMENT,\n"
                 + "  movie_id INT NOT NULL,\n"
                 + "  hall_id INT NOT NULL,\n"
                 + "  show_date DATE NOT NULL,\n"

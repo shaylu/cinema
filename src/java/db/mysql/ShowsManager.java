@@ -24,9 +24,9 @@ import models.Show;
  */
 public class ShowsManager extends DbManagerEntity {
 
-    public static final String INSERT_QUERY = "INSERT INTO shows (movie_id, hall_id, show_date, num_of_seats_left, price_per_seat) values(?,?,?,?,?);";
+    public static final String INSERT_QUERY = "INSERT INTO shows (movie_id, hall_id, show_date, show_time, num_of_seats_left, price_per_seat) values(?,?,?,?,?,?);";
     public static final String SUBSTRUCT = "UPDATE shows SET num_of_seats_left = (num_of_seats_left - (?)) WHERE show_id = (?);";
-    public static final String GET_BY_ID = "SELECT TOP 1 * FROM shows WHERE show_id = (?);";
+    public static final String GET_BY_ID = "SELECT * FROM shows WHERE show_id = (?);";
     public static final String GET_ALL = "SELECT * FROM shows;";
     public static final String GET_BY_HALL = "SELECT * FROM shows WHERE hall_id = (?);";
     public static final String GET_BY_LAST_TICKETS = "SELECT * FROM shows WHERE num_of_seats_left < (?);";
@@ -42,12 +42,9 @@ public class ShowsManager extends DbManagerEntity {
             statement.setInt(1, movie_id);
             statement.setInt(2, hall_id);
             statement.setInt(3, num_of_seats_left);
-            
-            long time = show_date.getTime();
-            Timestamp stamp = new Timestamp(time);
-            statement.setTimestamp(4, stamp);
-            
-            statement.setDouble(5, price_per_seat);
+            statement.setDate(4, new java.sql.Date(show_date.getTime()));
+            statement.setTime(5, new java.sql.Time(show_date.getTime()));
+            statement.setDouble(6, price_per_seat);
 
             return statement.executeUpdate();
         }

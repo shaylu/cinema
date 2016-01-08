@@ -44,10 +44,10 @@ public class PromoCategoriesManager extends DbManagerEntity {
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {
         int result = 0;
-        result += add("");
-        result += add("");
-        result += add("");
-        result += add("");
+        result += add("2 pupcuren in 50 nis");
+        result += add("2 pupcoren + 2 drinks in 75 nis");
+        result += add("pupcoren +snake + drink in 60 nis");
+        result += add("2 pupcuren + 2 snakes + 2 drinks 100 nis");
         return result;
     }
 

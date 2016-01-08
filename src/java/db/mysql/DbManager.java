@@ -48,8 +48,10 @@ public class DbManager implements AutoCloseable {
         promosManager = new PromosManager(this);
         reviewsManager = new ReviewsManager(this);
 
-//         movieCategoriesManager.addDefaultValues();
+        //promoCategoriesManager.addDefaultValues();
+       // movieCategoriesManager.addDefaultValues();
         //       moviesManager.addDefaultValues();
+        //  hallsManager.addDefaultValues();
     }
 
     public MovieCategoriesManager getMovieCategoriesManager() {

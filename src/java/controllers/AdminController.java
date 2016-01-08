@@ -51,16 +51,16 @@ import models.User;
 @Path("admin")
 public class AdminController {
 
-    private static db.mysql.DbManager db;
+//    private static db.mysql.DbManager db;
 
-    static {
-        try {
-            db = new DbManager();
-        } catch (Exception e) {
-            String txt;
-            txt = e.getMessage();
-        }
-    }
+//    static {
+//        try {
+//            db = new DbManager();
+//        } catch (Exception e) {
+//            String txt;
+//            txt = e.getMessage();
+//        }
+//    }
 
     public AdminController() {
 
@@ -121,13 +121,13 @@ public class AdminController {
         if (user != null && !user.equals("") && pass != null && !pass.equals("")) {
             // login
             try {
-                boolean userExist = db.getUsersManager().userExist(user, pass);
+                boolean userExist = ControllerHelper.getDb().getUsersManager().userExist(user, pass);
 
                 if (!userExist) {
                     throw new Exception("User or Password is invalid.");
                 }
 
-                int userId = db.getUsersManager().getUserId(user);
+                int userId = ControllerHelper.getDb().getUsersManager().getUserId(user);
 
                 // login, create session
                 HttpSession session = request.getSession(true);
@@ -151,7 +151,7 @@ public class AdminController {
     public Response getLoginView(@Context HttpServletRequest request) throws URISyntaxException {
         int result;
         try {
-            result = db.getUsersManager().addDefaultValues();
+            result = ControllerHelper.getDb().getUsersManager().addDefaultValues();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failed to add default users, " + e.getMessage()).build();
         }
@@ -173,7 +173,7 @@ public class AdminController {
         String json = null;
 
         try {
-            List<MovieCategory> categories = db.getMovieCategoriesManager().getAll();
+            List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAll();
             json = gson.toJson(categories);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all categories, " + e.getMessage()).build();
@@ -192,7 +192,7 @@ public class AdminController {
         int result;
 
         try {
-            result = db.getMovieCategoriesManager().addDefaultValues();
+            result = ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
         }
@@ -208,7 +208,7 @@ public class AdminController {
         }
 
         try {
-            db.getMovieCategoriesManager().add(name);
+            ControllerHelper.getDb().getMovieCategoriesManager().add(name);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
         }
@@ -242,7 +242,7 @@ public class AdminController {
         List<MovieCategory> categories = null;
 
         try {
-            categories = db.getMovieCategoriesManager().getAll();
+            categories = ControllerHelper.getDb().getMovieCategoriesManager().getAll();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
@@ -277,7 +277,7 @@ public class AdminController {
             Date date = formatter.parse(release_date);
             boolean is_reco = is_recommanded.toLowerCase().equals("true") ? true : false;
 
-            db.getMoviesManager().add(name, date, mov_length, cat_id, plot, poster, trailer, is_reco);
+            ControllerHelper.getDb().getMoviesManager().add(name, date, mov_length, cat_id, plot, poster, trailer, is_reco);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to add movie, " + e.getMessage()).build();
         }
@@ -309,7 +309,7 @@ public class AdminController {
         }
 
         try {
-            db.getHallsManager().add(hall_id, num_of_seats);
+            ControllerHelper.getDb().getHallsManager().add(hall_id, num_of_seats);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new hall, " + e.getMessage()).build();
         }
@@ -328,7 +328,7 @@ public class AdminController {
         String json = null;
 
         try {
-            List<Hall> halls = db.getHallsManager().getaAll();
+            List<Hall> halls = ControllerHelper.getDb().getHallsManager().getaAll();
             json = gson.toJson(halls);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all halls, " + e.getMessage()).build();
@@ -347,7 +347,7 @@ public class AdminController {
         int result;
 
         try {
-            result = db.getHallsManager().addDefaultValues();
+            result = ControllerHelper.getDb().getHallsManager().addDefaultValues();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add halls, " + e.getMessage()).build();
         }
@@ -372,8 +372,8 @@ public class AdminController {
         List<Integer> halls = new ArrayList<>();
         
         try {
-            movies = db.getMoviesManager().getAll();
-            for (Hall hall : db.getHallsManager().getaAll()) {
+            movies = ControllerHelper.getDb().getMoviesManager().getAll();
+            for (Hall hall : ControllerHelper.getDb().getHallsManager().getaAll()) {
                 halls.add(hall.getId());
             }
         } catch (Exception e) {
@@ -395,9 +395,9 @@ public class AdminController {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
             Date date = formatter.parse(date_str);
             
-            Hall hall = db.getHallsManager().get(hall_id);
+            Hall hall = ControllerHelper.getDb().getHallsManager().get(hall_id);
             int seats = hall.getNumOfSeats();
-            db.getShowsManager().add(movie_id, hall_id, seats, date, price);
+            ControllerHelper.getDb().getShowsManager().add(movie_id, hall_id, seats, date, price);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new hall, " + e.getMessage()).build();
         }
@@ -416,7 +416,7 @@ public class AdminController {
         String json = null;
 
         try {
-            List<Hall> halls = db.getHallsManager().getaAll();
+            List<Hall> halls = ControllerHelper.getDb().getHallsManager().getaAll();
             json = gson.toJson(halls);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all halls, " + e.getMessage()).build();
@@ -435,7 +435,7 @@ public class AdminController {
         int result;
 
         try {
-            result = db.getHallsManager().addDefaultValues();
+            result = ControllerHelper.getDb().getHallsManager().addDefaultValues();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add halls, " + e.getMessage()).build();
         }

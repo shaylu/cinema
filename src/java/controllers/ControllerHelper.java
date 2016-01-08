@@ -12,9 +12,22 @@ import db.mysql.DbManager;
  * @author Liraz
  */
 public class ControllerHelper {
-     protected static db.mysql.DbManager db;
+
+    private static db.mysql.DbManager db;
+
+    public static DbManager getDb() {
+        if (db == null) {
+            init();
+        }
+        
+        return db;
+    }
 
     static {
+        init();
+    }
+
+    private static void init() {
         try {
             db = new DbManager();
         } catch (Exception e) {
@@ -23,5 +36,4 @@ public class ControllerHelper {
         }
     }
 
-    
 }

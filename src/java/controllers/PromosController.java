@@ -37,11 +37,10 @@ public class PromosController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
-    //TODO:check
+
     @GET
-    @Path("{id}")
-    public Response getPromo(@PathParam("order_id") int promoId){
+    @Path("{promo_id}")
+    public Response getPromo(@PathParam("promo_id") int promoId) {
         Gson gson = new Gson();
         String json = null;
         try {

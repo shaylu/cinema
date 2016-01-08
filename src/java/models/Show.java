@@ -9,7 +9,6 @@ import db.DBEntity;
 import java.util.Date;
 import org.joda.time.LocalTime;
 
-
 /**
  *
  * @author Dell
@@ -21,16 +20,16 @@ public class Show implements DBEntity {
     public Hall hall;
     public Date date;
     public String time;
-    public int num_of_sets_left;
+    public int num_of_seats_left;
     public double price_per_seate;
 
-    public Show(int id, Movie movie, Hall hall, Date date, String time, int num_of_sets_left, double price_per_seate) {
+    public Show(int id, Movie movie, Hall hall, Date date, String time, int num_of_seats_left, double price_per_seate) {
         this.id = id;
         this.movie = movie;
         this.hall = hall;
         this.date = date;
         this.time = time;
-        this.num_of_sets_left = num_of_sets_left;
+        this.num_of_seats_left = num_of_seats_left;
         this.price_per_seate = price_per_seate;
     }
 
@@ -46,11 +45,11 @@ public class Show implements DBEntity {
     }
 
     public void setNumOfSeatsLeft(int num_of_sets_left) {
-        this.num_of_sets_left = num_of_sets_left;
+        this.num_of_seats_left = num_of_sets_left;
     }
 
     public int getNumOfSeatsLeft() {
-        return this.num_of_sets_left;
+        return this.num_of_seats_left;
     }
 
     public void setMovie(Movie movie_id) {
@@ -96,8 +95,5 @@ public class Show implements DBEntity {
     public void setTime(String time) {
         this.time = time;
     }
-    
-    
-    
-    
+
 }

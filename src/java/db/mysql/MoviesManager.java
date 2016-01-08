@@ -28,15 +28,15 @@ public class MoviesManager extends DbManagerEntity {
 
     public static final String INSERT_QUERY = "INSERT INTO movies (name, release_date, mov_length, cat_id,"
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
-    public static final String SELECT_ALL = "SELECT * FROM movies M inner join movies_categories C on M.cat_id = C.cat_id ";
+    public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "";
-    public static final String GET_MOVIE_QUERY = "SELECT * FROM movies WHERE movie_id = ?";
-    public final static String DELET_MOVIE = "DELETE from movies WHERE movie_id = (?)";
-    public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies where cat_id = ? and trailer != null and name like '%?'  ";
-    public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies where cat_id = ? and trailer = null and name like '%?'  ";
-    public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies where trailer != null and name like '%?'  ";
-    public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies where trailer = null and name like '%?'  ";
-    public final static String RECOMMENDED_QUERY = "SELECT * FROM movies WHERE is_recommended = true;";
+    public static final String GET_MOVIE_QUERY = "SELECT * FROM movies M WHERE movie_id = ?";
+    public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
+    public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies M where cat_id = ? and trailer != null and name like '%?'  ";
+    public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies M where cat_id = ? and trailer = null and name like '%?'  ";
+    public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies M where trailer != null and name like '%?'  ";
+    public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where trailer = null and name like '%?'  ";
+    public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE is_recommended = true;";
 
     public enum ShowTime {
 
@@ -64,28 +64,28 @@ public class MoviesManager extends DbManagerEntity {
         }
     }
 
-    public Movie getMovie(int id) throws SQLException, ClassNotFoundException {
+    public Movie getMovieById(int id) throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_MOVIE_QUERY);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(GET_MOVIE_QUERY);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             Movie result = createMovieFromMySql(rs);
             return result;
         }
     }
 
     public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
-        Movie result = new Movie();
-        result.setId(rs.getInt("movie_id"));
-        result.setName(rs.getString("M.name"));
-        result.setRelease_date(rs.getDate("release_date"));
-        result.setName(rs.getString("mov_length"));
-        result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("C.cat_id")));
-        result.setPlot(rs.getString("plot"));
-        result.setPoster(rs.getString("poster"));
-        result.setTrailer(rs.getString("trailer"));
-        result.setIs_recomanded(rs.getBoolean("is_recommended"));
 
+        Movie result = new Movie();
+        result.setId(rs.getInt("M.movie_id"));
+        result.setName(rs.getString("M.name"));
+        result.setRelease_date(rs.getDate("M.release_date"));
+        result.setMovie_length(rs.getDouble("M.mov_length"));
+        result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("M.cat_id")));
+        result.setPlot(rs.getString("M.plot"));
+        result.setPoster(rs.getString("M.poster"));
+        result.setIs_recomanded(rs.getBoolean("M.is_recommended"));
         return result;
     }
 
@@ -167,7 +167,6 @@ public class MoviesManager extends DbManagerEntity {
     // public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended)
     public int addDefaultValues() throws SQLException, ClassNotFoundException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        
 
         int result = 0;
         // Creating Star Wars: The Force Awakens
@@ -180,7 +179,7 @@ public class MoviesManager extends DbManagerEntity {
         result += add("Star Wars: The Force Awakens", release_date, 131, 1, plot, posterLink, trailer, true);
 
         //Creating Krampus
-       release_date = formatter.parse("2016-04-23");
+        release_date = formatter.parse("2016-04-23");
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
         posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";

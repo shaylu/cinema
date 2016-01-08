@@ -138,8 +138,8 @@ public class ShowsManager extends DbManagerEntity {
         Show showToReturn = new Show();
 
         showToReturn.setId(rs.getInt("S.show_id"));
-        showToReturn.setMovie(manager.getMoviesManager().getMovie(rs.getInt("S.movie_id")));
-        showToReturn.setHall(manager.getHallsManager().get(rs.getInt("S.hall_id")));
+        showToReturn.setMovie(manager.getMoviesManager().getMovieById(rs.getInt("S.movie_id")));
+        showToReturn.setHall(manager.getHallsManager().getHallById(rs.getInt("S.hall_id")));
         showToReturn.setDate(rs.getDate("S.show_date"));
         showToReturn.setNumOfSeatsLeft(rs.getInt("S.num_of_seats_left"));
         showToReturn.setPricePerSeat(rs.getDouble("S.price_per_seat"));

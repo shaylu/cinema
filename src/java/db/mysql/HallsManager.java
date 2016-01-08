@@ -21,7 +21,7 @@ import models.Hall;
 public class HallsManager extends DbManagerEntity {
 
     public static final String INSERT_QUERY = "INSERT INTO halls (hall_id, num_of_seats) values(?,?);";
-    public static final String GET_BY_ID = "SELECT TOP 1 * FROM halls WHERE hall_id = (?);";
+    public static final String GET_BY_ID = "SELECT * FROM halls WHERE hall_id = (?) LIMIT 1;";
     public static final String GET_ALL = "SELECT * FROM halls;";
 
     public HallsManager(DbManager manager) throws ClassNotFoundException, SQLException {
@@ -37,13 +37,11 @@ public class HallsManager extends DbManagerEntity {
         }
     }
 
-    public Hall get(int id) throws ClassNotFoundException, SQLException {
+    public Hall getHallById(int id) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_BY_ID);
             statement.setInt(1, id);
-
             ResultSet rs = statement.executeQuery();
-
             rs.next();
             Hall result = createHallFromMySql(rs);
             return result;
@@ -59,7 +57,6 @@ public class HallsManager extends DbManagerEntity {
             while (rs.next()) {
                 result.add(createHallFromMySql(rs));
             }
-
             return result;
         }
     }

@@ -24,7 +24,7 @@ public class ReviewsManager extends DbManagerEntity {
 
     private final static String INSERT_QUERY = "INSERT INTO reviews (order_id, rank, review_text,"
             + " review_date) values(?,?,?,?)";
-    public final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on 'R.order_id = O.id' ";
+    public final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on R.order_id = O.id ";
     public final static String SELECT_REVIEW = "SELECT * FROM reviews WHERE rev_id = ?";
 
     public ReviewsManager(DbManager manager) {
@@ -63,7 +63,8 @@ public class ReviewsManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_REVIEW);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(SELECT_REVIEW);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             reviewToReturn = createReviewFromMySql(rs);
         }
         return reviewToReturn;
@@ -87,11 +88,11 @@ public class ReviewsManager extends DbManagerEntity {
     private Review createReviewFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         Review result = new Review();
-        result.setId(rs.getInt("rev_id"));
-        result.setOrder(manager.getOrdersManager().getOrderById(rs.getInt("order_id")));
-        result.setRank(rs.getDouble("rank"));
-        result.setText(rs.getString("review_text"));
-        result.setDate(rs.getDate("review_date"));
+        result.setId(rs.getInt("R.rev_id"));
+        result.setOrder(manager.getOrdersManager().getOrderById(rs.getInt("O.order_id")));
+        result.setRank(rs.getDouble("R.rank"));
+        result.setText(rs.getString("R.review_text"));
+        result.setDate(rs.getDate("R.review_date"));
         return result;
     }
 

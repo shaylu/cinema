@@ -8,6 +8,7 @@ package controllers;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -17,7 +18,7 @@ import models.Order;
 
 /**
  *
- * @author Liraz
+ * @author Liraz TODO: checck
  */
 @Path("reviews")
 public class ReviewsController {
@@ -37,6 +38,18 @@ public class ReviewsController {
         }
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+// TODO check if work
+    @POST
+    @Path("add")
+    public Response addNewReview(int order_id, double rank, String text) {
+        try {
+            ControllerHelper.getDb().getReviewsManager().add(order_id, rank, text);
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).entity("Success.").build();
+
     }
 
 }

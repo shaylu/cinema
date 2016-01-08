@@ -58,42 +58,38 @@ public class MovieManager implements DBEntityManager<Movie> {
         DBHelper.executeUpdateStatment(CREATE_TABLE);
     }
 
-    public void addMoviesToDataBase() throws SQLException{
+    public void addMoviesToDataBase() throws SQLException {
 
         ArrayList<Movie> moviesToInsert = new ArrayList<Movie>();
         boolean isAddToDB = true;
         // Creating Star Wars: The Force Awakens
-        Date release_date = new Date(17/12/2015);
+        Date release_date = new Date(17 / 12 / 2015);
         String plot = "Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a rag-tag group of heroes can stop them, along with the help of the Resistance.";
         String posterLink = "http://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
         MovieCategory category = getMovieCategoryByName("Action");
-        
+
         Movie starWarsTheForceAwakens = new Movie("Star Wars: The Force Awakens", release_date, 131, plot, posterLink, trailer, category, true);
         moviesToInsert.add(starWarsTheForceAwakens);
-       
+
         //Creating Krampus
-        release_date = new Date(04/12/2105);
+        release_date = new Date(04 / 12 / 2105);
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
         posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
         category = getMovieCategoryByName("Comedy");
-        
+
         Movie Krampus = new Movie("Krampus", release_date, 98, plot, posterLink, trailer, category, true);
         moviesToInsert.add(Krampus);
 
-        
         for (Movie p : moviesToInsert) {
-	    isAddToDB = addEntity(p);
-            if (isAddToDB == false)
-            {
+            isAddToDB = addEntity(p);
+            if (isAddToDB == false) {
                 throw new MySQLDataException();
             }
-	}
-    
-        
+        }
     }
-    
+
     @Override
     public boolean addEntity(Movie entity) {
         Connection conn = null;

@@ -29,7 +29,7 @@ public class DbManager implements AutoCloseable {
     private HallsManager hallsManager;
     private ShowsManager showsManager;
     private OrdersManager ordersManager;
-    private PromoCompaniesManager promoCompaniesManager;
+    private CompaniesManager promoCompaniesManager;
     private PromoCategoriesManager promoCategoriesManager;
     private PromosManager promosManager;
     private ReviewsManager reviewsManager;
@@ -43,10 +43,15 @@ public class DbManager implements AutoCloseable {
         hallsManager = new HallsManager(this);
         showsManager = new ShowsManager(this);
         ordersManager = new OrdersManager(this);
-        promoCompaniesManager = new PromoCompaniesManager(this);
+        promoCompaniesManager = new CompaniesManager(this);
         promoCategoriesManager = new PromoCategoriesManager(this);
         promosManager = new PromosManager(this);
         reviewsManager = new ReviewsManager(this);
+
+        //promoCategoriesManager.addDefaultValues();
+        //movieCategoriesManager.addDefaultValues();
+        //moviesManager.addDefaultValues();
+        //  hallsManager.addDefaultValues();
     }
 
     public MovieCategoriesManager getMovieCategoriesManager() {
@@ -69,7 +74,7 @@ public class DbManager implements AutoCloseable {
         return ordersManager;
     }
 
-    public PromoCompaniesManager getPromoCompaniesManager() {
+    public CompaniesManager getPromoCompaniesManager() {
         return promoCompaniesManager;
     }
 

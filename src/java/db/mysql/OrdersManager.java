@@ -27,17 +27,20 @@ public class OrdersManager extends DbManagerEntity {
     public static final String SELECT_ALL = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id ";
     private final static String DELET_QUERY = "DELET from orders WHERE order_id = (?)";
     public static final String SELECT_ORDER_BY_ID = "SELECT client_id,fname,lname,email,phone,show_id,num_of_seats,total_payment,credit_card_last_digit,exp_date_month,exp_date_year"
-    + "FROM cinemacity.orders WHERE order_id = ? ";
-    
+            + "FROM cinemacity.orders WHERE order_id = ? ";
+    public static final String SELECT_ORDER_BY_SHOW_ID = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id  WHERE show_id = ?";
+    public static final String SELECT_ORDER_BY_CLIENT_ID = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id client_id = ?";
+    public static final String SELECT_ORDER = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id WHERE order_id = ?";
+
     public OrdersManager(DbManager manager) {
         this.manager = manager;
     }
 
     public int add(String client_id, String fname, String lname, String email, String phone, int show_id, int num_of_seats, double total_payment, String credit_card_last_digits, int exp_month, int exp_year, Date order_date) throws ClassNotFoundException, SQLException {
-                
+
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
-            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat dateformatSql = new SimpleDateFormat("yyyy-MM-dd");
 
             statement.setString(1, client_id);
             statement.setString(2, fname);
@@ -57,67 +60,95 @@ public class OrdersManager extends DbManagerEntity {
 
     public int delete(int order_id) throws ClassNotFoundException, SQLException {
 
-        try (Connection conn = manager.getConnection()){
+        try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(DELET_QUERY);
             statement.setInt(1, order_id);
             return statement.executeUpdate();
-        } 
+        }
     }
 
     public Order get(int order_id) throws ClassNotFoundException, SQLException {
-            
+
         Order orderToReturn;
-        try (Connection conn = manager.getConnection()){
+        try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_ID);
             statement.setInt(1, order_id);
             ResultSet rs = statement.executeQuery();
-            orderToReturn = getOrderByResultSet(rs);
+            orderToReturn = createOrderFromMySql(rs);
         }
         return orderToReturn;
     }
-    
-        public Order getOrderByResultSet(ResultSet rs) throws SQLException, ClassNotFoundException {
+
+    public Order createOrderFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
         Order OrderToReturn = new Order();
 
-        OrderToReturn.setClientId(rs.getString("client_id"));
-        OrderToReturn.setFirstName(rs.getString("fname"));
-        OrderToReturn.setLastName(rs.getString("lname"));
-        OrderToReturn.setEmail(rs.getString("email"));
-        OrderToReturn.setPhoneNumber(rs.getString("phone"));
-        OrderToReturn.setShow(manager.getShowsManager().getShow(rs.getInt("show_id")));
-        OrderToReturn.setNumOfSeats(rs.getInt("num_of_seats"));
-        OrderToReturn.setTotalPayment(rs.getDouble("total_payment"));
-        OrderToReturn.setCreditCardLastDigit(rs.getString("credit_card_last_digit"));
-        OrderToReturn.setExpDateMonth(rs.getInt("exp_date_month"));
-        OrderToReturn.setExpDateYear(rs.getInt("exp_date_year"));
-        OrderToReturn.setOrderDate(rs.getDate("order_date"));
+        OrderToReturn.setClientId(rs.getString("O.client_id"));
+        OrderToReturn.setFirstName(rs.getString("O.fname"));
+        OrderToReturn.setLastName(rs.getString("O.lname"));
+        OrderToReturn.setEmail(rs.getString("O.email"));
+        OrderToReturn.setPhoneNumber(rs.getString("O.phone"));
+        OrderToReturn.setShow(manager.getShowsManager().getShow(rs.getInt("O.show_id")));
+        OrderToReturn.setNumOfSeats(rs.getInt("O.num_of_seats"));
+        OrderToReturn.setTotalPayment(rs.getDouble("O.total_payment"));
+        OrderToReturn.setCreditCardLastDigit(rs.getString("O.credit_card_last_digit"));
+        OrderToReturn.setExpDateMonth(rs.getInt("O.exp_date_month"));
+        OrderToReturn.setExpDateYear(rs.getInt("O.exp_date_year"));
+        OrderToReturn.setOrderDate(rs.getDate("O.order_date"));
         return OrderToReturn;
     }
 
     public List<Order> getAll() throws ClassNotFoundException, SQLException {
-        
+
         ArrayList<Order> ListToReturn = new ArrayList<Order>();
-        
-        try (Connection conn = manager.getConnection()){
+
+        try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_ALL);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                ListToReturn.add(getOrderByResultSet(rs));
+                ListToReturn.add(createOrderFromMySql(rs));
             }
         }
         return ListToReturn;
     }
 
-    public List<Order> getAllByMovie(int movie_id) throws ClassNotFoundException, SQLException {
-                throw new UnsupportedOperationException();
-    }
-
     public List<Order> getAllByShow(int show_id) throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
+        ArrayList<Order> ListToReturn = new ArrayList<Order>();
+
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_SHOW_ID);
+            statement.setInt(1, show_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ListToReturn.add(createOrderFromMySql(rs));
+            }
+        }
+        return ListToReturn;
     }
 
     public List<Order> getAllByClientId(String client_id) throws ClassNotFoundException, SQLException {
-        throw new UnsupportedOperationException();
+
+        ArrayList<Order> ListToReturn = new ArrayList<Order>();
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_CLIENT_ID);
+            statement.setString(1, client_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                ListToReturn.add(createOrderFromMySql(rs));
+            }
+        }
+        return ListToReturn;
     }
 
+    public Order getOrderById(int id) throws SQLException, ClassNotFoundException {
+        Order orderToReturn = new Order();
+        
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_ORDER);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery(SELECT_ORDER);
+            orderToReturn = createOrderFromMySql(rs);
+        }
+       
+        return orderToReturn;
+    }
 }

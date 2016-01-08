@@ -59,7 +59,8 @@ public class LayoutHelper {
         StringBuilder str = new StringBuilder();
         str.append("<div><a href=\"categories\">Movie Categories</a></div>");
         str.append("<div><a href=\"movies\">Movies</a></div>");
-        str.append("<div><a href=\"\">Halls</a></div>");
+        str.append("<div><a href=\"halls\">Halls</a></div>");
+        str.append("<div><a href=\"shows\">Shows</a></div>");
         str.append("<div><a href=\"\">Promotions Categories</a></div>");
         str.append("<div><a href=\"\">Promotions Companies</a></div>");
         str.append("<div><a href=\"\">Promotions</a></div>");

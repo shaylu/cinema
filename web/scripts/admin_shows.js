@@ -25,8 +25,9 @@ $(function () {
         var movie_id = $("#addShow #selMovieId").val();
         var hall_id = $("#addShow #selHallId").val();
         var price = $("#addShow #numPricePerSeat").val();
-        var date = $("#addShow #txtDateTime").val();
-        $.ajax({url: url, data: {'movie_id': movie_id, 'hall_id': hall_id, 'price': price, 'date': date}, method: 'POST'})
+        var date = $("#addShow #txtDate").val();
+        var time = $("#addShow #txtTime").val();
+        $.ajax({url: url, data: {'movie_id': movie_id, 'hall_id': hall_id, 'price': price, 'date': date, 'time': time}, method: 'POST'})
                 .fail(function (data) {
                     alert(data.responseText);
                 })

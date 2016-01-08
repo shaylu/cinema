@@ -39,8 +39,10 @@ public class AdminShowsView implements ICinemaView {
                 + getMoviesSelectBox()
                 + "  <label for=\"selHallId\">Hall</label>\n"
                 + getHallsSelectBox()
-                + "  <label for=\"txtDateTime\">Date and Time</label>\n"
-                + "  <input type=\"datetime-local\" id=\"txtDateTime\" name=\"txtNumOfSeats\">\n"
+                + "  <label for=\"txtDate\">Date</label>\n"
+                + "  <input type=\"date\" id=\"txtDate\" name=\"txtDate\">\n"
+                + "  <label for=\"txtTime\">Time</label>\n"
+                + "  <input type=\"time\" id=\"txtTime\" name=\"txtTime\">\n"
                 + "  <label for=\"numPricePerSeat\">Price Per Seat</label>\n"
                 + "  <input type=\"number\" id=\"numPricePerSeat\" name=\"numPricePerSeat\">\n"
                 + "  <input type=\"submit\" value=\"Add\" />\n"

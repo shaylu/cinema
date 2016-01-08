@@ -386,18 +386,18 @@ public class AdminController {
 
     @POST
     @Path("shows/add")
-    public Response addShow(@Context HttpServletRequest request, @FormParam("hall_id") int hall_id, @FormParam("movie_id") int movie_id, @FormParam("price") double price, @FormParam("date") String date_str) throws Exception {
+    public Response addShow(@Context HttpServletRequest request, @FormParam("hall_id") int hall_id, @FormParam("movie_id") int movie_id, @FormParam("price") double price, @FormParam("date") String date_str, @FormParam("time") String time_str) throws Exception {
         if (!isLogin(request)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date date = formatter.parse(date_str);
             
             Hall hall = ControllerHelper.getDb().getHallsManager().getHallById(hall_id);
             int seats = hall.getNumOfSeats();
-            ControllerHelper.getDb().getShowsManager().add(movie_id, hall_id, seats, date, price);
+            ControllerHelper.getDb().getShowsManager().add(movie_id, hall_id, seats, date_str, time_str, price);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new hall, " + e.getMessage()).build();
         }

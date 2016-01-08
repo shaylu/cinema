@@ -5,8 +5,6 @@
  */
 package db.mysql;
 
-import static db.mysql.MovieCategoriesManager.SELECT_ALL;
-import static db.mysql.CompaniesManager.SELECT_COMPANY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,8 +23,8 @@ import models.PromotionCategory;
 public class PromoCategoriesManager extends DbManagerEntity {
 
     public final static String INSERT_QUERY = "INSERT INTO promotion_categories (name) values(?)";
-    public final static String DELET_PROMOTIONCATEGORY = "DELET from promotion_categories WHERE promo_cat_id = (?)";
-    public final static String SELECT_ALL_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories";
+    public final static String DELET_PROMOTIONCATEGORY = "DELETE from promotion_categories WHERE promo_cat_id = (?)";
+    public final static String SELECT_ALL_PROMORIONCATEGORY = "SELECT * FROM promotion_categories";
     public final static String SELECT_PROMORIONCATEGORY = "SELECT * FROM  promotion_categories WHERE promo_cat_id = ?";
 
     public PromoCategoriesManager(DbManager manager) {
@@ -57,7 +55,7 @@ public class PromoCategoriesManager extends DbManagerEntity {
         ArrayList<PromotionCategory> result = new ArrayList<>();
         try (Connection conn = manager.getConnection()) {
             Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_ALL);
+            ResultSet rs = statement.executeQuery(SELECT_ALL_PROMORIONCATEGORY);
             while (rs.next()) {
                 PromotionCategory mc = createPromotionCategoryFromMySql(rs);
                 result.add(mc);
@@ -69,7 +67,9 @@ public class PromoCategoriesManager extends DbManagerEntity {
 
     private PromotionCategory createPromotionCategoryFromMySql(ResultSet rs) throws SQLException {
         PromotionCategory result = new PromotionCategory();
-        result.setId(rs.getInt("promo_cat_id"));
+        
+        int aInt = rs.getInt("promo_cat_id");
+        result.setId(aInt);
         result.setName(rs.getString("name"));
         return result;
 

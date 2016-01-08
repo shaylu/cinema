@@ -44,6 +44,8 @@ import models.Company;
 import models.Hall;
 import models.Movie;
 import models.MovieCategory;
+import models.Promotion;
+import models.PromotionCategory;
 import models.Show;
 import models.User;
 
@@ -542,7 +544,154 @@ public class AdminController {
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new companies to db.").build();
     }
-    
-    
-    
+
+    // ========================================================
+    // PROMO CATEGORIES
+    // ========================================================
+    @GET
+    @Path("promotions/categories")
+    public Response adminPromoCompanies(@Context HttpServletRequest request) throws URISyntaxException {
+        if (!isLogin(request)) {
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+            URI targetURIForRedirection = new URI("/admin");
+            return Response.seeOther(targetURIForRedirection).build();
+        }
+
+        views.admin.AdminPromoCategoriesView view = new views.admin.AdminPromoCategoriesView();
+        return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
+    }
+
+    @POST
+    @Path("promotions/categories/add")
+    public Response addPromoCompany(@Context HttpServletRequest request, @FormParam("name") String name) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            ControllerHelper.getDb().getPromoCategoriesManager().add(name);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added new category to db.").build();
+    }
+
+    @GET
+    @Path("promotions/categories/all")
+    public Response getAllPromoCategories(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        Gson gson = new Gson();
+        String json = null;
+
+        try {
+            List<PromotionCategory> categories = ControllerHelper.getDb().getPromoCategoriesManager().getAll();
+            json = gson.toJson(categories);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all companies, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+
+    @POST
+    @Path("promotions/categories/add_default")
+    public Response promoCategoriesAddDefault(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        int result;
+
+        try {
+            result = ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add categories, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added " + result + " new categories to db.").build();
+    }
+
+    // ========================================================
+    // PROMOS
+    // ========================================================
+    @GET
+    @Path("promotions")
+    public Response adminPromos(@Context HttpServletRequest request) throws URISyntaxException {
+        if (!isLogin(request)) {
+//            return Response.status(Response.Status.UNAUTHORIZED).build();
+            URI targetURIForRedirection = new URI("/admin");
+            return Response.seeOther(targetURIForRedirection).build();
+        }
+
+        List<Company> companies = null;
+        List<PromotionCategory> categories = null;
+        try {
+            companies = ControllerHelper.getDb().getPromoCompaniesManager().getAll();
+            categories = ControllerHelper.getDb().getPromoCategoriesManager().getAll();
+
+        } catch (Exception e) {
+        }
+        views.admin.AdminPromosView view = new views.admin.AdminPromosView(companies, categories);
+        return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
+    }
+
+    @POST
+    @Path("promotions/add")
+    public Response addPromo(@Context HttpServletRequest request, @FormParam("cat_id") int cat_id, @FormParam("comp_id") int comp_id, @FormParam("description") String description, @FormParam("exp_date") String exp_date_str, @FormParam("promo_code") String promo_code, @FormParam("image") String image) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date exp_date = formatter.parse(exp_date_str);
+            ControllerHelper.getDb().getPromosManager().add(comp_id, cat_id, description, exp_date, promo_code, image);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new promo, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added new promo to db.").build();
+    }
+
+    @GET
+    @Path("promotions/all")
+    public Response getAllPromos(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        Gson gson = new Gson();
+        String json = null;
+
+        try {
+            List<Promotion> promotions = ControllerHelper.getDb().getPromosManager().getAll();
+            json = gson.toJson(promotions);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all promos, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+
+    @POST
+    @Path("promotions/add_default")
+    public Response promoAddDefault(@Context HttpServletRequest request) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+        int result;
+
+        try {
+            result = ControllerHelper.getDb().getPromosManager().addDefaultValues();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add promos, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).entity("Added " + result + " new promos to db.").build();
+    }
 }

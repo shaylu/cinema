@@ -40,7 +40,7 @@ public class ReviewsController {
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-// TODO check if work
+    
     @POST
     @Path("add")
     public Response addNewReview(@FormParam("order_id")int order_id,@FormParam("rank")double rank,@FormParam("text") String text) {

@@ -395,7 +395,7 @@ public class AdminController {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
             Date date = formatter.parse(date_str);
             
-            Hall hall = db.getHallsManager().get(hall_id);
+            Hall hall = db.getHallsManager().getHallById(hall_id);
             int seats = hall.getNumOfSeats();
             db.getShowsManager().add(movie_id, hall_id, seats, date, price);
         } catch (Exception e) {

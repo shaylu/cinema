@@ -137,8 +137,8 @@ public class ShowsManager extends DbManagerEntity {
         int movie_id = rs.getInt("movie_id");
         int hall_id = rs.getInt("hall_id");
         
-        Movie movie = manager.getMoviesManager().getMovie(movie_id);
-        Hall hall = manager.getHallsManager().get(hall_id);
+        Movie movie = manager.getMoviesManager().getMovieById(movie_id);
+        Hall hall = manager.getHallsManager().getHallById(hall_id);
 
         Show result = new Show();
         result.setId(rs.getInt("show_id"));

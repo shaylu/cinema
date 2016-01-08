@@ -64,11 +64,12 @@ public class MoviesManager extends DbManagerEntity {
         }
     }
 
-    public Movie getMovie(int id) throws SQLException, ClassNotFoundException {
+    public Movie getMovieById(int id) throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_MOVIE_QUERY);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(GET_MOVIE_QUERY);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             Movie result = createMovieFromMySql(rs);
             return result;
         }
@@ -80,11 +81,11 @@ public class MoviesManager extends DbManagerEntity {
         result.setName(rs.getString("M.name"));
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getInt("M.mov_length"));
-        
+
         int cat_id = rs.getInt("C.cat_id");
         MovieCategory category = manager.getMovieCategoriesManager().getMovieCategoryById(cat_id);
         result.setCategory(category);
-        
+
         result.setPlot(rs.getString("M.plot"));
         result.setPoster(rs.getString("M.poster"));
         result.setTrailer(rs.getString("M.trailer"));
@@ -171,7 +172,6 @@ public class MoviesManager extends DbManagerEntity {
     // public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended)
     public int addDefaultValues() throws SQLException, ClassNotFoundException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        
 
         int result = 0;
         // Creating Star Wars: The Force Awakens
@@ -184,7 +184,7 @@ public class MoviesManager extends DbManagerEntity {
         result += add("Star Wars: The Force Awakens", release_date, 131, 1, plot, posterLink, trailer, true);
 
         //Creating Krampus
-       release_date = formatter.parse("2016-04-23");
+        release_date = formatter.parse("2016-04-23");
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
         posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";

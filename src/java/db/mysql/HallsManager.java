@@ -37,13 +37,11 @@ public class HallsManager extends DbManagerEntity {
         }
     }
 
-    public Hall get(int id) throws ClassNotFoundException, SQLException {
+    public Hall getHallById(int id) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_BY_ID);
             statement.setInt(1, id);
-
             ResultSet rs = statement.executeQuery();
-
             rs.next();
             Hall result = createHallFromMySql(rs);
             return result;
@@ -59,7 +57,6 @@ public class HallsManager extends DbManagerEntity {
             while (rs.next()) {
                 result.add(createHallFromMySql(rs));
             }
-
             return result;
         }
     }

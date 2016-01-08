@@ -24,13 +24,13 @@ import models.Show;
  */
 public class ShowsManager extends DbManagerEntity {
 
-    public static final String INSERT_QUERY = "INSERT INTO shows (movie_id, hall_id, show_date, show_time, num_of_seats_left, price_per_seat) values(?,?,?,?,?,?);";
-    public static final String SUBSTRUCT = "UPDATE shows SET num_of_seats_left = (num_of_seats_left - (?)) WHERE show_id = (?);";
-    public static final String GET_BY_ID = "SELECT * FROM shows WHERE show_id = (?);";
-    public static final String GET_ALL = "SELECT * FROM shows;";
-    public static final String GET_BY_HALL = "SELECT * FROM shows WHERE hall_id = (?);";
+    public static final String INSERT_QUERY = "INSERT INTO shows (movie_id, hall_id, show_date, num_of_seats_left, price_per_seat) values(?,?,?,?,?);";
+    public static final String SUBSTRUCT = "UPDATE shows S SET num_of_seats_left = (num_of_seats_left - (?)) WHERE show_id = (?);";
+    public static final String GET_BY_ID = "SELECT * FROM shows S WHERE show_id = (?) LIMIT 1;";
+    public static final String GET_ALL = "SELECT * FROM shows S;";
+    public static final String GET_BY_HALL = "SELECT * FROM shows S inner join halls H on S.hall_id = H.hall_id WHERE hall_id = (?);";
     public static final String GET_BY_LAST_TICKETS = "SELECT * FROM shows WHERE num_of_seats_left < (?);";
-    public static final String GET_BY_MOVIE = "SELECT * FROM shows WHERE movie_id = (?);";
+    public static final String GET_BY_MOVIE = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE movie_id = (?);";
 
     public ShowsManager(DbManager manager) {
         this.manager = manager;
@@ -136,20 +136,17 @@ public class ShowsManager extends DbManagerEntity {
     }
     
     public Show createShowFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
-        int movie_id = rs.getInt("movie_id");
-        int hall_id = rs.getInt("hall_id");
-        
-        Movie movie = manager.getMoviesManager().getMovieById(movie_id);
-        Hall hall = manager.getHallsManager().getHallById(hall_id);
+       
+        Show showToReturn = new Show();
 
-        Show result = new Show();
-        result.setId(rs.getInt("show_id"));
-        result.setMovie(movie);
-        result.setHall(hall);
-        result.setDate(rs.getDate("show_date"));
-        result.setNumOfSeatsLeft(rs.getInt("num_of_seats_left"));
-        result.setPricePerSeat(rs.getDouble("price_per_seat"));
-        return result;
+        showToReturn.setId(rs.getInt("S.show_id"));
+        showToReturn.setMovie(manager.getMoviesManager().getMovieById(rs.getInt("S.movie_id")));
+        showToReturn.setHall(manager.getHallsManager().getHallById(rs.getInt("S.hall_id")));
+        showToReturn.setDate(rs.getDate("S.show_date"));
+        showToReturn.setNumOfSeatsLeft(rs.getInt("S.num_of_seats_left"));
+        showToReturn.setPricePerSeat(rs.getDouble("S.price_per_seat"));
+   
+        return showToReturn;
     }
 
         public int addDefaultValues() throws ClassNotFoundException, SQLException {

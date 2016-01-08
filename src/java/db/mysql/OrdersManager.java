@@ -74,6 +74,7 @@ public class OrdersManager extends DbManagerEntity {
             PreparedStatement statement = conn.prepareStatement(SELECT_ORDER_BY_ID);
             statement.setInt(1, order_id);
             ResultSet rs = statement.executeQuery();
+            rs.next();
             orderToReturn = createOrderFromMySql(rs);
         }
         return orderToReturn;
@@ -105,7 +106,8 @@ public class OrdersManager extends DbManagerEntity {
             PreparedStatement statement = conn.prepareStatement(SELECT_ALL);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                ListToReturn.add(createOrderFromMySql(rs));
+                Order order = createOrderFromMySql(rs);
+                ListToReturn.add(order);
             }
         }
         return ListToReturn;

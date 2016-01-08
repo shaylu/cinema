@@ -147,7 +147,8 @@ public class OrdersManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_ORDER);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(SELECT_ORDER);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             orderToReturn = createOrderFromMySql(rs);
         }
        

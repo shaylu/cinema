@@ -7,6 +7,7 @@ package controllers;
 
 import com.google.gson.Gson;
 import java.sql.SQLException;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -42,7 +43,7 @@ public class ReviewsController {
 // TODO check if work
     @POST
     @Path("add")
-    public Response addNewReview(int order_id, double rank, String text) {
+    public Response addNewReview(@FormParam("order_id")int order_id,@FormParam("rank")double rank,@FormParam("text") String text) {
         try {
             ControllerHelper.getDb().getReviewsManager().add(order_id, rank, text);
         } catch (Exception e) {

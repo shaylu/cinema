@@ -45,10 +45,11 @@ public class CompaniesManager extends DbManagerEntity {
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {
         int result = 0;
-        result += add("", "", "");
-        result += add("", "", "");
-        result += add("", "", "");
-        result += add("", "", "");
+        
+        result += add("Elit", "Alenbi 55,Haifa", "coffe and candy");
+        result += add("McDodals", "Herzel 55, TelAvivi", "fast food");
+        result += add("Lizi Boutique", "Ben Zvi 156,Jerusalem ", "fashion");
+       
         return result;
     }
 

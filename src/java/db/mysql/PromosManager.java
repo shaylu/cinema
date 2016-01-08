@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,12 +53,14 @@ public class PromosManager extends DbManagerEntity {
     }
 //TODO
 
-    public int addDefaultValues() throws ClassNotFoundException, SQLException {
+    public int addDefaultValues() throws ClassNotFoundException, SQLException, ParseException {
         int result = 0;
-        // result += add();
-        //result += add();
-        //result += add();
-        //result += add();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        result += add(1, 1, "coffe and cockis in 25 nis", formatter.parse("2016-05-01"), "1111", "http://www.ksharimplus.com/components/img.aspx?img=images%5Cshutterstock_11548816.jpg&width=600");
+        result += add(2, 1, "a meal that includes a burger fries and drink in 35 nis", formatter.parse("2016-08-31"), "2222", "https://rewards.americanexpress.co.il/contentassets/1f1a0e894740488da90740c7fcae0871/macbigb.jpg?id=16251");
+        result += add(2, 1, "a T-base in 25 nis", formatter.parse("2016-12-31"), "3333", "http://saloona.co.il/kona/files/2013/03/qk803rydhym2s8h028c.jpg");
+
         return result;
     }
 
@@ -90,7 +93,7 @@ public class PromosManager extends DbManagerEntity {
     }
 
     public Promotion createPromotionFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
-        
+
         Promotion result = new Promotion();
         result.setId(rs.getInt("P.promo_id"));
         result.setCompanie(manager.getPromoCompaniesManager().getCompanyById(rs.getInt("P.comp_id")));

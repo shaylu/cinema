@@ -31,7 +31,7 @@ public class ReviewsManager extends DbManagerEntity {
         this.manager = manager;
     }
 
-    public int add(int order_id, int rank, String review_text) throws ClassNotFoundException, SQLException {
+    public int add(int order_id, double rank, String review_text) throws ClassNotFoundException, SQLException {
         // dont forget to set the review date using the now() function
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);

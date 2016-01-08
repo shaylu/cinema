@@ -72,7 +72,8 @@ public class PromoCompaniesManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_COMPANY);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery(SELECT_COMPANY);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
             result = createCompanyFromMySql(rs);
         }
         return result;
@@ -83,7 +84,7 @@ public class PromoCompaniesManager extends DbManagerEntity {
         result.setId(rs.getInt("comp_id"));
         result.setName(rs.getString("name"));
         result.setAddress(rs.getString("address"));
-        result.setAboutText(rs.getString("abut_text"));
+        result.setAboutText(rs.getString("about_text"));
         return result;
     }
 

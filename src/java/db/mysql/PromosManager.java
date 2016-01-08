@@ -29,8 +29,7 @@ public class PromosManager extends DbManagerEntity {
     public final static String INSERT_QUERY = "INSERT INTO promotions (comp_id, promo_cat_id, description, exp_date,"
             + "promo_code, image) values(?,?,?,?,?,?)";
     public final static String DELET_PROMOTION = "DELET from promotions WHERE promo_id = (?)";
-    public final static String SELECT_ALL = "SELECT * FROM (promotions P inner join companys C "
-            + "on P.comp_id = C.comp_id) inner join promotion_categories PC on PC.promo_cat_id = P.promo_cat_id";
+    public final static String SELECT_ALL = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id";
     public static final String SELECT_PROMOION = "SELECT * FROM promotions WHERE promo_id = ?";
 
     public PromosManager(DbManager manager) {
@@ -90,14 +89,15 @@ public class PromosManager extends DbManagerEntity {
     }
 
     public Promotion createPromotionFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
+        
         Promotion result = new Promotion();
-        result.setId(rs.getInt("cat_id"));
-        result.setCompanie(manager.getPromoCompaniesManager().getCompanyById(rs.getInt("comp_id")));
-        result.setPromoCategorie(manager.getPromoCategoriesManager().getPromotionCategoryById(rs.getInt("promo_cat_id")));
-        result.setDescription(rs.getString("description"));
-        result.setDate(rs.getDate("exp_date"));
-        result.setPromoCode(rs.getString("promo_code"));
-        result.setImage(rs.getString("image"));
+        result.setId(rs.getInt("P.promo_id"));
+        result.setCompanie(manager.getPromoCompaniesManager().getCompanyById(rs.getInt("P.comp_id")));
+        result.setPromoCategorie(manager.getPromoCategoriesManager().getPromotionCategoryById(rs.getInt("P.promo_cat_id")));
+        result.setDescription(rs.getString("P.description"));
+        result.setDate(rs.getDate("P.exp_date"));
+        result.setPromoCode(rs.getString("P.promo_code"));
+        result.setImage(rs.getString("P.image"));
         return result;
     }
 }

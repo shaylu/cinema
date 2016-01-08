@@ -42,7 +42,7 @@ public class MovieController {
     @Produces(MediaType.TEXT_HTML)
     public String liraz() throws ServletException, IOException, SQLException, Exception {
         System.out.println("Shay you are my bitch");
-        DbManager db = new DbManager();
+        //DbManager db = new DbManager();
         return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
                 + "<HTML>\n"
                 + "   <HEAD>\n"

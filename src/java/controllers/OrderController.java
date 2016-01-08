@@ -28,7 +28,7 @@ public class OrderController {
         Gson gson = new Gson();
         String json = null;
         try {
-            List<Order> orders = ControllerHelper.db.getOrdersManager().getAll();
+            List<Order> orders = ControllerHelper.getDb().getOrdersManager().getAll();
             json = gson.toJson(orders);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)

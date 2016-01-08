@@ -694,4 +694,24 @@ public class AdminController {
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new promos to db.").build();
     }
+
+    @POST
+    @Path("fildb")
+    public Response fildb() {
+        try {
+            ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+            ControllerHelper.getDb().getMoviesManager().addDefaultValues();
+            ControllerHelper.getDb().getHallsManager().addDefaultValues();
+            ControllerHelper.getDb().getShowsManager().addDefaultValues();
+            ControllerHelper.getDb().getOrdersManager().addDefaultValues();
+            ControllerHelper.getDb().getReviewsManager().addDefaultValues();
+            ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
+            ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
+            ControllerHelper.getDb().getPromosManager().addDefaultValues();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).entity("Success.").build();
+    }
 }

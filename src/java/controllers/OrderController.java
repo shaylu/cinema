@@ -36,7 +36,7 @@ public class OrderController {
             json = gson.toJson(orders);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get al promotions, " + e.getMessage()).build();
+                    .entity("Failed to get al orders, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }

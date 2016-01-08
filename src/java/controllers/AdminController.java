@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,7 @@ import javax.ws.rs.core.UriBuilder;
 import models.Hall;
 import models.Movie;
 import models.MovieCategory;
+import models.Show;
 import models.User;
 
 /**
@@ -250,6 +252,27 @@ public class AdminController {
         views.admin.AdminMoviesView view = new views.admin.AdminMoviesView(categories);
         return Response.status(Response.Status.OK).entity(view.getView()).build();
     }
+    
+    @GET
+    @Path("movies/all")
+    public Response getAllMovies(@Context HttpServletRequest request) {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        
+        Gson gson = new Gson();
+        List<Movie> movies = null;
+        String json = null;
+        
+        try {
+            movies = ControllerHelper.getDb().getMoviesManager().getAll();
+            json = gson.toJson(movies);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+        
+        return Response.status(Response.Status.OK).entity(json).build();
+    }
 
     private boolean isLogin(HttpServletRequest request) {
         return request.getSession().getAttribute("UserID") != null;
@@ -416,10 +439,10 @@ public class AdminController {
         String json = null;
 
         try {
-            List<Hall> halls = ControllerHelper.getDb().getHallsManager().getaAll();
-            json = gson.toJson(halls);
+            List<Show> shows = ControllerHelper.getDb().getShowsManager().getAllShows();
+            json = gson.toJson(shows);
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all halls, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all shows, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
@@ -435,7 +458,7 @@ public class AdminController {
         int result;
 
         try {
-            result = ControllerHelper.getDb().getHallsManager().addDefaultValues();
+            result = ControllerHelper.getDb().getShowsManager().addDefaultValues();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add halls, " + e.getMessage()).build();
         }

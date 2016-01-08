@@ -16,7 +16,7 @@ $(function () {
     };
 
     $("#btnRefreshShows").click(function (e) {
-        refreshHalls();
+        refreshShows();
     });
 
     $("#addShow").submit(function (e) {
@@ -38,13 +38,13 @@ $(function () {
     });
 
     $("#btnAddDefualtShows").click(function () {
-        var url = "halls/add_default";
+        var url = "shows/add_default";
         $.ajax({url: url, method: 'POST'})
                 .fail(function (data) {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    alert("Halls added successfully.");
+                    alert("Shows added successfully.");
                     refreshShows();
                 });
     });

@@ -28,7 +28,7 @@ public class AdminShowsView implements ICinemaView {
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
-        res.append("<p><button id=\"btnAddDefualtHalls\">Add Default Shows</button></p>");
+        res.append("<p><button id=\"btnAddDefualtShows\">Add Default Shows</button></p>");
         res.append("<h1>Admin > Shows</h1>\n"
                 + "<h2>Shows</h2>\n"
                 + "<div id=\"divAllShows\"></div>\n"

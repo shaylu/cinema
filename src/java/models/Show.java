@@ -20,11 +20,11 @@ public class Show implements DBEntity {
     public Movie movie;
     public Hall hall;
     public Date date;
-    public LocalTime time;
+    public String time;
     public int num_of_sets_left;
     public double price_per_seate;
 
-    public Show(int id, Movie movie, Hall hall, Date date, LocalTime time, int num_of_sets_left, double price_per_seate) {
+    public Show(int id, Movie movie, Hall hall, Date date, String time, int num_of_sets_left, double price_per_seate) {
         this.id = id;
         this.movie = movie;
         this.hall = hall;
@@ -89,9 +89,15 @@ public class Show implements DBEntity {
         return date;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+    
+    
     
     
 }

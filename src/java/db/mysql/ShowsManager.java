@@ -150,4 +150,15 @@ public class ShowsManager extends DbManagerEntity {
         return result;
     }
 
+        public int addDefaultValues() throws ClassNotFoundException, SQLException {
+        int result = 0;
+ //   public int add(int movie_id, int hall_id, int num_of_seats_left, Date show_date, double price_per_seat) throws ClassNotFoundException, SQLException {
+        result += add(1, 5, 4,new java.sql.Date(2016-01-02),25.5);
+        result += add(2, 3, 2,new java.sql.Date(2016-01-02),25.5);
+        result += add(3, 2, 2,new java.sql.Date(2016-01-03),25.5);
+        result += add(4, 1, 2,new java.sql.Date(2016-01-03),25.5);
+        return result;
+    }
 }
+
+

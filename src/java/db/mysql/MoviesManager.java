@@ -50,7 +50,6 @@ public class MoviesManager extends DbManagerEntity {
     public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended) throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
-            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
 
             statement.setString(1, name);
             statement.setDate(2, new java.sql.Date(release_date.getTime()));

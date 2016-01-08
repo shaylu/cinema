@@ -28,7 +28,7 @@ public class OrderController {
 
     @GET
     @Path("all")
-    public Response getAllPromos(@Context HttpServletRequest request) {
+    public Response getAllOrders(@Context HttpServletRequest request) {
         Gson gson = new Gson();
         String json = null;
         try {

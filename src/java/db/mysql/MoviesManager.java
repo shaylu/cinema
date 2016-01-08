@@ -30,7 +30,7 @@ public class MoviesManager extends DbManagerEntity {
             + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "";
-    public static final String GET_MOVIE_QUERY = "SELECT * FROM movies M WHERE movie_id = ?";
+    public static final String GET_MOVIE_QUERY = "SELECT * FROM movies M WHERE M.movie_id = ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
     public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies M where cat_id = ? and trailer != null and name like '%?'  ";
     public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies M where cat_id = ? and trailer = null and name like '%?'  ";
@@ -78,7 +78,7 @@ public class MoviesManager extends DbManagerEntity {
     public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         Movie result = new Movie();
-        result.setId(rs.getInt("M.movie_id"));
+        result.setId(rs.getInt("M.movie_id"));  //fail!
         result.setName(rs.getString("M.name"));
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getDouble("M.mov_length"));

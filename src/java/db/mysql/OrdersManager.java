@@ -24,7 +24,7 @@ import models.Order;
 public class OrdersManager extends DbManagerEntity {
 
     public static final String INSERT_QUERY = "INSERT INTO orders (client_id, fname, lname, email, phone, show_id, num_of_seats,"
-            + "total_payment, credit_card_last_digit, exp_date_month, exp_date_year, order_date) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+            + "total_payment, credit_card_last_digit, exp_date_month, exp_date_year, order_date) values(?,?,?,?,?,?,?,?,?,?,?,CURDATE())";
     public static final String SELECT_ALL = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id ";
     private final static String DELET_QUERY = "DELET from orders WHERE order_id = (?)";
     public static final String SELECT_ORDER_BY_ID = "SELECT client_id,fname,lname,email,phone,show_id,num_of_seats,total_payment,credit_card_last_digit,exp_date_month,exp_date_year"
@@ -37,7 +37,7 @@ public class OrdersManager extends DbManagerEntity {
         this.manager = manager;
     }
 
-    public int add(String client_id, String fname, String lname, String email, String phone, int show_id, int num_of_seats, double total_payment, String credit_card_last_digits, int exp_month, int exp_year, Date order_date) throws ClassNotFoundException, SQLException {
+    public int add(String client_id, String fname, String lname, String email, String phone, int show_id, int num_of_seats, double total_payment, String credit_card_last_digits, int exp_month, int exp_year) throws ClassNotFoundException, SQLException {
 
         try (Connection conn = manager.getConnection()) {
             conn.setAutoCommit(false);
@@ -55,7 +55,6 @@ public class OrdersManager extends DbManagerEntity {
             statement.setString(9, credit_card_last_digits);
             statement.setInt(10, exp_month);
             statement.setInt(11, exp_year);
-            statement.setString(12, dateformatSql.format(order_date));
             statement.executeUpdate();
             int result = manager.getShowsManager().substructTickets(show_id, num_of_seats, conn);
             
@@ -68,10 +67,10 @@ public class OrdersManager extends DbManagerEntity {
         int result = 0;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        result += add("123456", "Mor", "Shalom", "morS@gmail.com", "05244781256", 1, 1, 25.5, "2588", 05, 2019, formatter.parse("2016-04-23"));
-        result += add("111444", "Inbar", "Gal", "inbargal@gmail.com", "0507778899", 2, 3, 88.5, "3669", 02, 2021, formatter.parse("2016-02-05"));
-        result += add("265487", "Raz", "Maor", "razmaor@gmail.com", "057874556", 3, 2, 44, "5987", 07, 2017, formatter.parse("2016-01-12"));
-        result += add("841576", "Ben", "Tapuzi", "tapuzi@gmail.com", "0505547123", 4, 2, 71, "5987", 07, 2017, formatter.parse("2016-01-12"));
+        result += add("123456", "Mor", "Shalom", "morS@gmail.com", "05244781256", 1, 1, 25.5, "2588", 05, 2019);
+        result += add("111444", "Inbar", "Gal", "inbargal@gmail.com", "0507778899", 2, 3, 88.5, "3669", 02, 2021);
+        result += add("265487", "Raz", "Maor", "razmaor@gmail.com", "057874556", 3, 2, 44, "5987", 07, 2017);
+        result += add("841576", "Ben", "Tapuzi", "tapuzi@gmail.com", "0505547123", 4, 2, 71, "5987", 07, 2017);
 
         return result;
     }

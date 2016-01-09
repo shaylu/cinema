@@ -121,7 +121,6 @@ public class ShowsManager extends DbManagerEntity {
                 Show show = createShowFromMySql(rs);
                 result.add(show);
             }
-
             return result;
         }
     }

@@ -5,6 +5,7 @@
  */
 package models;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import db.DBEntity;
 import java.util.Date;
@@ -123,7 +124,16 @@ public class Movie implements DBEntity {
         json.addProperty("plot", getPlot());
         json.addProperty("poster", getPoster());
         json.addProperty("trailer", getTrailer());
-        json.addProperty("is_recomanded", is_recomanded());
+        json.addProperty("is_recomanded", "1");
+        return json.toString();
+    }
+    
+    public String toRedisRecommanded() {
+        JsonObject json = new JsonObject();
+        json.addProperty("id", getId());
+        json.addProperty("name", getName());
+        json.addProperty("plot", getPlot());
+        json.addProperty("poster", getPoster());
         return json.toString();
     }
 }

@@ -64,10 +64,11 @@ public class MoviesManager extends DbManagerEntity {
             statement.setString(7, trailer_url);
             statement.setBoolean(8, is_recommended);
             result = statement.executeUpdate();
-            
+
             if (is_recommended) {
                 Movie movie = getMovieByName(name);
-                jdisMovie.sadd(REDIS_KEY, movie.toRedisJson());
+                String moviesJson = movie.toRedisRecommanded();
+                jdisMovie.sadd(REDIS_KEY, moviesJson);
             }
 
             return result;
@@ -141,29 +142,15 @@ public class MoviesManager extends DbManagerEntity {
         return moviesResult;
     }
 
-    public ArrayList<Movie> getRecommendedFromRedis() throws SQLException, ClassNotFoundException {
+    public String getRecommendedFromRedis() throws SQLException, ClassNotFoundException {
         this.jdisMovie = new Jedis("localhost");
-        ArrayList<Movie> allRecommendedMovies = new ArrayList<Movie>();
-        try {
-            Gson gson = new Gson();
-            Set<String> allValues = jdisMovie.smembers(REDIS_KEY);
-
-            for (String value : allValues) {
-                Movie movieToAdd = gson.fromJson(value, Movie.class);
-                allRecommendedMovies.add(movieToAdd);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage() + "Redis all value fild");
-        } finally {
-            this.jdisMovie.disconnect();
-        }
-        return allRecommendedMovies;
-
+        String str = this.jdisMovie.get(REDIS_KEY);
+        this.jdisMovie.disconnect();
+        return str;
     }
 
 // if cat_id == 0 then it dosen't matter what category
-// i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
+    // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
     public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
 
         ArrayList<Movie> result = new ArrayList<>();

@@ -51,6 +51,7 @@ public class MoviesSearchView implements ICinemaView {
        private String getCategoriesSelectBox() {
         StringBuilder res = new StringBuilder();
         res.append("<select id=\"selCatID\" name=\"selCatID\">\n");
+        res.append("<option value=\"0\">All</option>");
         for (MovieCategory category : categories) {
             res.append("<option value=\"" + category.getId() + "\">" + category.getName() + "</option>");
         }

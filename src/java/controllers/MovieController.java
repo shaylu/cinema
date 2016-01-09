@@ -59,7 +59,7 @@ public class MovieController {
 
     @GET
     @Path("search")
-    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("num_of_seat_left") boolean num_of_seat_left) {
+    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("last") boolean num_of_seat_left) {
 
         Map<String, String[]> parameterMap = request.getParameterMap();
         Gson gson = new Gson();

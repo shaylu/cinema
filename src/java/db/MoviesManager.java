@@ -212,18 +212,24 @@ public class MoviesManager extends DbManagerEntity {
                     queryToreturn.append("and M.trailer != null and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
+                }else{
+                statement = conn.prepareStatement(queryToreturn.toString());
+                statement.setString(1, "%" + keyword + "%");
                 }
-            } else if (has_trailer) {
+
+            } else {
+                if (has_trailer) {
                 queryToreturn.append("and M.trailer != null and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-            } else if (is_recommended) {
+                }
+                else if (is_recommended) {
                 queryToreturn.append("and M.is_recommended != null and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-            } else if (num_of_seat_left) {
+                } else if (num_of_seat_left) {
                 queryToreturn.append("and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
@@ -243,15 +249,22 @@ public class MoviesManager extends DbManagerEntity {
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-            }
+            }else{
+                queryToreturn.append("and M.cat_id = ?");
+                statement = conn.prepareStatement(queryToreturn.toString());
+                statement.setString(1, "%" + keyword + "%");
+                statement.setInt(2, cat_id);
+                }
+
+            
+        }
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Movie movie = createMovieFromMySql(rs);
                 listToReturn.add(movie);
             }
         }
-        
-        
+
         return listToReturn;
     }
 

@@ -695,23 +695,85 @@ public class AdminController {
         return Response.status(Response.Status.OK).entity("Added " + result + " new promos to db.").build();
     }
 
-    @POST
-    @Path("fildb")
-    public Response fildb() {
+    @GET
+    @Path("filldb")
+    public Response filldb() {
+        StringBuilder str = new StringBuilder();
         try {
-            ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-            ControllerHelper.getDb().getMoviesManager().addDefaultValues();
-            ControllerHelper.getDb().getHallsManager().addDefaultValues();
-            ControllerHelper.getDb().getShowsManager().addDefaultValues();
-            ControllerHelper.getDb().getOrdersManager().addDefaultValues();
-            ControllerHelper.getDb().getReviewsManager().addDefaultValues();
-            ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
-            ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
-            ControllerHelper.getDb().getPromosManager().addDefaultValues();
+            try {
+                ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+            } catch (Exception e) {
+                str.append("Movie Categories: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getMoviesManager().addDefaultValues();
+            } catch (Exception e) {
+                str.append("Movies: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getHallsManager().addDefaultValues();
+            } catch (Exception e) {
+                str.append("Halls: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getShowsManager().addDefaultValues();
+            } catch (Exception e) {
+                str.append("Shows: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getOrdersManager().addDefaultValues();
+            } catch (Exception e) {
+            }
+
+            try {
+                ControllerHelper.getDb().getReviewsManager().addDefaultValues();
+            } catch (Exception e) {
+                str.append("Reviews: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
+            } catch (Exception e) {
+                str.append("Promo Companies: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
+
+            } catch (Exception e) {
+                str.append("Promo Categories: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
+
+            try {
+                ControllerHelper.getDb().getPromosManager().addDefaultValues();
+
+            } catch (Exception e) {
+                str.append("Promos: ");
+                str.append(e.getMessage());
+                str.append("\n");
+            }
 
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        return Response.status(Response.Status.OK).entity("Success.").build();
+        return Response.status(Response.Status.OK).entity(str.toString()).build();
     }
 }

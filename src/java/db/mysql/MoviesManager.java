@@ -6,7 +6,6 @@
 package db.mysql;
 
 import com.mysql.jdbc.exceptions.MySQLDataException;
-import static db.MovieCategoryManager.getMovieCategoryByName;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +26,7 @@ import models.MovieCategory;
 public class MoviesManager extends DbManagerEntity {
 
     public static final String INSERT_QUERY = "INSERT INTO movies (name, release_date, mov_length, cat_id,"
-            + " plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
+            + "plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "SELECT * FROM movies M WHERE M.movie_id = ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
@@ -177,16 +176,16 @@ public class MoviesManager extends DbManagerEntity {
         String plot = "Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a rag-tag group of heroes can stop them, along with the help of the Resistance.";
         String posterLink = "http://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
-        MovieCategory category = getMovieCategoryByName("Action");
+        MovieCategory category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
 
-        result += add("Star Wars: The Force Awakens", release_date, 131, 1, plot, posterLink, trailer, true);
+        result += add("Star Wars: The Force Awakens", release_date, 131, category.getId(), plot, posterLink, trailer, true);
 
         //Creating Krampus
         release_date = formatter.parse("2016-04-23");
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
         posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
-        category = getMovieCategoryByName("Comedy");
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
 
         result += add("Krampus", release_date, 98, 2, plot, posterLink, trailer, true);
 

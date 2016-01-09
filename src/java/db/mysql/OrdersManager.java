@@ -40,6 +40,7 @@ public class OrdersManager extends DbManagerEntity {
     public int add(String client_id, String fname, String lname, String email, String phone, int show_id, int num_of_seats, double total_payment, String credit_card_last_digits, int exp_month, int exp_year, Date order_date) throws ClassNotFoundException, SQLException {
 
         try (Connection conn = manager.getConnection()) {
+            conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -55,7 +56,11 @@ public class OrdersManager extends DbManagerEntity {
             statement.setInt(10, exp_month);
             statement.setInt(11, exp_year);
             statement.setString(12, dateformatSql.format(order_date));
-            return statement.executeUpdate();
+            statement.executeUpdate();
+            int result = manager.getShowsManager().substructTickets(show_id, num_of_seats, conn);
+            
+            conn.commit();
+            return result;
         }
     }
 

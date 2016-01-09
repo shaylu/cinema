@@ -115,7 +115,7 @@ public class Movie implements DBEntity {
 
     public String toRedisJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("movie_id", getId());
+        json.addProperty("id", getId());
         json.addProperty("name", getName());
         json.addProperty("release_date", getRelease_date().toString());
         json.addProperty("movie_length", getMovie_length());

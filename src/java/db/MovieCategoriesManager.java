@@ -62,7 +62,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
         result += add("Sci-Fi");
         return result;
     }
-
+//TODO
     public List<MovieCategory> getAll() throws ClassNotFoundException, SQLException {
 
         ArrayList<MovieCategory> result = new ArrayList<>();
@@ -112,13 +112,6 @@ public class MovieCategoriesManager extends DbManagerEntity {
         return result;
     }
 
-//    public MovieCategory getMovieCategoryRedisById(int id) {
-//        String jsonRes = jdisMovieCat.get(new Integer(id).toString());
-//        Gson gson = new Gson();
-//        MovieCategory ctegory = gson.fromJson(jsonRes, MovieCategory.class
-//        );
-//        return ctegory;
-//    }
     public MovieCategory getMovieCategoryByName(String name) throws SQLException, ClassNotFoundException {
         MovieCategory result;
         try (Connection conn = manager.getConnection()) {

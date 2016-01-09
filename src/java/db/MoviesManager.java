@@ -51,10 +51,7 @@ public class MoviesManager extends DbManagerEntity {
     public MoviesManager(DbManager manager) {
         this.manager = manager;
     }
-//    public enum ShowTime {
-//        DONT_CARE, MORNING, NOON, EVENING, NEXT_3_HOURS;
-//    }
-
+    
     public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended) throws SQLException, ClassNotFoundException {
         this.jdisMovie = new Jedis("localhost");
         int result = 0;
@@ -122,18 +119,18 @@ public class MoviesManager extends DbManagerEntity {
         }
         return result;
     }
-
+//TODO
     public boolean delete(int mov_id) throws SQLException, ClassNotFoundException {
         boolean result = false;
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(DELET_MOVIE);
             statement.setInt(1, mov_id);
-            statement.executeUpdate(DELET_MOVIE);
+            statement.executeUpdate();
             result = true;
         }
         return result;
     }
-
+//TODO
     public ArrayList<Movie> getRecommended() throws SQLException, ClassNotFoundException {
 
         ArrayList<Movie> moviesResult = new ArrayList<>();

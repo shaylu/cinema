@@ -38,10 +38,16 @@ public class MoviesManager extends DbManagerEntity {
     public static final String SELECT_MOVIE_BY_ID = "SELECT * FROM movies M WHERE M.movie_id = ?";
     public static final String SELECT_MOVIE_BY_KEYWORD = "SELECT * FROM movies M WHERE M.name like ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
-    public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies M where M.cat_id = ? and M.trailer = ? and M.name like ?  ";
-    public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies M where M.cat_id = ? and M.trailer = null and M.name like ? ";
-    public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies M where M.trailer != null and M.name like ?  ";
-    public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where M.trailer = null and M.name like ?  ";
+    //new
+    public final static String FILTER_QUERY_FILTERED_BY_ALL_NO_TRAILER = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.is_recommended = ? and S.num_of_seats_left < 10 and M.name like ? ";
+    public final static String FILTER_QUERY_FILTERED_BY_ALL = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.trailer = ? and M.is_recommended = ? and S.num_of_seats_left < 10 and M.name like ? ";
+    public final static String FILTER_QUERY_FILTERED_BY_ALL_NO_RECOMMENDED = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.trailer = ? and S.num_of_seats_left < 10 and M.name like ? ";
+    public final static String FILTER_QUERY_FILTERED_BY_ALL_NO_LAST_TICKETS = "SELECT * FROM movies M where M.trailer = ? and M.is_recommended = ? and M.name like ? ";
+    public final static String FILTER_QUERY_FILTERED_BY_ALL_NO_KEYWORD = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.trailer = ? and M.is_recommended = ? and S.num_of_seats_left < 10 and M.name like ?  ";
+    public final static String FILTER_QUERY_FILTERED_BY_TRAILER_AND_KEYWORD = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.trailer = ? and M.name like ? ";
+    public final static String FILTER_QUERY_FILTERED_BY_RECOROMMENDED_AND_KEYWORD = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.is_recommended = ? and M.name like ? ";
+    public final static String FILTER_QUERY_FILTERED_BY_LAST_TICKET_AND_KEYWORD = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where and S.num_of_seats_left < 10 and M.name like ? ";
+
     public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE M.is_recommended = true;";
     public static final String SELECT_MOVIE_BY_NAME = "SELECT * FROM movies M WHERE name = (?)";
     public static final String SELECT_MOVIE_BY_CATID = "SELECT * FROM movies M WHERE cat_id = (?)";
@@ -51,9 +57,6 @@ public class MoviesManager extends DbManagerEntity {
     public MoviesManager(DbManager manager) {
         this.manager = manager;
     }
-//    public enum ShowTime {
-//        DONT_CARE, MORNING, NOON, EVENING, NEXT_3_HOURS;
-//    }
 
     public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended) throws SQLException, ClassNotFoundException {
         this.jdisMovie = new Jedis("localhost");
@@ -157,56 +160,71 @@ public class MoviesManager extends DbManagerEntity {
             str.append(member);
             str.append(",");
         }
-        
+
         String res = str.toString();
-        if (smembers.size() > 0)
+        if (smembers.size() > 0) {
             res = res.substring(0, res.length() - 1);
+        }
         res += "]";
-        
+
         this.jdisMovie.disconnect();
         return res;
     }
 
-// if cat_id == 0 then it dosen't matter what category
-    // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
-    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
+    public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended, boolean num_of_seat_left) throws SQLException, ClassNotFoundException {
 
-        ArrayList<Movie> result = new ArrayList<>();
-
+        ArrayList<Movie> listToReturn = new ArrayList<>();
+        StringBuilder queryToreturn = new StringBuilder();
+        String key = keyword;
+        if (keyword == null) {
+            key = " ";
+        }
+        queryToreturn.append("SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.trailer = ? and M.is_recommended = ? and M.name like ? ");
         PreparedStatement statement = null;
         try (Connection conn = manager.getConnection()) {
+            if (cat_id == 0) {
+                if (num_of_seat_left) {
+                    queryToreturn.append("and S.num_of_seats_left < 10 ");
+                    statement = conn.prepareStatement(queryToreturn.toString());
+                    statement.setBoolean(1, has_trailer);
+                    statement.setBoolean(2, is_recommended);
+                    statement.setString(3, "%" + keyword + "%");
+                    statement.setBoolean(4, num_of_seat_left);
+                } else {
+                    statement = conn.prepareStatement(queryToreturn.toString());
+                    statement.setBoolean(1, has_trailer);
+                    statement.setBoolean(2, is_recommended);
+                    statement.setString(3, "%" + keyword + "%");
+                }
+            } else {
+                if (num_of_seat_left) {
+                    queryToreturn.append("and S.num_of_seats_left < 10 and M.cat_id = ?");
+                    statement = conn.prepareStatement(queryToreturn.toString());
+                    statement.setBoolean(1, has_trailer);
+                    statement.setBoolean(2, is_recommended);
+                    statement.setString(3, "%" + keyword + "%");
+                    statement.setBoolean(4, num_of_seat_left);
+                    statement.setInt(5, cat_id);
+                } else {
+                    queryToreturn.append("and M.cat_id = ?");
+                    statement = conn.prepareStatement(queryToreturn.toString());
+                    statement.setBoolean(1, has_trailer);
+                    statement.setBoolean(2, is_recommended);
+                    statement.setString(3, "%" + keyword + "%");
+                    statement.setInt(4, cat_id);
+                }
 
-            if (cat_id != 0 && has_trailer) {
-                statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
-                statement.setInt(1, cat_id);
-                statement.setBoolean(2, is_recommended);
-                statement.setString(3, "%" + keyword);
-            } else if (cat_id != 0 && !has_trailer) {
-                statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
-                statement.setInt(1, cat_id);
-                //statement.setBoolean(2, is_recommended);
-                statement.setString(3, "%" + keyword);
-            } else if (cat_id == 0 && has_trailer) {
-                statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
-                //statement.setBoolean(1, is_recommended);
-                statement.setString(2, "%" + keyword);
-            } else if (cat_id == 0 && !has_trailer) {
-                statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER);
-                //statement.setBoolean(1, is_recommended);
-                statement.setString(2, "%" + keyword);
-            }
-            //NOT WORKING
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                Movie movie = createMovieFromMySql(rs);
-                result.add(movie);
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    Movie movie = createMovieFromMySql(rs);
+                    listToReturn.add(movie);
+
+                }
             }
         }
-
-        return result;
+        return listToReturn;
     }
 
-    // public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended)
     public int addDefaultValues() throws SQLException, ClassNotFoundException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 

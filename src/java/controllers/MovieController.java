@@ -59,7 +59,7 @@ public class MovieController {
 
     @GET
     @Path("search")
-    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended) {
+    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("num_of_seat_left") boolean num_of_seat_left) {
 
         Map<String, String[]> parameterMap = request.getParameterMap();
         Gson gson = new Gson();
@@ -75,8 +75,10 @@ public class MovieController {
                 movies = ControllerHelper.getDb().getMoviesManager().getByCategory(cat_id);
             } else if (!parameterMap.containsKey("has_trailer")) {
                 movies = ControllerHelper.getDb().getMoviesManager().getAll();
-            } else {
-                movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
+            }
+            else {
+                //String keyword, int cat_id, boolean has_trailer, boolean is_recommended, boolean num_of_seat_left)
+                movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended, num_of_seat_left);
             }
             json = gson.toJson(movies);
         } catch (Exception e) {

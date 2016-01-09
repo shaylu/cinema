@@ -185,7 +185,7 @@ public class AdminController {
         String json = null;
 
         try {
-            List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAll();
+            List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
             json = gson.toJson(categories);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all categories, " + e.getMessage()).build();
@@ -254,7 +254,7 @@ public class AdminController {
         List<MovieCategory> categories = null;
 
         try {
-            categories = ControllerHelper.getDb().getMovieCategoriesManager().getAll();
+            categories = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }

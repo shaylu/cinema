@@ -7,6 +7,7 @@ package controllers;
 
 import com.google.gson.Gson;
 import java.sql.SQLException;
+import java.util.List;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Movie;
 import models.Order;
+import models.Review;
+import views.ReviewAddView;
 
 /**
  *
@@ -40,16 +43,45 @@ public class ReviewsController {
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
+
     @POST
     @Path("add")
-    public Response addNewReview(@FormParam("order_id")int order_id,@FormParam("rank")double rank,@FormParam("text") String text) {
+    public Response addNewReview(@FormParam("order_id") int order_id, @FormParam("rank") double rank, @FormParam("text") String text) {
         try {
             ControllerHelper.getDb().getReviewsManager().add(order_id, rank, text);
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).entity("Success.").build();
+
+    }
+
+    @GET
+    @Path("bymovie/{movie_id}")
+    public Response getReviewByMovie(@PathParam("movie_id") int movie_id) throws SQLException, ClassNotFoundException {
+        Gson gson = new Gson();
+        String json = null;
+        try {
+            List<Review> reviews = ControllerHelper.getDb().getReviewsManager().getByMovieId(movie_id);
+            json = gson.toJson(reviews);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get all reviews, " + e.getMessage()).build();
+        }
+
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+
+    @GET
+    @Path("add_review/{order_id}")
+    public Response addReview(@PathParam("order_id") int order_id) {
+        try {
+            views.ReviewAddView view = new ReviewAddView(order_id);
+            return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to add review, " + e.getMessage()).build();
+        }
 
     }
 

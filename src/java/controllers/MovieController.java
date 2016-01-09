@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Movie;
 import models.MovieCategory;
+import views.MoviePageView;
 import views.MoviesSearchView;
 
 /**
@@ -39,6 +40,17 @@ public class MovieController {
         try {
             List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
             MoviesSearchView view = new MoviesSearchView(categories);
+            return Response.status(Response.Status.OK).entity(view.getView()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("{id}")
+    public Response moviePage(@PathParam("id") int id) {
+        try {
+            MoviePageView view = new MoviePageView(id);
             return Response.status(Response.Status.OK).entity(view.getView()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
@@ -100,8 +112,8 @@ public class MovieController {
 //
 //    }
     @GET
-    @Path("{id}")
-    public Response getMovieById(@PathParam("movie_id") int movie_id) {
+    @Path("get/{id}")
+    public Response getMovieById(@PathParam("id") int movie_id) {
         Gson gson = new Gson();
         String json = null;
         try {

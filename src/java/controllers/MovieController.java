@@ -32,7 +32,7 @@ import views.MoviesSearchView;
  */
 @Path("movies")
 public class MovieController {
-    
+
     @GET
     @Path("search_view")
     public Response searchView() {
@@ -58,15 +58,12 @@ public class MovieController {
             if (parameterMap.containsKey("keyword") && !parameterMap.containsKey("has_trailer")) {
                 // used by keyword search
                 movies = ControllerHelper.getDb().getMoviesManager().getByKeyword(keyword);
-            } 
-            else if (parameterMap.containsKey("cat_id") && !parameterMap.containsKey("has_trailer")) {
+            } else if (parameterMap.containsKey("cat_id") && !parameterMap.containsKey("has_trailer")) {
                 // used by category search
                 movies = ControllerHelper.getDb().getMoviesManager().getByCategory(cat_id);
-            }
-            else if (!parameterMap.containsKey("has_trailer")) {
+            } else if (!parameterMap.containsKey("has_trailer")) {
                 movies = ControllerHelper.getDb().getMoviesManager().getAll();
-            }
-            else {
+            } else {
                 movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
             }
             json = gson.toJson(movies);
@@ -81,9 +78,11 @@ public class MovieController {
 //    @Produces(MediaType.TEXT_HTML)
 //    public String liraz() throws ServletException, IOException, SQLException, Exception {
 //        System.out.println("Shay you are my bitch");
-//        ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-//        ControllerHelper.getDb().getMoviesManager().addDefaultValues();
-//       List <Movie> movies = ControllerHelper.getDb().getMoviesManager().getRecommendedFromRedis();
+//        //ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+//        //ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
+//       // ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
+//      //  ControllerHelper.getDb().getPromosManager().addDefaultValues();
+//        ControllerHelper.getDb().getPromosManager().delete(1);
 //
 //        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
 //                + "<HTML>\n"
@@ -99,6 +98,7 @@ public class MovieController {
 //                + "</HTML>";
 //
 //    }
+
     @GET
     @Path("{id}")
     public Response getMovieById(@PathParam("movie_id") int movie_id) {
@@ -128,7 +128,7 @@ public class MovieController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
+
     @GET
     @Path("home_recommended")
     public Response getRecommandedForHome(@Context HttpServletRequest request) {

@@ -109,6 +109,7 @@ public class MoviesManager extends DbManagerEntity {
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getDouble("M.mov_length"));
         result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("M.cat_id")));
+        result.setTrailer(rs.getString("M.trailer"));
         result.setPlot(rs.getString("M.plot"));
         result.setPoster(rs.getString("M.poster"));
         result.setIs_recomanded(rs.getBoolean("M.is_recommended"));

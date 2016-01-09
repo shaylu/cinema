@@ -80,6 +80,7 @@ public class ShowsManager extends DbManagerEntity {
             return result;
         }
     }
+//TODO
 
     public Show getShowByHall(int hall_id) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
@@ -108,6 +109,7 @@ public class ShowsManager extends DbManagerEntity {
             return result;
         }
     }
+//TODO
 
     public List<Show> getAllShowsWithLastTickets(int tickets_less_than) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
@@ -125,6 +127,7 @@ public class ShowsManager extends DbManagerEntity {
             return result;
         }
     }
+//TODO
 
     public List<Show> getAllShowsForMovie(int movie_id) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
@@ -144,7 +147,6 @@ public class ShowsManager extends DbManagerEntity {
     }
 
     public Show createShowFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
-
         Show showToReturn = new Show();
 
         showToReturn.setId(rs.getInt("S.show_id"));

@@ -37,7 +37,6 @@ public class PromoCategoriesManager extends DbManagerEntity {
             statement.setString(1, name);
             return statement.executeUpdate();
         }
-
     }
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {

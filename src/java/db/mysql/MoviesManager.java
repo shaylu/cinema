@@ -5,6 +5,7 @@
  */
 package db.mysql;
 
+import com.google.gson.Gson;
 import com.mysql.jdbc.exceptions.MySQLDataException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,8 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import models.Movie;
 import models.MovieCategory;
+import redis.clients.jedis.Jedis;
 
 /**
  *
@@ -35,17 +38,19 @@ public class MoviesManager extends DbManagerEntity {
     public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies M where M.trailer != null and M.name like ?  ";
     public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where M.trailer = null and M.name like ?  ";
     public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE M.is_recommended = true;";
-
-    public enum ShowTime {
-
-        DONT_CARE, MORNING, NOON, EVENING, NEXT_3_HOURS;
-    }
+    public final static String REDIS_KEY = "recommended";
+    Jedis jdisMovie;
 
     public MoviesManager(DbManager manager) {
         this.manager = manager;
     }
+//    public enum ShowTime {
+//        DONT_CARE, MORNING, NOON, EVENING, NEXT_3_HOURS;
+//    }
 
     public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended) throws SQLException, ClassNotFoundException {
+        this.jdisMovie = new Jedis("localhost");
+        int result = 0;
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
 
@@ -58,8 +63,18 @@ public class MoviesManager extends DbManagerEntity {
             statement.setString(7, trailer_url);
             statement.setBoolean(8, is_recommended);
 
-            return statement.executeUpdate();
+            if (is_recommended) {
+                result = statement.executeUpdate();
+                Movie movie = new Movie(name, release_date, mov_length, plot, poster_url, trailer_url,
+                        manager.getMovieCategoriesManager().getMovieCategoryById(cat_id), is_recommended);
+                jdisMovie.sadd(REDIS_KEY, movie.toRedisJson());
+            }
+
+            return result;
+        } finally {
+            this.jdisMovie.disconnect();
         }
+
     }
 
     public Movie getMovieById(int id) throws SQLException, ClassNotFoundException {
@@ -77,7 +92,7 @@ public class MoviesManager extends DbManagerEntity {
     public Movie createMovieFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
 
         Movie result = new Movie();
-        result.setId(rs.getInt("M.movie_id"));  
+        result.setId(rs.getInt("M.movie_id"));
         result.setName(rs.getString("M.name"));
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getDouble("M.mov_length"));
@@ -125,13 +140,34 @@ public class MoviesManager extends DbManagerEntity {
         }
         return moviesResult;
     }
-    // if cat_id == 0 then it dosen't matter what category
-    // i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
 
+    public ArrayList<Movie> getRecommendedFromRedis() throws SQLException, ClassNotFoundException {
+        this.jdisMovie = new Jedis("localhost");
+        ArrayList<Movie> allRecommendedMovies = new ArrayList<Movie>();
+        try {
+            Gson gson = new Gson();
+            Set<String> allValues = jdisMovie.smembers(REDIS_KEY);
+
+            for (String value : allValues) {
+                Movie movieToAdd = gson.fromJson(value, Movie.class);
+                allRecommendedMovies.add(movieToAdd);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "Redis all value fild");
+        } finally {
+            this.jdisMovie.disconnect();
+        }
+        return allRecommendedMovies;
+
+    }
+
+// if cat_id == 0 then it dosen't matter what category
+// i created a view named next_three_hours that selects the movie ids that shows up the next 3 hours 
     public List<Movie> getAllByFilter(String keyword, int cat_id, boolean has_trailer, boolean is_recommended) throws SQLException, ClassNotFoundException {
-        
+
         ArrayList<Movie> result = new ArrayList<>();
-        
+
         PreparedStatement statement = null;
         try (Connection conn = manager.getConnection()) {
 
@@ -139,12 +175,12 @@ public class MoviesManager extends DbManagerEntity {
                 statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 statement.setBoolean(2, is_recommended);
-                statement.setString(3,"%" + keyword);
+                statement.setString(3, "%" + keyword);
             } else if (cat_id != 0 && !has_trailer) {
                 statement = conn.prepareStatement(FILTER_QUERY_HASNOTTRAILER_CAT);
                 statement.setInt(1, cat_id);
                 //statement.setBoolean(2, is_recommended);
-                statement.setString(3,"%" + keyword);
+                statement.setString(3, "%" + keyword);
             } else if (cat_id == 0 && has_trailer) {
                 statement = conn.prepareStatement(FILTER_QUERY_HASTRAILER);
                 //statement.setBoolean(1, is_recommended);
@@ -157,11 +193,10 @@ public class MoviesManager extends DbManagerEntity {
             //NOT WORKING
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-            Movie movie = createMovieFromMySql(rs);
-            result.add(movie);
+                Movie movie = createMovieFromMySql(rs);
+                result.add(movie);
             }
         }
-
 
         return result;
     }

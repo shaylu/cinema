@@ -31,11 +31,12 @@ public class MovieCategoriesManager extends DbManagerEntity {
     Jedis jdisMovieCat;
 
     public MovieCategoriesManager(DbManager manager) {
-        this.jdisMovieCat = new Jedis("localhost");
+        //  this.jdisMovieCat = new Jedis("localhost");
         this.manager = manager;
     }
 
     public int add(String name) throws ClassNotFoundException, SQLException {
+        this.jdisMovieCat = new Jedis("localhost");
         int result = 0;
 
         try (Connection conn = manager.getConnection()) {
@@ -47,6 +48,8 @@ public class MovieCategoriesManager extends DbManagerEntity {
             MovieCategory movieCat = getMovieCategoryByName(name);
             jdisMovieCat.sadd(REDIS_KEY, movieCat.toRedisJson());
             return result;
+        } finally {
+            this.jdisMovieCat.disconnect();
         }
 
     }
@@ -75,10 +78,8 @@ public class MovieCategoriesManager extends DbManagerEntity {
         return result;
     }
 
-    
-    
     public List<MovieCategory> getAllFromRedis() throws ClassNotFoundException, SQLException {
-
+        this.jdisMovieCat = new Jedis("localhost");
         ArrayList<MovieCategory> allMovieCat = new ArrayList<>();
         try {
             Gson gson = new Gson();
@@ -89,9 +90,10 @@ public class MovieCategoriesManager extends DbManagerEntity {
                 allMovieCat.add(catToAdd);
             }
 
-            
         } catch (Exception e) {
             System.out.println(e.getMessage() + "Redis all value fild");
+        } finally {
+            this.jdisMovieCat.disconnect();
         }
 
         return allMovieCat;
@@ -117,7 +119,6 @@ public class MovieCategoriesManager extends DbManagerEntity {
 //        );
 //        return ctegory;
 //    }
-
     public MovieCategory getMovieCategoryByName(String name) throws SQLException, ClassNotFoundException {
         MovieCategory result;
         try (Connection conn = manager.getConnection()) {

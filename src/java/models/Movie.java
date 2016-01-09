@@ -5,6 +5,7 @@
  */
 package models;
 
+import com.google.gson.JsonObject;
 import db.DBEntity;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +26,8 @@ public class Movie implements DBEntity {
     public String trailer;
     public boolean is_recomanded;
 
-    public Movie(String name, Date release_date, int movie_length, String plot, String poster, String trailer, MovieCategory category,boolean is_recomanded) {
-        
+    public Movie(String name, Date release_date, int movie_length, String plot, String poster, String trailer, MovieCategory category, boolean is_recomanded) {
+
         this.name = name;
         this.release_date = release_date;
         this.movie_length = movie_length;
@@ -112,4 +113,17 @@ public class Movie implements DBEntity {
         this.is_recomanded = is_recomanded;
     }
 
+    public String toRedisJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("movie_id", getId());
+        json.addProperty("name", getName());
+        json.addProperty("release_date", getRelease_date().toString());
+        json.addProperty("movie_length", getMovie_length());
+        json.addProperty("category", getCategory().toRedisJson());
+        json.addProperty("plot", getPlot());
+        json.addProperty("poster", getPoster());
+        json.addProperty("trailer", getTrailer());
+        json.addProperty("is_recomanded", is_recomanded());
+        return json.toString();
+    }
 }

@@ -6,6 +6,9 @@
 package db.mysql;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mysql.jdbc.exceptions.MySQLDataException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,6 +44,7 @@ public class MoviesManager extends DbManagerEntity {
     public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where M.trailer = null and M.name like ?  ";
     public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE M.is_recommended = true;";
     public static final String SELECT_MOVIE_BY_NAME = "SELECT * FROM movies M WHERE name = (?)";
+    public static final String SELECT_MOVIE_BY_CATID = "SELECT * FROM movies M WHERE cat_id = (?)";
     public final static String REDIS_KEY = "recommended";
     Jedis jdisMovie;
 
@@ -146,9 +150,21 @@ public class MoviesManager extends DbManagerEntity {
 
     public String getRecommendedFromRedis() throws SQLException, ClassNotFoundException {
         this.jdisMovie = new Jedis("localhost");
-        String str = this.jdisMovie.get(REDIS_KEY);
+        Set<String> smembers = this.jdisMovie.smembers(REDIS_KEY);
+        StringBuilder str = new StringBuilder();
+        str.append("[");
+        for (String member : smembers) {
+            str.append(member);
+            str.append(",");
+        }
+        
+        String res = str.toString();
+        if (smembers.size() > 0)
+            res = res.substring(0, res.length() - 1);
+        res += "]";
+        
         this.jdisMovie.disconnect();
-        return str;
+        return res;
     }
 
 // if cat_id == 0 then it dosen't matter what category
@@ -228,11 +244,26 @@ public class MoviesManager extends DbManagerEntity {
         }
         return result;
     }
+
     public List<Movie> getByKeyword(String keyword) throws SQLException, ClassNotFoundException {
         ArrayList<Movie> result = new ArrayList<>();
         try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_BY_ID);
-            statement.setString(1,"%" + keyword);
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_BY_KEYWORD);
+            statement.setString(1, "%" + keyword + "%");
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Movie mc = createMovieFromMySql(rs);
+                result.add(mc);
+            }
+        }
+        return result;
+    }
+
+    public List<Movie> getByCategory(int cat_id) throws ClassNotFoundException, SQLException {
+        ArrayList<Movie> result = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_BY_CATID);
+            statement.setInt(1, cat_id);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Movie mc = createMovieFromMySql(rs);

@@ -42,14 +42,20 @@ public class MovieController {
 
         try {
             List<Movie> movies = null;
-            if (!parameterMap.containsKey("keyword") && !parameterMap.containsKey("has_trailer")) {
+            if (parameterMap.containsKey("keyword") && !parameterMap.containsKey("has_trailer")) {
                 // used by keyword search
                 movies = ControllerHelper.getDb().getMoviesManager().getByKeyword(keyword);
+            } 
+            else if (parameterMap.containsKey("cat_id") && !parameterMap.containsKey("has_trailer")) {
+                // used by category search
+                movies = ControllerHelper.getDb().getMoviesManager().getByCategory(cat_id);
             }
-            movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
+            else {
+                movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
+            }
             json = gson.toJson(movies);
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get al orders, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all movies, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
@@ -105,5 +111,16 @@ public class MovieController {
                     .entity("Failed to get al orders, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+    
+    @GET
+    @Path("home_recommended")
+    public Response getRecommandedForHome(@Context HttpServletRequest request) {
+        try {
+            String recommendedFromRedis = ControllerHelper.getDb().getMoviesManager().getRecommendedFromRedis();
+            return Response.status(Response.Status.OK).entity(recommendedFromRedis).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
+        }
     }
 }

@@ -50,25 +50,23 @@ public class ShowsManager extends DbManagerEntity {
         }
     }
 
-      public int addDefaultValues() throws ClassNotFoundException, SQLException {
+    public int addDefaultValues() throws ClassNotFoundException, SQLException {
         int result = 0;
         //   public int add(int movie_id, int hall_id, int num_of_seats_left, Date show_date, double price_per_seat) throws ClassNotFoundException, SQLException {
-        result += add(1, 5, 4, "2016-01-02", "10:20", 25.5);
-        result += add(2, 3, 2, "2016-01-15", "12:45", 29.5);
-        result += add(1, 2, 2, "2016-02-20", "16:15", 22);
-        result += add(2, 1, 2, "2016-02-30", "21:00", 35.5);
+        result += add(1, 5, 100, "2016-01-02", "10:20", 25.5);
+        result += add(2, 3, 50, "2016-01-15", "12:45", 29.5);
+        result += add(1, 2, 35, "2016-02-20", "16:15", 22);
+        result += add(2, 1, 100, "2016-02-29", "21:00", 35.5);
         return result;
     }
-      
-    public int substructTickets(int show_id, int num_of_tickets) throws ClassNotFoundException, SQLException {
-        // when ordering a ticket to show, this function will be called.
-        try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(SUBSTRUCT);
-            statement.setInt(1, num_of_tickets);
-            statement.setInt(2, show_id);
 
-            return statement.executeUpdate();
-        }
+    public int substructTickets(int show_id, int num_of_tickets, Connection conn) throws ClassNotFoundException, SQLException {
+        // when ordering a ticket to show, this function will be called.
+        PreparedStatement statement = conn.prepareStatement(SUBSTRUCT);
+        statement.setInt(1, num_of_tickets);
+        statement.setInt(2, show_id);
+
+        return statement.executeUpdate();
     }
 
     public Show getShow(int id) throws ClassNotFoundException, SQLException {

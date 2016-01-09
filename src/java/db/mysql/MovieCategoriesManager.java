@@ -24,7 +24,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public static final String INSERT_QUERY = "INSERT INTO movie_categories (name) values(?)";
     public static final String SELECT_ALL = "SELECT * FROM movie_categories";
     public static final String SELECT_MOVIE_CATEGORY = "SELECT * FROM movie_categories WHERE cat_id = (?)";
-    public static final String SELET_MOVIECAT_BY_NAME = "SELECR cat_id FROM movie_categories WHERE name = ?";
+    public static final String SELET_MOVIECAT_BY_NAME = "SELECT * FROM movie_categories WHERE name = (?)";
 
     Jedis jdisMovieCat;
 

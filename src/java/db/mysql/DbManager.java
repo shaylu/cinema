@@ -191,7 +191,7 @@ public class DbManager implements AutoCloseable {
                 + "  description VARCHAR(500) NULL,\n"
                 + "  exp_date DATE NULL,\n"
                 + "  promo_code VARCHAR(50) NULL,\n"
-                + "  image VARCHAR(50) NULL,\n"
+                + "  image VARCHAR(250) NULL,\n"
                 + "  PRIMARY KEY (promo_id),\n"
                 + "  INDEX promo_comp_idx (comp_id ASC),\n"
                 + "  INDEX promo_cat_id_idx (promo_cat_id ASC),\n"
@@ -220,7 +220,7 @@ public class DbManager implements AutoCloseable {
                 + "  fldFname VARCHAR(50) NOT NULL,\n"
                 + "  fldLname VARCHAR(50) NOT NULL,\n"
                 + "  PRIMARY KEY (fldUserId))");
-        executeSql(DbName, "CREATE OR REPLACE VIEW next_three_hours AS SELECT m.movie_id FROM movies as m INNER JOIN shows as s ON s.movie_id = m.movie_id WHERE s.show_date >= NOW() AND s.show_date <= NOW() + INTERVAL 3 HOUR;");
+//        executeSql(DbName, "CREATE OR REPLACE VIEW next_three_hours AS SELECT m.movie_id FROM movies as m INNER JOIN shows as s ON s.movie_id = m.movie_id WHERE s.show_date >= NOW() AND s.show_date <= NOW() + INTERVAL 3 HOUR;");
     }
 
 }

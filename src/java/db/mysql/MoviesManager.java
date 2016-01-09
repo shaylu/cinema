@@ -38,6 +38,7 @@ public class MoviesManager extends DbManagerEntity {
     public final static String FILTER_QUERY_HASTRAILER = "SELECT * FROM movies M where M.trailer != null and M.name like ?  ";
     public final static String FILTER_QUERY_HASNOTTRAILER = "SELECT * FROM movies M where M.trailer = null and M.name like ?  ";
     public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE M.is_recommended = true;";
+    public static final String SELECT_MOVIE_BY_NAME = "SELECT * FROM movies M WHERE name = (?)";
     public final static String REDIS_KEY = "recommended";
     Jedis jdisMovie;
 
@@ -62,11 +63,10 @@ public class MoviesManager extends DbManagerEntity {
             statement.setString(6, poster_url);
             statement.setString(7, trailer_url);
             statement.setBoolean(8, is_recommended);
-
+            result = statement.executeUpdate();
+            
             if (is_recommended) {
-                result = statement.executeUpdate();
-                Movie movie = new Movie(name, release_date, mov_length, plot, poster_url, trailer_url,
-                        manager.getMovieCategoriesManager().getMovieCategoryById(cat_id), is_recommended);
+                Movie movie = getMovieByName(name);
                 jdisMovie.sadd(REDIS_KEY, movie.toRedisJson());
             }
 
@@ -226,5 +226,17 @@ public class MoviesManager extends DbManagerEntity {
 
         return result;
 
+    }
+
+    public Movie getMovieByName(String name) throws SQLException, ClassNotFoundException {
+        Movie result;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_BY_NAME);
+            statement.setString(1, name);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            result = createMovieFromMySql(rs);
+        }
+        return result;
     }
 }

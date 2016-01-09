@@ -5,7 +5,6 @@
  */
 package models;
 
-import db.DBEntity;
 import java.util.Date;
 import org.joda.time.LocalTime;
 
@@ -13,7 +12,7 @@ import org.joda.time.LocalTime;
  *
  * @author Dell
  */
-public class Show implements DBEntity {
+public class Show {
 
     public int id;
     public Movie movie;

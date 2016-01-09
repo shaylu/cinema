@@ -6,7 +6,7 @@
 package controllers;
 
 import com.google.gson.Gson;
-import db.mysql.DbManager;
+import db.DbManager;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Movie;
 import models.MovieCategory;
+import views.MoviesSearchView;
 
 /**
  *
@@ -31,6 +32,18 @@ import models.MovieCategory;
  */
 @Path("movies")
 public class MovieController {
+    
+    @GET
+    @Path("search_view")
+    public Response searchView() {
+        try {
+            List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
+            MoviesSearchView view = new MoviesSearchView(categories);
+            return Response.status(Response.Status.OK).entity(view.getView()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
 
     @GET
     @Path("search")
@@ -49,6 +62,9 @@ public class MovieController {
             else if (parameterMap.containsKey("cat_id") && !parameterMap.containsKey("has_trailer")) {
                 // used by category search
                 movies = ControllerHelper.getDb().getMoviesManager().getByCategory(cat_id);
+            }
+            else if (!parameterMap.containsKey("has_trailer")) {
+                movies = ControllerHelper.getDb().getMoviesManager().getAll();
             }
             else {
                 movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);

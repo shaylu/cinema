@@ -5,13 +5,11 @@
  */
 package models;
 
-import db.DBEntity;
-
 /**
  *
  * @author Dell
  */
-public class PromotionCategory implements DBEntity {
+public class PromotionCategory {
 
     public int id;
     public String name;

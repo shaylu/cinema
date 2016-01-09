@@ -5,8 +5,6 @@
  */
 package models;
 
-import db.DBEntity;
-import db.DBEntityManager;
 import java.sql.ResultSet;
 import org.w3c.dom.Entity;
 
@@ -14,7 +12,7 @@ import org.w3c.dom.Entity;
  *
  * @author Liraz
  */
-public class User implements DBEntity {
+public class User {
 
     public int fldUserId;
     protected String fldPassword;

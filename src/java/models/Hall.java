@@ -5,13 +5,11 @@
  */
 package models;
 
-import db.DBEntity;
-
 /**
  *
  * @author Dell
  */
-public class Hall implements DBEntity {
+public class Hall {
 
     public int id;
     public int num_of_seats;

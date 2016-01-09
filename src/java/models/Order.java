@@ -5,14 +5,13 @@
  */
 package models;
 
-import db.DBEntity;
 import java.util.Date;
 
 /**
  *
  * @author Dell
  */
-public class Order implements DBEntity {
+public class Order {
 
     public int id;
     public String clientId;

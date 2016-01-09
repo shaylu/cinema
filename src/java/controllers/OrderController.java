@@ -18,6 +18,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Order;
+import models.Show;
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 /**
  *
@@ -44,12 +47,16 @@ public class OrderController {
     @POST
     @Path("add")
     public Response addNewOrder(@Context HttpServletRequest request, @FormParam("client_id") String client_id, @FormParam("fname") String fname,
-            @FormParam("lname") String lname, @FormParam("email") String email, @FormParam("credit_card_last_digit") String credit_card_last_digit,
-            @FormParam("num_of_seats") int num_of_seats, @FormParam("exp_date_month") int exp_date_month, @FormParam("exp_date_year") int exp_date_year, @FormParam("show_id") int show_id,
-            @FormParam("total_payment") double total_payment, @FormParam("order_date") Date order_date, @FormParam("phone") String phone) throws ClassNotFoundException, SQLException {
+            @FormParam("lname") String lname, @FormParam("email") String email, @FormParam("credit_num") String credit_num,
+            @FormParam("num_of_seats") int num_of_seats, @FormParam("month") int month, @FormParam("year") int year, @FormParam("show_id") int show_id,
+            @FormParam("phone") String phone) throws ClassNotFoundException, SQLException {
 
         try {
-            ControllerHelper.getDb().getOrdersManager().add(client_id, fname, lname, email, phone, show_id, num_of_seats, total_payment, credit_card_last_digit, exp_date_month, exp_date_year, order_date);
+            // making order
+            String credit_card_last_digit = credit_num.substring(Math.max(0, credit_num.length() - 4));
+            Show show = controllers.ControllerHelper.getDb().getShowsManager().getShow(show_id);
+            double total_payment = show.getPricePerSeat() * num_of_seats;
+            ControllerHelper.getDb().getOrdersManager().add(client_id, fname, lname, email, phone, show_id, num_of_seats, total_payment, credit_card_last_digit, month, year);
 
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

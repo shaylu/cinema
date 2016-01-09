@@ -5,10 +5,11 @@
  */
 package models;
 
+import com.google.gson.JsonObject;
 import db.DBEntity;
 import java.sql.ResultSet;
 
-public class MovieCategory implements DBEntity{
+public class MovieCategory implements DBEntity {
 
     public int id;
     public String name;
@@ -34,5 +35,12 @@ public class MovieCategory implements DBEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String toRedisJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("id", getId());
+        json.addProperty("name", getName());
+        return json.toString();
     }
 }

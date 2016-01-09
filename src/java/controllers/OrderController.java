@@ -43,7 +43,6 @@ public class OrderController {
 
     @POST
     @Path("add")
-
     public Response addNewOrder(@Context HttpServletRequest request, @FormParam("client_id") String client_id, @FormParam("fname") String fname,
             @FormParam("lname") String lname, @FormParam("email") String email, @FormParam("credit_card_last_digit") String credit_card_last_digit,
             @FormParam("num_of_seats") int num_of_seats, @FormParam("exp_date_month") int exp_date_month, @FormParam("exp_date_year") int exp_date_year, @FormParam("show_id") int show_id,

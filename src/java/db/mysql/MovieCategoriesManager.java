@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import models.MovieCategory;
+import redis.clients.jedis.Jedis;
 
 /**
  *
@@ -23,17 +24,29 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public static final String INSERT_QUERY = "INSERT INTO movie_categories (name) values(?)";
     public static final String SELECT_ALL = "SELECT * FROM movie_categories";
     public static final String SELECT_MOVIE_CATEGORY = "SELECT * FROM movie_categories WHERE cat_id = (?)";
+    public static final String SELET_MOVIECAT_BY_NAME = "SELECR cat_id FROM movie_categories WHERE name = ?";
+
+    Jedis jdisMovieCat;
 
     public MovieCategoriesManager(DbManager manager) {
+        this.jdisMovieCat = new Jedis("localhost");
         this.manager = manager;
     }
 
     public int add(String name) throws ClassNotFoundException, SQLException {
+        int result = 0;
+
         try (Connection conn = manager.getConnection()) {
+
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
             statement.setString(1, name);
-            return statement.executeUpdate();
+            result = statement.executeUpdate();
+            
+            MovieCategory movieCat = getMovieCategoryByName(name);
+            jdisMovieCat.set(new Integer(movieCat.getId()).toString(), movieCat.toRedisJson());
+            return result;
         }
+
     }
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {
@@ -65,6 +78,19 @@ public class MovieCategoriesManager extends DbManagerEntity {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_CATEGORY);
             statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            result = createMovieCtaegoryFromMySql(rs);
+        }
+
+        return result;
+    }
+
+    public MovieCategory getMovieCategoryByName(String name) throws SQLException, ClassNotFoundException {
+        MovieCategory result;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELET_MOVIECAT_BY_NAME);
+            statement.setString(1, name);
             ResultSet rs = statement.executeQuery();
             rs.next();
             result = createMovieCtaegoryFromMySql(rs);

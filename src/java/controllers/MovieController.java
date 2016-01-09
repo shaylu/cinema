@@ -11,12 +11,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,17 +34,19 @@ public class MovieController {
 
     @GET
     @Path("search")
-    public Response getMovieByFilter(@PathParam("keyword") String keyword, @PathParam("cat_id") int cat_id, @PathParam("has_trailer") boolean has_trailer, @PathParam("is_recommended") boolean is_recommended) {
+    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended) {
 
+        Map<String, String[]> parameterMap = request.getParameterMap();
         Gson gson = new Gson();
         String json = null;
-        try {
-            keyword = "j";
-            cat_id = 1;
-            has_trailer = true;
-            is_recommended = true;
 
-            List<Movie> movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
+        try {
+            List<Movie> movies = null;
+            if (!parameterMap.containsKey("keyword") && !parameterMap.containsKey("has_trailer")) {
+                // used by keyword search
+                movies = ControllerHelper.getDb().getMoviesManager().getByKeyword(keyword);
+            }
+            movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
             json = gson.toJson(movies);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get al orders, " + e.getMessage()).build();
@@ -72,7 +76,6 @@ public class MovieController {
 //                + "</HTML>";
 //
 //    }
-
     @GET
     @Path("{id}")
     public Response getMovieById(@PathParam("movie_id") int movie_id) {

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import models.Movie;
 import models.MovieCategory;
+import org.apache.jasper.tagplugins.jstl.core.Catch;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -32,6 +33,7 @@ public class MoviesManager extends DbManagerEntity {
             + "plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "SELECT * FROM movies M WHERE M.movie_id = ?";
+    public static final String SELECT_MOVIE_BY_KEYWORD = "SELECT * FROM movies M WHERE M.name like ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
     public final static String FILTER_QUERY_HASTRAILER_CAT = "SELECT * FROM movies M where M.cat_id = ? and M.trailer = ? and M.name like ?  ";
     public final static String FILTER_QUERY_HASNOTTRAILER_CAT = "SELECT * FROM movies M where M.cat_id = ? and M.trailer = null and M.name like ? ";
@@ -227,4 +229,19 @@ public class MoviesManager extends DbManagerEntity {
         return result;
 
     }
+
+    public List<Movie> getByKeyword(String keyword) throws SQLException, ClassNotFoundException {
+        ArrayList<Movie> result = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_BY_ID);
+            statement.setString(1,"%" + keyword);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Movie mc = createMovieFromMySql(rs);
+                result.add(mc);
+            }
+        }
+        return result;
+    }
+
 }

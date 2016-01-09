@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import db.mysql.DbManager;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class MovieController {
     @GET
     @Path("search")
     public Response getMovieByFilter(@PathParam("keyword") String keyword, @PathParam("cat_id") int cat_id, @PathParam("has_trailer") boolean has_trailer, @PathParam("is_recommended") boolean is_recommended) {
-        
+
         Gson gson = new Gson();
         String json = null;
         try {
@@ -40,7 +41,7 @@ public class MovieController {
             cat_id = 1;
             has_trailer = true;
             is_recommended = true;
-            
+
             List<Movie> movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter(keyword, cat_id, has_trailer, is_recommended);
             json = gson.toJson(movies);
         } catch (Exception e) {
@@ -54,10 +55,10 @@ public class MovieController {
     @Produces(MediaType.TEXT_HTML)
     public String liraz() throws ServletException, IOException, SQLException, Exception {
         System.out.println("Shay you are my bitch");
-       //  ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-      //  MovieCategory movieCat = ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryRedisById(1);
-        
-                return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
+        ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+       List <MovieCategory> movieCats = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
+
+        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
                 + "<HTML>\n"
                 + "   <HEAD>\n"
                 + "      <TITLE>\n"
@@ -71,7 +72,7 @@ public class MovieController {
                 + "</HTML>";
 
     }
-    
+
     @GET
     @Path("{id}")
     public Response getMovieById(@PathParam("movie_id") int movie_id) {

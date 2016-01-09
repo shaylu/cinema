@@ -110,13 +110,13 @@ public class MovieCategoriesManager extends DbManagerEntity {
         return result;
     }
 
-    public MovieCategory getMovieCategoryRedisById(int id) {
-        String jsonRes = jdisMovieCat.get(new Integer(id).toString());
-        Gson gson = new Gson();
-        MovieCategory ctegory = gson.fromJson(jsonRes, MovieCategory.class
-        );
-        return ctegory;
-    }
+//    public MovieCategory getMovieCategoryRedisById(int id) {
+//        String jsonRes = jdisMovieCat.get(new Integer(id).toString());
+//        Gson gson = new Gson();
+//        MovieCategory ctegory = gson.fromJson(jsonRes, MovieCategory.class
+//        );
+//        return ctegory;
+//    }
 
     public MovieCategory getMovieCategoryByName(String name) throws SQLException, ClassNotFoundException {
         MovieCategory result;

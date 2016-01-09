@@ -697,6 +697,8 @@ public class AdminController {
     @Path("filldb")
     public Response filldb() {
         StringBuilder str = new StringBuilder();
+        ControllerHelper.getDb().getMoviesManager().deletKeyFromRedis();
+        ControllerHelper.getDb().getMovieCategoriesManager().deletKeyFromRedis();
         try {
             try {
                 ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();

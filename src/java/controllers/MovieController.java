@@ -59,7 +59,7 @@ public class MovieController {
 
     @GET
     @Path("search")
-    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("num_of_seat_left") boolean num_of_seat_left) {
+    public Response getMovieByFilter(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("last") boolean num_of_seat_left) {
 
         Map<String, String[]> parameterMap = request.getParameterMap();
         Gson gson = new Gson();
@@ -87,31 +87,34 @@ public class MovieController {
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
 
-    @GET
-    @Path("liraz")
-    @Produces(MediaType.TEXT_HTML)
-    public String liraz() throws ServletException, IOException, SQLException, Exception {
-        System.out.println("Shay you are my bitch");
-        ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-        ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
-       // ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
-      //  ControllerHelper.getDb().getPromosManager().addDefaultValues();
-        List<MovieCategory> cat = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
-
-        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
-                + "<HTML>\n"
-                + "   <HEAD>\n"
-                + "      <TITLE>\n"
-                + "         A Small Hello \n"
-                + "      </TITLE>\n"
-                + "   </HEAD>\n"
-                + "<BODY>\n"
-                + "   <H1>Hi</H1>\n"
-                + "   <P>This is very minimal \"Shay you are my bitch\" HTML document.</P> \n"
-                + "</BODY>\n"
-                + "</HTML>";
-
-    }
+//    @GET
+//    @Path("liraz")
+//    @Produces(MediaType.TEXT_HTML)
+//    public String liraz() throws ServletException, IOException, SQLException, Exception {
+//        System.out.println("Shay you are my bitch");
+//        ControllerHelper.getDb().getMovieCategoriesManager().deletKeyFromRedis();
+//        ControllerHelper.getDb().getMoviesManager().deletKeyFromRedis();
+//        ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+//        ControllerHelper.getDb().getMoviesManager().addDefaultValues();
+//        
+//       // ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
+//      //  ControllerHelper.getDb().getPromosManager().addDefaultValues();
+//        List<MovieCategory> cat = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
+//
+//        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
+//                + "<HTML>\n"
+//                + "   <HEAD>\n"
+//                + "      <TITLE>\n"
+//                + "         A Small Hello \n"
+//                + "      </TITLE>\n"
+//                + "   </HEAD>\n"
+//                + "<BODY>\n"
+//                + "   <H1>Hi</H1>\n"
+//                + "   <P>This is very minimal \"Shay you are my bitch\" HTML document.</P> \n"
+//                + "</BODY>\n"
+//                + "</HTML>";
+//
+//    }
 
     @GET
     @Path("get/{id}")

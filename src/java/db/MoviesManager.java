@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mysql.jdbc.exceptions.MySQLDataException;
+import static db.MovieCategoriesManager.REDIS_KEY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -108,6 +109,7 @@ public class MoviesManager extends DbManagerEntity {
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getDouble("M.mov_length"));
         result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("M.cat_id")));
+        result.setTrailer(rs.getString("M.trailer"));
         result.setPlot(rs.getString("M.plot"));
         result.setPoster(rs.getString("M.poster"));
         result.setIs_recomanded(rs.getBoolean("M.is_recommended"));
@@ -219,12 +221,17 @@ public class MoviesManager extends DbManagerEntity {
                     queryToreturn.append("and M.trailer is not null and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
+                }else{
+                statement = conn.prepareStatement(queryToreturn.toString());
+                statement.setString(1, "%" + keyword + "%");
                 }
-            } else if (has_trailer) {
+            } else{
+                if (has_trailer) {
                 queryToreturn.append("and M.trailer is not null and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
+                
             } else if (is_recommended) {
                 queryToreturn.append("and M.is_recommended is not null and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
@@ -256,13 +263,22 @@ public class MoviesManager extends DbManagerEntity {
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-            }
+            }else{
+                queryToreturn.append("and M.cat_id = ?");
+                statement = conn.prepareStatement(queryToreturn.toString());
+                statement.setString(1, "%" + keyword + "%");
+                statement.setInt(2, cat_id);
+                }
+
+            
+        }
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Movie movie = createMovieFromMySql(rs);
                 listToReturn.add(movie);
             }
         }
+
         return listToReturn;
     }
 
@@ -333,7 +349,9 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public void deletKeyFromRedis() {
+        this.jdisMovie = new Jedis("localhost");
         this.jdisMovie.del(REDIS_KEY);
+        this.jdisMovie.disconnect();
     }
 
 }

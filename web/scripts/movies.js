@@ -12,7 +12,7 @@ $(function () {
         var has_trailer = $("#hasTrailer").prop('checked');
         var last = $("#lastTickets").prop('checked');
         var is_recommended = $("#isRecommanded").prop('checked');
-        var cat_id = $("#selCatId").val();
+        var cat_id = $("#selCatID").val();
         $.ajax({url: url, data: {'keyword': keyword, 'has_trailer': has_trailer, 'last': last, 'is_recommended': is_recommended, 'cat_id': cat_id}}).fail(function (data) {
             alert(data.responseText);
         }).done(function (data) {

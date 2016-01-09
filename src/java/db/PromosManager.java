@@ -29,7 +29,7 @@ public class PromosManager extends DbManagerEntity {
 
     public final static String INSERT_QUERY = "INSERT INTO promotions (comp_id, promo_cat_id, description, exp_date,"
             + "promo_code, image) values(?,?,?,?,?,?)";
-    public final static String DELET_PROMOTION = "DELET from promotions WHERE promo_id = (?)";
+    public final static String DELET_PROMOTION = "DELETE FROM promotions WHERE promo_id = (?)";
     public final static String SELECT_ALL = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id";
     public static final String SELECT_PROMOION = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_id = ?";
 
@@ -90,6 +90,17 @@ public class PromosManager extends DbManagerEntity {
         }
 
         return promotionToReturn;
+    }
+
+    public int delete(int id) throws SQLException, ClassNotFoundException {
+        int result = 0;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(DELET_PROMOTION);
+            statement.setInt(1, id);
+            result = statement.executeUpdate();
+            return result;
+        }
+
     }
 
     public Promotion createPromotionFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {

@@ -5,14 +5,13 @@
  */
 package models;
 
-import db.DBEntity;
 import java.util.Date;
 
 /**
  *
  * @author Dell
  */
-public class Review implements DBEntity {
+public class Review {
 
     public int id;
     public Order order;

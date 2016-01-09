@@ -7,7 +7,6 @@ package models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import db.DBEntity;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  *
  * @author Dell
  */
-public class Movie implements DBEntity {
+public class Movie {
 
     public int id;
     public String name;

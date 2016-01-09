@@ -5,7 +5,7 @@
  */
 package controllers;
 
-import db.mysql.DbManager;
+import db.DbManager;
 
 /**
  *
@@ -13,7 +13,7 @@ import db.mysql.DbManager;
  */
 public class ControllerHelper {
 
-    private static db.mysql.DbManager db;
+    private static db.DbManager db;
 
     public static DbManager getDb() {
         if (db == null) {

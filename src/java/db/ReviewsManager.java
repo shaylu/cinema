@@ -5,135 +5,95 @@
  */
 package db;
 
-import com.mysql.jdbc.Connection;
+import static db.PromosManager.SELECT_ALL;
+import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import models.Review;
 
 /**
  *
- * @author Liraz
+ * @author shay.lugasi
  */
-public class ReviewsManager implements DBEntityManager<Review> {
+public class ReviewsManager extends DbManagerEntity {
 
-    private static final Logger LOGGER = Logger.getLogger(ReviewsManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS reviews (\n"
-            + "  rev_id INT NOT NULL AUTO_INCREMENT,\n"
-            + "  order_id INT NOT NULL,\n"
-            + "  rank DOUBLE ZEROFILL NULL,\n"
-            + "  review_text VARCHAR(500) NULL,\n"
-            + "  review_date DATE NOT NULL,\n"
-            + "  PRIMARY KEY (rev_id), INDEX order_id_idx (order_id ASC),\n"
-            + "  CONSTRAINT order_id FOREIGN KEY (order_id) REFERENCES orders (Order_id))";
-    private final static String INSERT_TABLE = "INSERT INTO reviews (rev_id, order_id, rank, review_text,"
-            + " review_date) values(?,?,?,?,?)";
-    private final static String DELET_REVIEW = "DELET from reviews WHERE rev_id = (?)";
-    private final static String UPDATE_REVIWE = "UPDATE reviews SET rev_id = ?, order_id = ?, rank = ?, review_text = ?,"
-            + " review_date = ? WHERE rev_id = ?";
-    private final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on 'R.order_id = O.id' ";//"SELECT * FROM cinema_city.reviews";
+    private final static String INSERT_QUERY = "INSERT INTO reviews (order_id, rank, review_text,"
+            + " review_date) values(?,?,?,?)";
+    public final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on R.order_id = O.id ";
+    public final static String SELECT_REVIEW = "SELECT * FROM reviews WHERE rev_id = ?";
 
-    public static String getCREATE_TABLE() {
-        return CREATE_TABLE;
+    public ReviewsManager(DbManager manager) {
+        this.manager = manager;
     }
 
-    @Override
-    public void createTable() {
-        DBHelper.executeUpdateStatment(CREATE_TABLE);
-    }
-
-    @Override
-    public boolean addEntity(Review entity) {
-        Connection conn = null;
-        boolean result;
-
-        try {
-            conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
-            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
-
-            statement.setInt(1, entity.getId());
-            statement.setInt(2, (entity.getOrder().getId()));
-            statement.setDouble(3, entity.getRank());
-            statement.setString(4, entity.getText());
-            statement.setString(5, dateformatSql.format(entity.getDate()));
-            statement.execute();
-            result = true;
-        } catch (ClassNotFoundException | SQLException ex) {
-            result = false;
-            LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
+    public int add(int order_id, double rank, String review_text) throws ClassNotFoundException, SQLException {
+        // dont forget to set the review date using the now() function
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
+            statement.setInt(1, order_id);
+            statement.setDouble(2, rank);
+            statement.setString(3, review_text);
+            statement.setDate(4, getCurrentDate());
+            return statement.executeUpdate();
         }
+    }
+
+    private static Date getCurrentDate() {
+        java.util.Date today = new java.util.Date();
+        return new java.sql.Date(today.getTime());
+    }
+
+    public int addDefaultValues() throws ClassNotFoundException, SQLException {
+        int result = 0;
+        //int order_id, int rank, String review_text
+        result += add(1, 5, "Awesome movie! warmly recommended!");
+        result += add(2, 2.1, "Very Good");
+        result += add(3, 1, "I've seen better...");
+        result += add(4, 4.8, "It is highly recommended, thrilling, exciting, WOW!");
         return result;
     }
 
-    @Override
-    public boolean update(Review entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(Review entity) {
-        Connection conn = null;
-        boolean result = false;
-        try {
-            conn = DBHelper.getConnection();
-            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_REVIEW);
-            statement.setInt(1, entity.getId());
-            statement.execute();
-        } catch (ClassNotFoundException | SQLException ex) {
-            result = false;
-            LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
+    public Review getReviewById(int id) throws SQLException, ClassNotFoundException {
+        Review reviewToReturn;
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_REVIEW);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            reviewToReturn = createReviewFromMySql(rs);
         }
+        return reviewToReturn;
     }
 
-    public ArrayList<Review> allReviews() {
+    public List<Review> getAll() throws ClassNotFoundException, SQLException {
 
-        ArrayList<Review> ListToReturn = new ArrayList<>();
-        ResultSet rs = null;
-
-        try {
-            rs = DBHelper.executeQueryStatment(SELECT_ALLREVIWES);
+        ArrayList<Review> result = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(SELECT_ALL);
             while (rs.next()) {
-                ListToReturn.add(getShowByResultSetLine(rs));
+                Review mc = createReviewFromMySql(rs);
+                result.add(mc);
             }
-        } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
         }
 
-        return ListToReturn;
+        return result;
     }
 
-    public static Review getShowByResultSetLine(ResultSet rs) {
-        Review review = new Review();
-        try {
-            review.setId(rs.getInt("rev_id"));
-            review.setOrder(OrderManager.getOrderByResultSet(rs));
-            review.setRank(rs.getDouble("rank"));
-            review.setText(rs.getString("review_text"));
-            review.setDate(rs.getDate("review_date"));
+    private Review createReviewFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
 
-        } catch (Exception e) {
-        }
-        return review;
+        Review result = new Review();
+        result.setId(rs.getInt("R.rev_id"));
+        result.setOrder(manager.getOrdersManager().getOrderById(rs.getInt("O.order_id")));
+        result.setRank(rs.getDouble("R.rank"));
+        result.setText(rs.getString("R.review_text"));
+        result.setDate(rs.getDate("R.review_date"));
+        return result;
     }
+
 }

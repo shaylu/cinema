@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.mysql;
+package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,7 @@ public class DbManager implements AutoCloseable {
     private static final String DbName = "CinemaCity";
 
     private static final String MySqlUsername = "root";
-    private static final String MySqlPassword = "mta1Dev!";
+    private static final String MySqlPassword = "1234";
 
     private MovieCategoriesManager movieCategoriesManager;
     private MoviesManager moviesManager;

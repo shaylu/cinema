@@ -40,6 +40,31 @@ $(function () {
                     alert(data);
                 });
     });
+    
+    $("#searchByCategory").submit(function (e) {
+        e.preventDefault();
+        var url = "../app/movies/search";
+        var cat_id = $("#selCatID").val();
+        $.ajax({url: url, data: {'cat_id': cat_id}})
+                .fail(function (data) {
+                    alert(data.responseText);
+                })
+                .done(function (data) {
+                    alert(data);
+                });
+    });
+    
+    $("#btnGetRecomended").click(function () {
+        var url = "../app/movies/home_recommended";
+        var cat_id = $("#selCatID").val();
+        $.ajax({url: url, data: {'cat_id': cat_id}})
+                .fail(function (data) {
+                    alert(data.responseText);
+                })
+                .done(function (data) {
+                    alert(data);
+                });
+    });
 });
 
 

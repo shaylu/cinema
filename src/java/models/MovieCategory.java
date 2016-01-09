@@ -6,10 +6,9 @@
 package models;
 
 import com.google.gson.JsonObject;
-import db.DBEntity;
 import java.sql.ResultSet;
 
-public class MovieCategory implements DBEntity {
+public class MovieCategory {
 
     public int id;
     public String name;

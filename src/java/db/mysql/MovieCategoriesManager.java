@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import models.MovieCategory;
 import redis.clients.jedis.Jedis;
 
@@ -26,7 +27,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public static final String SELECT_ALL = "SELECT * FROM movie_categories";
     public static final String SELECT_MOVIE_CATEGORY = "SELECT * FROM movie_categories WHERE cat_id = (?)";
     public static final String SELET_MOVIECAT_BY_NAME = "SELECT * FROM movie_categories WHERE name = (?)";
-
+    public static final String REDIS_KEY = "allMovieCategories";
     Jedis jdisMovieCat;
 
     public MovieCategoriesManager(DbManager manager) {
@@ -44,7 +45,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
             result = statement.executeUpdate();
 
             MovieCategory movieCat = getMovieCategoryByName(name);
-            jdisMovieCat.set(new Integer(movieCat.getId()).toString(), movieCat.toRedisJson());
+            jdisMovieCat.sadd(REDIS_KEY, movieCat.toRedisJson());
             return result;
         }
 
@@ -74,6 +75,28 @@ public class MovieCategoriesManager extends DbManagerEntity {
         return result;
     }
 
+    
+    
+    public List<MovieCategory> getAllFromRedis() throws ClassNotFoundException, SQLException {
+
+        ArrayList<MovieCategory> allMovieCat = new ArrayList<>();
+        try {
+            Gson gson = new Gson();
+            Set<String> allValues = jdisMovieCat.smembers(REDIS_KEY);
+
+            for (String value : allValues) {
+                MovieCategory catToAdd = gson.fromJson(value, MovieCategory.class);
+                allMovieCat.add(catToAdd);
+            }
+
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "Redis all value fild");
+        }
+
+        return allMovieCat;
+    }
+
     public MovieCategory getMovieCategoryById(int id) throws SQLException, ClassNotFoundException {
         MovieCategory result;
         try (Connection conn = manager.getConnection()) {
@@ -90,7 +113,8 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public MovieCategory getMovieCategoryRedisById(int id) {
         String jsonRes = jdisMovieCat.get(new Integer(id).toString());
         Gson gson = new Gson();
-        MovieCategory ctegory = gson.fromJson(jsonRes, MovieCategory.class);
+        MovieCategory ctegory = gson.fromJson(jsonRes, MovieCategory.class
+        );
         return ctegory;
     }
 

@@ -31,27 +31,22 @@ public class MovieCategoriesManager extends DbManagerEntity {
     Jedis jdisMovieCat;
 
     public MovieCategoriesManager(DbManager manager) {
-        //  this.jdisMovieCat = new Jedis("localhost");
         this.manager = manager;
     }
 
     public int add(String name) throws ClassNotFoundException, SQLException {
         this.jdisMovieCat = new Jedis("localhost");
         int result = 0;
-
         try (Connection conn = manager.getConnection()) {
-
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
             statement.setString(1, name);
             result = statement.executeUpdate();
-
             MovieCategory movieCat = getMovieCategoryByName(name);
             jdisMovieCat.sadd(REDIS_KEY, movieCat.toRedisJson());
             return result;
         } finally {
-            this.jdisMovieCat.disconnect();
+            jdisMovieCat.disconnect();
         }
-
     }
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {
@@ -63,6 +58,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
         return result;
     }
 //TODO
+
     public List<MovieCategory> getAll() throws ClassNotFoundException, SQLException {
 
         ArrayList<MovieCategory> result = new ArrayList<>();
@@ -93,7 +89,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
         } catch (Exception e) {
             System.out.println(e.getMessage() + "Redis all value fild");
         } finally {
-            this.jdisMovieCat.disconnect();
+            jdisMovieCat.disconnect();
         }
 
         return allMovieCat;
@@ -130,5 +126,9 @@ public class MovieCategoriesManager extends DbManagerEntity {
         result.setId(rs.getInt("cat_id"));
         result.setName(rs.getString("name"));
         return result;
+    }
+    
+     public void deletKeyFromRedis() {
+        this.jdisMovieCat.del(REDIS_KEY);
     }
 }

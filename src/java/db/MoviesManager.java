@@ -51,8 +51,9 @@ public class MoviesManager extends DbManagerEntity {
     public MoviesManager(DbManager manager) {
         this.manager = manager;
     }
-    
+
     public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended) throws SQLException, ClassNotFoundException {
+
         this.jdisMovie = new Jedis("localhost");
         int result = 0;
         try (Connection conn = manager.getConnection()) {
@@ -76,7 +77,7 @@ public class MoviesManager extends DbManagerEntity {
 
             return result;
         } finally {
-            this.jdisMovie.disconnect();
+            jdisMovie.disconnect();
         }
 
     }
@@ -120,6 +121,7 @@ public class MoviesManager extends DbManagerEntity {
         return result;
     }
 //TODO
+
     public boolean delete(int mov_id) throws SQLException, ClassNotFoundException {
         boolean result = false;
         try (Connection conn = manager.getConnection()) {
@@ -131,6 +133,7 @@ public class MoviesManager extends DbManagerEntity {
         return result;
     }
 //TODO
+
     public ArrayList<Movie> getRecommended() throws SQLException, ClassNotFoundException {
 
         ArrayList<Movie> moviesResult = new ArrayList<>();
@@ -146,21 +149,23 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public String getRecommendedFromRedis() throws SQLException, ClassNotFoundException {
+        //redis.connectToRedis();
         this.jdisMovie = new Jedis("localhost");
-        Set<String> smembers = this.jdisMovie.smembers(REDIS_KEY);
+        Set<String> smembers = jdisMovie.smembers(REDIS_KEY);
         StringBuilder str = new StringBuilder();
         str.append("[");
         for (String member : smembers) {
             str.append(member);
             str.append(",");
         }
-        
+
         String res = str.toString();
-        if (smembers.size() > 0)
+        if (smembers.size() > 0) {
             res = res.substring(0, res.length() - 1);
+        }
         res += "]";
-        
-        this.jdisMovie.disconnect();
+
+        jdisMovie.disconnect();
         return res;
     }
 
@@ -268,6 +273,10 @@ public class MoviesManager extends DbManagerEntity {
             }
         }
         return result;
+    }
+
+    public void deletKeyFromRedis() {
+        this.jdisMovie.del(REDIS_KEY);
     }
 
 }

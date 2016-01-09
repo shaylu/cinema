@@ -112,4 +112,5 @@ public class Movie implements DBEntity {
         this.is_recomanded = is_recomanded;
     }
 
+   // public string toJson 
 }

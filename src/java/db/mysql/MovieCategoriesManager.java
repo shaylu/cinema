@@ -26,7 +26,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public static final String INSERT_QUERY = "INSERT INTO movie_categories (name) values(?)";
     public static final String SELECT_ALL = "SELECT * FROM movie_categories";
     public static final String SELECT_MOVIE_CATEGORY = "SELECT * FROM movie_categories WHERE cat_id = (?)";
-    public static final String SELET_MOVIECAT_BY_NAME = "SELECT * FROM movie_categories WHERE name = (?)";
+    public static final String SELECT_MOVIECAT_BY_NAME = "SELECT * FROM movie_categories WHERE name = (?)";
     public static final String REDIS_KEY = "allMovieCategories";
     Jedis jdisMovieCat;
 
@@ -122,7 +122,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public MovieCategory getMovieCategoryByName(String name) throws SQLException, ClassNotFoundException {
         MovieCategory result;
         try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(SELET_MOVIECAT_BY_NAME);
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIECAT_BY_NAME);
             statement.setString(1, name);
             ResultSet rs = statement.executeQuery();
             rs.next();

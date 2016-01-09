@@ -60,7 +60,8 @@ public class MovieController {
 //    public String liraz() throws ServletException, IOException, SQLException, Exception {
 //        System.out.println("Shay you are my bitch");
 //        ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-//       List <MovieCategory> movieCats = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
+//        ControllerHelper.getDb().getMoviesManager().addDefaultValues();
+//       List <Movie> movies = ControllerHelper.getDb().getMoviesManager().getRecommendedFromRedis();
 //
 //        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
 //                + "<HTML>\n"

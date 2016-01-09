@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mysql.jdbc.exceptions.MySQLDataException;
+import static db.MovieCategoriesManager.REDIS_KEY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -108,6 +109,7 @@ public class MoviesManager extends DbManagerEntity {
         result.setRelease_date(rs.getDate("M.release_date"));
         result.setMovie_length(rs.getDouble("M.mov_length"));
         result.setCategory(manager.getMovieCategoriesManager().getMovieCategoryById(rs.getInt("M.cat_id")));
+        result.setTrailer(rs.getString("M.trailer"));
         result.setPlot(rs.getString("M.plot"));
         result.setPoster(rs.getString("M.poster"));
         result.setIs_recomanded(rs.getBoolean("M.is_recommended"));
@@ -335,7 +337,9 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public void deletKeyFromRedis() {
+        this.jdisMovie = new Jedis("localhost");
         this.jdisMovie.del(REDIS_KEY);
+        this.jdisMovie.disconnect();
     }
 
 }

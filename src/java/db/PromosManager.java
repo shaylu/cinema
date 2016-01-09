@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.mysql;
+package db;
 
-import static db.mysql.MovieCategoriesManager.INSERT_QUERY;
-import static db.mysql.MovieCategoriesManager.SELECT_ALL;
-import static db.mysql.MovieCategoriesManager.SELECT_MOVIE_CATEGORY;
+import static db.MovieCategoriesManager.INSERT_QUERY;
+import static db.MovieCategoriesManager.SELECT_ALL;
+import static db.MovieCategoriesManager.SELECT_MOVIE_CATEGORY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -5,14 +5,13 @@
  */
 package models;
 
-import db.DBEntity;
 import java.util.Date;
 
 /**
  *
  * @author Dell
  */
-public class Promotion implements DBEntity {
+public class Promotion {
 
     public int id;
     public Company company;

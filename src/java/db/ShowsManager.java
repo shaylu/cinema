@@ -5,172 +5,157 @@
  */
 package db;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
+import java.util.List;
+import models.Hall;
+import models.Movie;
 import models.Show;
 
 /**
  *
- * @author Liraz
+ * @author shay.lugasi
  */
-public class ShowsManager implements DBEntityManager<Show> {
+public class ShowsManager extends DbManagerEntity {
 
-    private static final Logger LOGGER = Logger.getLogger(ShowsManager.class.getName());
-    private final static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS shows(\n"
-            + "  show_id INT NOT NULL ,\n"
-            + "  movie_id INT NOT NULL,\n"
-            + "  hall_id INT NOT NULL,\n"
-            + "  show_date DATE NOT NULL,\n"
-            + "  num_of_seats_left INT ZEROFILL NOT NULL,\n"
-            + "  price_per_seat DOUBLE ZEROFILL NOT NULL,\n"
-            + "  PRIMARY KEY (show_id),\n"
-            + "  INDEX movie_id_idx (movie_id ASC),\n"
-            + "  INDEX hall_id_idx (hall_id ASC),\n"
-            + "  CONSTRAINT movie_id FOREIGN KEY (movie_id) REFERENCES movies (movie_id),\n"
-            + "  CONSTRAINT hall_id FOREIGN KEY (hall_id) REFERENCES hall (hall_id)\n)";
+    public static final String INSERT_QUERY = "INSERT INTO shows (movie_id, hall_id, show_date, show_time, num_of_seats_left, price_per_seat) values(?,?,?,?,?,?);";
+    public static final String SUBSTRUCT = "UPDATE shows S SET num_of_seats_left = (num_of_seats_left - (?)) WHERE show_id = (?);";
+    public static final String GET_BY_ID = "SELECT * FROM shows S WHERE show_id = (?) LIMIT 1;";
+    public static final String GET_ALL = "SELECT * FROM shows S;";
+    public static final String GET_BY_HALL = "SELECT * FROM shows S inner join halls H on S.hall_id = H.hall_id WHERE hall_id = (?);";
+    public static final String GET_BY_LAST_TICKETS = "SELECT * FROM shows WHERE num_of_seats_left < (?);";
+    public static final String GET_BY_MOVIE = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE movie_id = (?);";
 
-    private final static String INSERT_TABLE = "INSERT INTO shows (show_id, mov_id, hall_id, show_date,"
-            + " num_of_seats_left, price_per_seat ) values(?,?,?,?,?,?)";
-    private final static String DELET_SHOW = "DELET from shows WHERE show_id = (?)";
-    private final static String UPDATE_SHOW = "UPDATE shows SET  mov_id = ?, hall_id = ?, show_date = ?,"
-            + " num_of_seats_left = ?, price_per_seat = ? WHERE show_id = ?";
-    private final static String SELECT_ALL_SHOWS = "select * from (shows S inner join hall H on H.hall_id=S.hall_id) "
-            + "inner join movies M on S.movie_id = M.movie_id";
-
-    public static String getCREATE_TABLE() {
-        return CREATE_TABLE;
+    public ShowsManager(DbManager manager) {
+        this.manager = manager;
     }
 
-    @Override
-    public void createTable() {
-        DBHelper.executeUpdateStatment(CREATE_TABLE);
-    }
+    public int add(int movie_id, int hall_id, int num_of_seats_left, String show_date, String time, double price_per_seat) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
+            statement.setInt(1, movie_id);
+            statement.setInt(2, hall_id);
+            statement.setString(3, show_date);
+            statement.setString(4, time);
+            statement.setInt(5, num_of_seats_left);
+            statement.setDouble(6, price_per_seat);
 
-    @Override
-    public boolean addEntity(Show entity) {
-        Connection conn = null;
-        boolean result;
-
-        try {
-            conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(INSERT_TABLE);
-            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
-
-            statement.setInt(1, entity.getId());
-            statement.setInt(2, (entity.getMovie().getId()));
-            statement.setInt(3, entity.getHall().getId());
-            statement.setString(4, dateformatSql.format(entity.getShowDate()));
-            statement.setInt(5, entity.getNumOfSeatsLeft());
-            statement.setDouble(6, entity.getPricePerSeat());
-            statement.execute();
-            result = true;
-        } catch (ClassNotFoundException | SQLException ex) {
-            result = false;
-            LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
+            return statement.executeUpdate();
         }
+    }
 
+    public int addDefaultValues() throws ClassNotFoundException, SQLException {
+        int result = 0;
+        //   public int add(int movie_id, int hall_id, int num_of_seats_left, Date show_date, double price_per_seat) throws ClassNotFoundException, SQLException {
+        result += add(1, 5, 100, "2016-01-02", "10:20", 25.5);
+        result += add(2, 3, 50, "2016-01-15", "12:45", 29.5);
+        result += add(1, 2, 35, "2016-02-20", "16:15", 22);
+        result += add(2, 1, 100, "2016-02-29", "21:00", 35.5);
         return result;
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean update(Show entity) {
-        Connection conn = null;
-        boolean result;
+    public int substructTickets(int show_id, int num_of_tickets, Connection conn) throws ClassNotFoundException, SQLException {
+        // when ordering a ticket to show, this function will be called.
+        PreparedStatement statement = conn.prepareStatement(SUBSTRUCT);
+        statement.setInt(1, num_of_tickets);
+        statement.setInt(2, show_id);
 
-        try {
-            conn = DBHelper.getConnection();
-            PreparedStatement statement = conn.prepareStatement(UPDATE_SHOW);
-            SimpleDateFormat dateformatSql = new SimpleDateFormat("dd-MM-yyyy");
-
-            statement.setInt(1, (entity.getMovie().getId()));
-            statement.setInt(2, entity.getHall().getId());
-            statement.setString(3, dateformatSql.format(entity.getShowDate()));
-            statement.setInt(4, entity.getNumOfSeatsLeft());
-            statement.setDouble(5, entity.getPricePerSeat());
-            statement.setInt(6, entity.getId());
-            statement.executeUpdate();
-            result = true;
-        } catch (ClassNotFoundException | SQLException ex) {
-            result = false;
-            LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return result;
-//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return statement.executeUpdate();
     }
 
-    @Override
-    public void delete(Show entity) {
-        Connection conn = null;
-        boolean result = false;
-        try {
-            conn = DBHelper.getConnection();
-            com.mysql.jdbc.PreparedStatement statement = (com.mysql.jdbc.PreparedStatement) conn.prepareStatement(DELET_SHOW);
-            statement.setInt(1, entity.getId());
-            statement.execute();
-        } catch (ClassNotFoundException | SQLException ex) {
-            result = false;
-            LOGGER.log(Level.SEVERE, null, ex);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
+    public Show getShow(int id) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_BY_ID);
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            Show result = createShowFromMySql(rs);
+            return result;
         }
     }
 
-    public ArrayList<Show> allShows() {
-        ArrayList<Show> allShows = new ArrayList<>();
-        ResultSet rs = null;
-        try {
-            rs = DBHelper.executeQueryStatment(SELECT_ALL_SHOWS);
+    public Show getShowByHall(int hall_id) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_BY_HALL);
+            statement.setInt(1, hall_id);
+
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            Show result = createShowFromMySql(rs);
+            return result;
+        }
+    }
+
+    public List<Show> getAllShows() throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(GET_ALL);
+
+            ArrayList<Show> result = new ArrayList<>();
+
             while (rs.next()) {
-                Show show = getShowByResultSetLine(rs);
-                allShows.add(show);
+                Show show = createShowFromMySql(rs);
+                result.add(show);
             }
-        } catch (Exception e) {
+
+            return result;
         }
-        return allShows;
     }
 
-    public static Show getShowByResultSetLine(ResultSet rs) {
-        Show show = new Show();
-        try {
-            show.setId(rs.getInt("show_id"));
-            show.setMovie(MovieManager.getMovieByResultSetLine(rs));
-            show.setHall(HallManager.getHallByResultSetLine(rs));
-            show.setDate(rs.getDate("show_date"));
-            show.setNumOfSeatsLeft(rs.getInt("num_of_seats_left"));
-            show.setPricePerSeat(rs.getDouble("price_per_seat"));
-        } catch (Exception e) {
+    public List<Show> getAllShowsWithLastTickets(int tickets_less_than) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_BY_LAST_TICKETS);
+            statement.setInt(1, tickets_less_than);
+
+            ResultSet rs = statement.executeQuery();
+            ArrayList<Show> result = new ArrayList<>();
+
+            while (rs.next()) {
+                Show show = createShowFromMySql(rs);
+                result.add(show);
+            }
+
+            return result;
         }
-        return show;
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<Show> getAllShowsForMovie(int movie_id) throws ClassNotFoundException, SQLException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_BY_MOVIE);
+            statement.setInt(1, movie_id);
+
+            ResultSet rs = statement.executeQuery();
+            ArrayList<Show> result = new ArrayList<>();
+
+            while (rs.next()) {
+                Show show = createShowFromMySql(rs);
+                result.add(show);
+            }
+
+            return result;
+        }
+    }
+
+    public Show createShowFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
+
+        Show showToReturn = new Show();
+
+        showToReturn.setId(rs.getInt("S.show_id"));
+        showToReturn.setMovie(manager.getMoviesManager().getMovieById(rs.getInt("S.movie_id")));
+        showToReturn.setHall(manager.getHallsManager().getHallById(rs.getInt("S.hall_id")));
+        showToReturn.setDate(rs.getDate("S.show_date"));
+        showToReturn.setTime(rs.getString("S.show_time"));
+        showToReturn.setNumOfSeatsLeft(rs.getInt("S.num_of_seats_left"));
+        showToReturn.setPricePerSeat(rs.getDouble("S.price_per_seat"));
+
+        return showToReturn;
     }
 
 }

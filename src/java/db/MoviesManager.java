@@ -212,16 +212,18 @@ public class MoviesManager extends DbManagerEntity {
                     statement.setBoolean(2, is_recommended);
                     statement.setString(3, "%" + keyword + "%");
                     statement.setInt(4, cat_id);
-                }
-
-                ResultSet rs = statement.executeQuery();
+                } 
+            }
+            
+          ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
                     Movie movie = createMovieFromMySql(rs);
                     listToReturn.add(movie);
 
-                }
-            }
+                }  
         }
+        
+        
         return listToReturn;
     }
 

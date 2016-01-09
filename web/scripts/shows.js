@@ -24,7 +24,7 @@ $(function () {
                 })
                 .done(function (data) {
                     alert("Order Successfully Added!");
-                    refreshShows();
+                    document.location = "../../orders/thankyou/" + data;
                 });
     });
 });

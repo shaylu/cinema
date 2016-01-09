@@ -28,7 +28,7 @@ public class PostOrderView implements ICinemaView {
                 + "<div id=\"orderDetails\"></div></p>"
         );
 
-        res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../scripts/post_order.js"));
+        res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../../scripts/post_order.js"));
         res.append(LayoutHelper.getFooter());
         return res.toString();
     }

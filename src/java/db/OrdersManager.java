@@ -26,8 +26,7 @@ public class OrdersManager extends DbManagerEntity {
             + "total_payment, credit_card_last_digit, exp_date_month, exp_date_year, order_date) values(?,?,?,?,?,?,?,?,?,?,?,CURDATE())";
     public static final String SELECT_ALL = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id ";
     private final static String DELET_QUERY = "DELET from orders WHERE order_id = (?)";
-    public static final String SELECT_ORDER_BY_ID = "SELECT client_id,fname,lname,email,phone,show_id,num_of_seats,total_payment,credit_card_last_digit,exp_date_month,exp_date_year"
-            + "FROM cinemacity.orders WHERE order_id = ? ";
+    public static final String SELECT_ORDER_BY_ID = "SELECT * FROM cinemacity.orders O inner join shows S on O.show_id = S.show_id WHERE order_id = ?";
     public static final String SELECT_ORDER_BY_SHOW_ID = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id  WHERE show_id = ?";
     public static final String SELECT_ORDER_BY_CLIENT_ID = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id client_id = ?";
     public static final String SELECT_ORDER = "SELECT * FROM orders O inner join shows S on O.show_id = S.show_id WHERE order_id = ?";

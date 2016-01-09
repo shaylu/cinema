@@ -5,6 +5,7 @@
  */
 package db.mysql;
 
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +25,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
     public static final String INSERT_QUERY = "INSERT INTO movie_categories (name) values(?)";
     public static final String SELECT_ALL = "SELECT * FROM movie_categories";
     public static final String SELECT_MOVIE_CATEGORY = "SELECT * FROM movie_categories WHERE cat_id = (?)";
-    public static final String SELET_MOVIECAT_BY_NAME = "SELECR cat_id FROM movie_categories WHERE name = ?";
+    public static final String SELET_MOVIECAT_BY_NAME = "SELECT * FROM movie_categories WHERE name = (?)";
 
     Jedis jdisMovieCat;
 
@@ -41,7 +42,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
             statement.setString(1, name);
             result = statement.executeUpdate();
-            
+
             MovieCategory movieCat = getMovieCategoryByName(name);
             jdisMovieCat.set(new Integer(movieCat.getId()).toString(), movieCat.toRedisJson());
             return result;
@@ -84,6 +85,13 @@ public class MovieCategoriesManager extends DbManagerEntity {
         }
 
         return result;
+    }
+
+    public MovieCategory getMovieCategoryRedisById(int id) {
+        String jsonRes = jdisMovieCat.get(new Integer(id).toString());
+        Gson gson = new Gson();
+        MovieCategory ctegory = gson.fromJson(jsonRes, MovieCategory.class);
+        return ctegory;
     }
 
     public MovieCategory getMovieCategoryByName(String name) throws SQLException, ClassNotFoundException {

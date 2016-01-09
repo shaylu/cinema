@@ -73,7 +73,7 @@ public class OrdersManager extends DbManagerEntity {
 
         return result;
     }
-
+//TODO
     public int delete(int order_id) throws ClassNotFoundException, SQLException {
 
         try (Connection conn = manager.getConnection()) {
@@ -82,7 +82,7 @@ public class OrdersManager extends DbManagerEntity {
             return statement.executeUpdate();
         }
     }
-
+//TODO
     public Order get(int order_id) throws ClassNotFoundException, SQLException {
 
         Order orderToReturn;
@@ -128,7 +128,7 @@ public class OrdersManager extends DbManagerEntity {
         }
         return ListToReturn;
     }
-
+//TODO
     public List<Order> getAllByShow(int show_id) throws ClassNotFoundException, SQLException {
         ArrayList<Order> ListToReturn = new ArrayList<Order>();
 
@@ -142,7 +142,7 @@ public class OrdersManager extends DbManagerEntity {
         }
         return ListToReturn;
     }
-
+//TODO
     public List<Order> getAllByClientId(String client_id) throws ClassNotFoundException, SQLException {
 
         ArrayList<Order> ListToReturn = new ArrayList<Order>();

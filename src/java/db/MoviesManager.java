@@ -59,6 +59,7 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public int add(String name, Date release_date, int mov_length, int cat_id, String plot, String poster_url, String trailer_url, boolean is_recommended) throws SQLException, ClassNotFoundException {
+
         this.jdisMovie = new Jedis("localhost");
         int result = 0;
         try (Connection conn = manager.getConnection()) {
@@ -82,7 +83,7 @@ public class MoviesManager extends DbManagerEntity {
 
             return result;
         } finally {
-            this.jdisMovie.disconnect();
+            jdisMovie.disconnect();
         }
 
     }
@@ -125,17 +126,19 @@ public class MoviesManager extends DbManagerEntity {
         }
         return result;
     }
+//TODO
 
     public boolean delete(int mov_id) throws SQLException, ClassNotFoundException {
         boolean result = false;
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(DELET_MOVIE);
             statement.setInt(1, mov_id);
-            statement.executeUpdate(DELET_MOVIE);
+            statement.executeUpdate();
             result = true;
         }
         return result;
     }
+//TODO
 
     public ArrayList<Movie> getRecommended() throws SQLException, ClassNotFoundException {
 
@@ -152,8 +155,9 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public String getRecommendedFromRedis() throws SQLException, ClassNotFoundException {
+        //redis.connectToRedis();
         this.jdisMovie = new Jedis("localhost");
-        Set<String> smembers = this.jdisMovie.smembers(REDIS_KEY);
+        Set<String> smembers = jdisMovie.smembers(REDIS_KEY);
         StringBuilder str = new StringBuilder();
         str.append("[");
         for (String member : smembers) {
@@ -313,6 +317,10 @@ public class MoviesManager extends DbManagerEntity {
             }
         }
         return result;
+    }
+
+    public void deletKeyFromRedis() {
+        this.jdisMovie.del(REDIS_KEY);
     }
 
 }

@@ -58,7 +58,7 @@ public class ReviewsManager extends DbManagerEntity {
         result += add(4, 4.8, "It is highly recommended, thrilling, exciting, WOW!");
         return result;
     }
-
+//TODO
     public Review getReviewById(int id) throws SQLException, ClassNotFoundException {
         Review reviewToReturn;
         try (Connection conn = manager.getConnection()) {
@@ -70,7 +70,7 @@ public class ReviewsManager extends DbManagerEntity {
         }
         return reviewToReturn;
     }
-
+//TODO
     public List<Review> getAll() throws ClassNotFoundException, SQLException {
 
         ArrayList<Review> result = new ArrayList<>();

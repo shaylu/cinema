@@ -7,7 +7,7 @@
 $(function () {
     $("#search").submit(function (e) {
         e.preventDefault();
-        var url = "login";
+        var url = "search";
         var keyword = $("#keyword").val();
         var has_trailer = $("#hasTrailer").prop('checked');
         var last = $("#lastTickets").prop('checked');

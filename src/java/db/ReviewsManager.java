@@ -26,6 +26,7 @@ public class ReviewsManager extends DbManagerEntity {
             + " review_date) values(?,?,?,?)";
     public final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on R.order_id = O.id ";
     public final static String SELECT_REVIEW = "SELECT * FROM reviews WHERE rev_id = ?";
+    public final static String SELECT_BY_MOVIE = "SELECT * FROM cinemacity.reviews R INNER JOIN Orders O ON R.order_id = O.order_id INNER JOIN shows ON O.show_id = shows.show_id WHERE shows.movie_id=?";
 
     public ReviewsManager(DbManager manager) {
         this.manager = manager;
@@ -93,6 +94,20 @@ public class ReviewsManager extends DbManagerEntity {
         result.setRank(rs.getDouble("R.rank"));
         result.setText(rs.getString("R.review_text"));
         result.setDate(rs.getDate("R.review_date"));
+        return result;
+    }
+
+    public List<Review> getByMovieId(int movie_id) throws ClassNotFoundException, SQLException {
+        ArrayList<Review> result = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_BY_MOVIE);
+            statement.setInt(1, movie_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Review mc = createReviewFromMySql(rs);
+                result.add(mc);
+            }
+        }
         return result;
     }
 

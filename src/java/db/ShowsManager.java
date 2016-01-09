@@ -30,7 +30,7 @@ public class ShowsManager extends DbManagerEntity {
     public static final String GET_ALL = "SELECT * FROM shows S;";
     public static final String GET_BY_HALL = "SELECT * FROM shows S inner join halls H on S.hall_id = H.hall_id WHERE hall_id = (?);";
     public static final String GET_BY_LAST_TICKETS = "SELECT * FROM shows WHERE num_of_seats_left < (?);";
-    public static final String GET_BY_MOVIE = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE movie_id = (?);";
+    public static final String GET_BY_MOVIE = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE M.movie_id = (?);";
 
     public ShowsManager(DbManager manager) {
         this.manager = manager;

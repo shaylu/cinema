@@ -6,15 +6,21 @@
 package controllers;
 
 import com.google.gson.Gson;
+import db.mysql.DbManager;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Movie;
+import models.MovieCategory;
 
 /**
  *
@@ -48,8 +54,10 @@ public class MovieController {
 //    @Produces(MediaType.TEXT_HTML)
 //    public String liraz() throws ServletException, IOException, SQLException, Exception {
 //        System.out.println("Shay you are my bitch");
-//        //DbManager db = new DbManager();
-//        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
+//       //  ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+//      //  MovieCategory movieCat = ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryRedisById(1);
+//        
+//                return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
 //                + "<HTML>\n"
 //                + "   <HEAD>\n"
 //                + "      <TITLE>\n"
@@ -63,6 +71,7 @@ public class MovieController {
 //                + "</HTML>";
 //
 //    }
+    
     @GET
     @Path("{id}")
     public Response getMovieById(@PathParam("movie_id") int movie_id) {

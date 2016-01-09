@@ -49,28 +49,28 @@ public class MovieController {
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
 
-//    @GET
-//    @Path("liraz")
-//    @Produces(MediaType.TEXT_HTML)
-//    public String liraz() throws ServletException, IOException, SQLException, Exception {
-//        System.out.println("Shay you are my bitch");
-//       //  ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-//      //  MovieCategory movieCat = ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryRedisById(1);
-//        
-//                return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
-//                + "<HTML>\n"
-//                + "   <HEAD>\n"
-//                + "      <TITLE>\n"
-//                + "         A Small Hello \n"
-//                + "      </TITLE>\n"
-//                + "   </HEAD>\n"
-//                + "<BODY>\n"
-//                + "   <H1>Hi</H1>\n"
-//                + "   <P>This is very minimal \"Shay you are my bitch\" HTML document.</P> \n"
-//                + "</BODY>\n"
-//                + "</HTML>";
-//
-//    }
+    @GET
+    @Path("liraz")
+    @Produces(MediaType.TEXT_HTML)
+    public String liraz() throws ServletException, IOException, SQLException, Exception {
+        System.out.println("Shay you are my bitch");
+       //  ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
+      //  MovieCategory movieCat = ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryRedisById(1);
+        
+                return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
+                + "<HTML>\n"
+                + "   <HEAD>\n"
+                + "      <TITLE>\n"
+                + "         A Small Hello \n"
+                + "      </TITLE>\n"
+                + "   </HEAD>\n"
+                + "<BODY>\n"
+                + "   <H1>Hi</H1>\n"
+                + "   <P>This is very minimal \"Shay you are my bitch\" HTML document.</P> \n"
+                + "</BODY>\n"
+                + "</HTML>";
+
+    }
     
     @GET
     @Path("{id}")

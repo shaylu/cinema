@@ -44,6 +44,22 @@ public class OrderController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
+    
+    @GET
+    @Path("get/{order_id}")
+    public Response getAllOrders(@PathParam("order_id") int order_id) {
+        Gson gson = new Gson();
+        String json = null;
+        try {
+            Order order = ControllerHelper.getDb().getOrdersManager().get(order_id);
+            json = gson.toJson(order);
+            return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get al orders, " + e.getMessage()).build();
+        }
+        
+    }
 
 //    @GET
 //    @Path("add_review/{order_id}")

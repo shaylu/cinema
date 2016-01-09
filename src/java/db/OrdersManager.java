@@ -53,11 +53,14 @@ public class OrdersManager extends DbManagerEntity {
             statement.setString(9, credit_card_last_digits);
             statement.setInt(10, exp_month);
             statement.setInt(11, exp_year);
-            statement.executeUpdate();
+            statement.executeUpdate(INSERT_QUERY, statement.RETURN_GENERATED_KEYS);
             int result = manager.getShowsManager().substructTickets(show_id, num_of_seats, conn);
-            
+
             conn.commit();
-            return result;
+            ResultSet rs = statement.getGeneratedKeys();
+            Order order = createOrderFromMySql(rs);
+            
+            return order.id;
         }
     }
 
@@ -73,6 +76,7 @@ public class OrdersManager extends DbManagerEntity {
         return result;
     }
 //TODO
+
     public int delete(int order_id) throws ClassNotFoundException, SQLException {
 
         try (Connection conn = manager.getConnection()) {
@@ -82,6 +86,7 @@ public class OrdersManager extends DbManagerEntity {
         }
     }
 //TODO
+
     public Order get(int order_id) throws ClassNotFoundException, SQLException {
 
         Order orderToReturn;
@@ -127,7 +132,7 @@ public class OrdersManager extends DbManagerEntity {
         }
         return ListToReturn;
     }
-//TODO
+
     public List<Order> getAllByShow(int show_id) throws ClassNotFoundException, SQLException {
         ArrayList<Order> ListToReturn = new ArrayList<Order>();
 
@@ -142,6 +147,7 @@ public class OrdersManager extends DbManagerEntity {
         return ListToReturn;
     }
 //TODO
+
     public List<Order> getAllByClientId(String client_id) throws ClassNotFoundException, SQLException {
 
         ArrayList<Order> ListToReturn = new ArrayList<Order>();

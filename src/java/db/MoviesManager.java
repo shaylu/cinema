@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mysql.jdbc.exceptions.MySQLDataException;
+import static db.MovieCategoriesManager.REDIS_KEY;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -320,7 +321,9 @@ public class MoviesManager extends DbManagerEntity {
     }
 
     public void deletKeyFromRedis() {
+        this.jdisMovie = new Jedis("localhost");
         this.jdisMovie.del(REDIS_KEY);
+        this.jdisMovie.disconnect();
     }
 
 }

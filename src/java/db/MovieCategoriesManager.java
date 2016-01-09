@@ -129,6 +129,8 @@ public class MovieCategoriesManager extends DbManagerEntity {
     }
     
      public void deletKeyFromRedis() {
+         this.jdisMovieCat = new Jedis("localhost");
         this.jdisMovieCat.del(REDIS_KEY);
+        this.jdisMovieCat.disconnect();
     }
 }

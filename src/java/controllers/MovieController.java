@@ -92,8 +92,11 @@ public class MovieController {
     @Produces(MediaType.TEXT_HTML)
     public String liraz() throws ServletException, IOException, SQLException, Exception {
         System.out.println("Shay you are my bitch");
+        ControllerHelper.getDb().getMovieCategoriesManager().deletKeyFromRedis();
+        ControllerHelper.getDb().getMoviesManager().deletKeyFromRedis();
         ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-        ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
+        ControllerHelper.getDb().getMoviesManager().addDefaultValues();
+        
        // ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
       //  ControllerHelper.getDb().getPromosManager().addDefaultValues();
         List<MovieCategory> cat = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();

@@ -17,7 +17,7 @@ public class LayoutHelper {
                 + "<html>\n"
                 + "<head>\n"
                 + "<meta charset=\"utf-8\">\n"
-                + "<title>Untitled Document</title>\n"
+                + "<title>++ CINEMA CITY APP ++</title>\n"
                 + "<style>\n"
                 + "form {\n"
                 + "	font-family: arial;\n"

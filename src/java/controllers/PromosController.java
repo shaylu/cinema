@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Promotion;
+import views.PromotionsView;
 
 /**
  *
@@ -23,6 +24,18 @@ import models.Promotion;
 @Path("promos")
 public class PromosController {
 
+    @GET
+    @Path("")
+    public Response home() {
+        try {
+            PromotionsView view = new PromotionsView();
+            return Response.status(Response.Status.OK).entity(view.getView()).type(MediaType.TEXT_HTML).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    
     @GET
     @Path("all")
     public Response getAllPromos(@Context HttpServletRequest request) {

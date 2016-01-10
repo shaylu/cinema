@@ -212,9 +212,7 @@ public class AdminController {
     @Path("categories")
     public Response adminCategories(@Context HttpServletRequest request) throws URISyntaxException {
         if (!isLogin(request)) {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-            URI targetURIForRedirection = new URI("/admin");
-            return Response.seeOther(targetURIForRedirection).build();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         views.admin.AdminCategoriesView view = new views.admin.AdminCategoriesView();
@@ -305,9 +303,7 @@ public class AdminController {
     @Path("halls")
     public Response adminHalls(@Context HttpServletRequest request) throws URISyntaxException {
         if (!isLogin(request)) {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-            URI targetURIForRedirection = new URI("/admin");
-            return Response.seeOther(targetURIForRedirection).build();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         views.admin.AdminHallsView view = new views.admin.AdminHallsView();
@@ -375,9 +371,7 @@ public class AdminController {
     @Path("shows")
     public Response adminShows(@Context HttpServletRequest request) throws URISyntaxException {
         if (!isLogin(request)) {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-            URI targetURIForRedirection = new URI("/admin");
-            return Response.seeOther(targetURIForRedirection).build();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         List<Movie> movies = null;
@@ -462,9 +456,7 @@ public class AdminController {
     @Path("companies")
     public Response adminCompanies(@Context HttpServletRequest request) throws URISyntaxException {
         if (!isLogin(request)) {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-            URI targetURIForRedirection = new URI("/admin");
-            return Response.seeOther(targetURIForRedirection).build();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         views.admin.AdminCompaniesView view = new views.admin.AdminCompaniesView();
@@ -532,9 +524,7 @@ public class AdminController {
     @Path("promotions/categories")
     public Response adminPromoCompanies(@Context HttpServletRequest request) throws URISyntaxException {
         if (!isLogin(request)) {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-            URI targetURIForRedirection = new URI("/admin");
-            return Response.seeOther(targetURIForRedirection).build();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         views.admin.AdminPromoCategoriesView view = new views.admin.AdminPromoCategoriesView();
@@ -617,9 +607,7 @@ public class AdminController {
     @Path("promotions")
     public Response adminPromos(@Context HttpServletRequest request) throws URISyntaxException {
         if (!isLogin(request)) {
-//            return Response.status(Response.Status.UNAUTHORIZED).build();
-            URI targetURIForRedirection = new URI("/admin");
-            return Response.seeOther(targetURIForRedirection).build();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         List<Company> companies = null;

@@ -39,7 +39,7 @@ public class OrdersManager extends DbManagerEntity {
 
         try (Connection conn = manager.getConnection()) {
             conn.setAutoCommit(false);
-            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
+            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY,PreparedStatement.RETURN_GENERATED_KEYS);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("yyyy-MM-dd");
 
             statement.setString(1, client_id);
@@ -53,7 +53,7 @@ public class OrdersManager extends DbManagerEntity {
             statement.setString(9, credit_card_last_digits);
             statement.setInt(10, exp_month);
             statement.setInt(11, exp_year);
-            statement.executeUpdate(INSERT_QUERY, statement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
             int result = manager.getShowsManager().substructTickets(show_id, num_of_seats, conn);
 
             conn.commit();
@@ -96,12 +96,12 @@ public class OrdersManager extends DbManagerEntity {
             statement.setInt(1, order_id);
             ResultSet rs = statement.executeQuery();
             rs.next();
-            orderToReturn = createOrderFromMySql(rs);
+            orderToReturn = createOrderFromMySqlWithInnerJoin(rs);
         }
         return orderToReturn;
     }
 
-    public Order createOrderFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
+    public Order createOrderFromMySqlWithInnerJoin(ResultSet rs) throws SQLException, ClassNotFoundException {
         Order OrderToReturn = new Order();
 
         OrderToReturn.setClientId(rs.getString("O.client_id"));
@@ -119,6 +119,24 @@ public class OrdersManager extends DbManagerEntity {
         return OrderToReturn;
     }
 
+     public Order createOrderFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
+        Order OrderToReturn = new Order();
+
+        OrderToReturn.setClientId(rs.getString("client_id"));
+        OrderToReturn.setFirstName(rs.getString("fname"));
+        OrderToReturn.setLastName(rs.getString("lname"));
+        OrderToReturn.setEmail(rs.getString("email"));
+        OrderToReturn.setPhoneNumber(rs.getString("phone"));
+        OrderToReturn.setShow(manager.getShowsManager().getShow(rs.getInt("show_id")));
+        OrderToReturn.setNumOfSeats(rs.getInt("num_of_seats"));
+        OrderToReturn.setTotalPayment(rs.getDouble("total_payment"));
+        OrderToReturn.setCreditCardLastDigit(rs.getString("credit_card_last_digit"));
+        OrderToReturn.setExpDateMonth(rs.getInt("exp_date_month"));
+        OrderToReturn.setExpDateYear(rs.getInt("exp_date_year"));
+        OrderToReturn.setOrderDate(rs.getDate("order_date"));
+        return OrderToReturn;
+    }
+
     public List<Order> getAll() throws ClassNotFoundException, SQLException {
 
         ArrayList<Order> ListToReturn = new ArrayList<Order>();
@@ -127,7 +145,7 @@ public class OrdersManager extends DbManagerEntity {
             PreparedStatement statement = conn.prepareStatement(SELECT_ALL);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                Order order = createOrderFromMySql(rs);
+                Order order = createOrderFromMySqlWithInnerJoin(rs);
                 ListToReturn.add(order);
             }
         }
@@ -142,7 +160,7 @@ public class OrdersManager extends DbManagerEntity {
             statement.setInt(1, show_id);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                ListToReturn.add(createOrderFromMySql(rs));
+                ListToReturn.add(createOrderFromMySqlWithInnerJoin(rs));
             }
         }
         return ListToReturn;
@@ -157,7 +175,7 @@ public class OrdersManager extends DbManagerEntity {
             statement.setString(1, client_id);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                ListToReturn.add(createOrderFromMySql(rs));
+                ListToReturn.add(createOrderFromMySqlWithInnerJoin(rs));
             }
         }
         return ListToReturn;
@@ -171,7 +189,7 @@ public class OrdersManager extends DbManagerEntity {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             rs.next();
-            orderToReturn = createOrderFromMySql(rs);
+            orderToReturn = createOrderFromMySqlWithInnerJoin(rs);
         }
 
         return orderToReturn;

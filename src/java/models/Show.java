@@ -33,6 +33,12 @@ public class Show {
         this.price_per_seate = price_per_seate;
     }
 
+    public Show(int id, Date date, int num_of_seats_left) {
+        this.id = id;
+        this.date = date;
+        this.num_of_seats_left = num_of_seats_left;
+        
+    }
     public Show() {
     }
 

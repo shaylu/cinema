@@ -100,6 +100,7 @@ public class MovieController {
         ControllerHelper.getDb().getMoviesManager().addDefaultValues();
         ControllerHelper.getDb().getHallsManager().addDefaultValues();
         ControllerHelper.getDb().getShowsManager().addDefaultValues();
+        ControllerHelper.getDb().getOrdersManager().addDefaultValues();
        
 // ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
       //  ControllerHelper.getDb().getPromosManager().addDefaultValues();

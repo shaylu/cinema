@@ -59,9 +59,9 @@ public class OrdersManager extends DbManagerEntity {
             conn.commit();
             ResultSet rs = statement.getGeneratedKeys();
             rs.next();
-            Order order = createOrderFromMySql(rs);
+            //Order order =getOrderById(rs.getInt(1));
             
-            return order.id;
+            return rs.getInt(1);
         }
     }
 
@@ -109,7 +109,7 @@ public class OrdersManager extends DbManagerEntity {
         OrderToReturn.setLastName(rs.getString("O.lname"));
         OrderToReturn.setEmail(rs.getString("O.email"));
         OrderToReturn.setPhoneNumber(rs.getString("O.phone"));
-        OrderToReturn.setShow(manager.getShowsManager().getShow(rs.getInt("O.show_id")));
+        OrderToReturn.setShow(manager.getShowsManager().getShowById(rs.getInt("O.show_id")));
         OrderToReturn.setNumOfSeats(rs.getInt("O.num_of_seats"));
         OrderToReturn.setTotalPayment(rs.getDouble("O.total_payment"));
         OrderToReturn.setCreditCardLastDigit(rs.getString("O.credit_card_last_digit"));
@@ -127,7 +127,7 @@ public class OrdersManager extends DbManagerEntity {
         OrderToReturn.setLastName(rs.getString("lname"));
         OrderToReturn.setEmail(rs.getString("email"));
         OrderToReturn.setPhoneNumber(rs.getString("phone"));
-        OrderToReturn.setShow(manager.getShowsManager().getShow(rs.getInt("show_id")));
+        OrderToReturn.setShow(manager.getShowsManager().getShowById(rs.getInt("show_id")));
         OrderToReturn.setNumOfSeats(rs.getInt("num_of_seats"));
         OrderToReturn.setTotalPayment(rs.getDouble("total_payment"));
         OrderToReturn.setCreditCardLastDigit(rs.getString("credit_card_last_digit"));

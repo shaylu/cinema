@@ -81,19 +81,17 @@ public class OrderController {
             @FormParam("lname") String lname, @FormParam("email") String email, @FormParam("credit_num") String credit_num,
             @FormParam("num_of_seats") int num_of_seats, @FormParam("month") int month, @FormParam("year") int year, @FormParam("show_id") int show_id,
             @FormParam("phone") String phone) throws ClassNotFoundException, SQLException {
-
         try {
             // making order
             String credit_card_last_digit = credit_num.substring(Math.max(0, credit_num.length() - 4));
             Show show = controllers.ControllerHelper.getDb().getShowsManager().getShowById(show_id);
             double total_payment = show.getPricePerSeat() * num_of_seats;
-            ControllerHelper.getDb().getOrdersManager().add(client_id, fname, lname, email, phone, show_id, num_of_seats, total_payment, credit_card_last_digit, month, year);
-            
+            Integer new_id = ControllerHelper.getDb().getOrdersManager().add(client_id, fname, lname, email, phone, show_id, num_of_seats, total_payment, credit_card_last_digit, month, year);
+            return Response.status(Response.Status.OK).entity(new_id.toString()).build();
 
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        return Response.status(Response.Status.OK).entity("Successfully added new order.").build();
 
     }
 }

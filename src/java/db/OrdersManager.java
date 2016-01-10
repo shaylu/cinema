@@ -58,6 +58,7 @@ public class OrdersManager extends DbManagerEntity {
 
             conn.commit();
             ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
             Order order = createOrderFromMySql(rs);
             
             return order.id;

@@ -16,7 +16,9 @@ import java.util.Date;
 import java.util.List;
 import models.Hall;
 import models.Movie;
+import models.Order;
 import models.Show;
+import redis.clients.jedis.Jedis;
 
 /**
  *
@@ -31,12 +33,14 @@ public class ShowsManager extends DbManagerEntity {
     public static final String GET_BY_HALL = "SELECT * FROM shows S inner join halls H on S.hall_id = H.hall_id WHERE hall_id = (?);";
     public static final String GET_BY_LAST_TICKETS = "SELECT * FROM shows WHERE num_of_seats_left < (?);";
     public static final String GET_BY_MOVIE = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE M.movie_id = (?);";
+    Jedis jdisShow;
 
     public ShowsManager(DbManager manager) {
         this.manager = manager;
     }
 
     public int add(int movie_id, int hall_id, int num_of_seats_left, String show_date, String time, double price_per_seat) throws ClassNotFoundException, SQLException {
+        int result = 0;
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
             statement.setInt(1, movie_id);
@@ -45,8 +49,19 @@ public class ShowsManager extends DbManagerEntity {
             statement.setString(4, time);
             statement.setInt(5, num_of_seats_left);
             statement.setDouble(6, price_per_seat);
+            result = statement.executeUpdate();
 
-            return statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
+            Show show = createShowFromMySql(rs);
+
+            StringBuilder strBuild = new StringBuilder("movie:{");
+            strBuild.append(movie_id);
+            strBuild.append("}:shows");
+            this.jdisShow = new Jedis("localhost");
+            jdisShow.zadd(strBuild.toString(), num_of_seats_left, show.toRedisJson());
+
+            return result;
         }
     }
 
@@ -159,5 +174,4 @@ public class ShowsManager extends DbManagerEntity {
 
         return showToReturn;
     }
-
 }

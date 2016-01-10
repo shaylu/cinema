@@ -16,7 +16,9 @@ import java.util.Date;
 import java.util.List;
 import models.Hall;
 import models.Movie;
+import models.Order;
 import models.Show;
+import redis.clients.jedis.Jedis;
 
 /**
  *
@@ -31,22 +33,26 @@ public class ShowsManager extends DbManagerEntity {
     public static final String GET_BY_HALL = "SELECT * FROM shows S inner join halls H on S.hall_id = H.hall_id WHERE hall_id = (?);";
     public static final String GET_BY_LAST_TICKETS = "SELECT * FROM shows WHERE num_of_seats_left < (?);";
     public static final String GET_BY_MOVIE = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE M.movie_id = (?);";
+    // public static final String GET_BY_SHOWID = "SELECT * FROM shows S inner join movies M on S.movie_id = M.movie_id  WHERE S.show_id = (?)"; 
+    Jedis jdisShow;
 
     public ShowsManager(DbManager manager) {
         this.manager = manager;
     }
 
     public int add(int movie_id, int hall_id, int num_of_seats_left, String show_date, String time, double price_per_seat) throws ClassNotFoundException, SQLException {
+        int result = 0;
         try (Connection conn = manager.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
+            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, movie_id);
             statement.setInt(2, hall_id);
             statement.setString(3, show_date);
             statement.setString(4, time);
             statement.setInt(5, num_of_seats_left);
             statement.setDouble(6, price_per_seat);
+            result = statement.executeUpdate();
 
-            return statement.executeUpdate();
+            return result;
         }
     }
 
@@ -65,18 +71,19 @@ public class ShowsManager extends DbManagerEntity {
         PreparedStatement statement = conn.prepareStatement(SUBSTRUCT);
         statement.setInt(1, num_of_tickets);
         statement.setInt(2, show_id);
+        int result = statement.executeUpdate();
 
-        return statement.executeUpdate();
+        return result;
     }
 
-    public Show getShow(int id) throws ClassNotFoundException, SQLException {
+    public Show getShowById(int id) throws ClassNotFoundException, SQLException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_BY_ID);
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
             rs.next();
-            Show result = createShowFromMySql(rs);
+            Show result = createShowFromMySqlWithInnerJoin(rs);
             return result;
         }
     }
@@ -89,7 +96,7 @@ public class ShowsManager extends DbManagerEntity {
 
             ResultSet rs = statement.executeQuery();
             rs.next();
-            Show result = createShowFromMySql(rs);
+            Show result = createShowFromMySqlWithInnerJoin(rs);
             return result;
         }
     }
@@ -102,7 +109,7 @@ public class ShowsManager extends DbManagerEntity {
             ArrayList<Show> result = new ArrayList<>();
 
             while (rs.next()) {
-                Show show = createShowFromMySql(rs);
+                Show show = createShowFromMySqlWithInnerJoin(rs);
                 result.add(show);
             }
 
@@ -120,7 +127,7 @@ public class ShowsManager extends DbManagerEntity {
             ArrayList<Show> result = new ArrayList<>();
 
             while (rs.next()) {
-                Show show = createShowFromMySql(rs);
+                Show show = createShowFromMySqlWithInnerJoin(rs);
                 result.add(show);
             }
 
@@ -138,7 +145,7 @@ public class ShowsManager extends DbManagerEntity {
             ArrayList<Show> result = new ArrayList<>();
 
             while (rs.next()) {
-                Show show = createShowFromMySql(rs);
+                Show show = createShowFromMySqlWithInnerJoin(rs);
                 result.add(show);
             }
 
@@ -146,7 +153,7 @@ public class ShowsManager extends DbManagerEntity {
         }
     }
 
-    public Show createShowFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
+    public Show createShowFromMySqlWithInnerJoin(ResultSet rs) throws SQLException, ClassNotFoundException {
         Show showToReturn = new Show();
 
         showToReturn.setId(rs.getInt("S.show_id"));
@@ -159,5 +166,4 @@ public class ShowsManager extends DbManagerEntity {
 
         return showToReturn;
     }
-
 }

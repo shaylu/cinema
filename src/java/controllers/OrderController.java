@@ -85,7 +85,7 @@ public class OrderController {
         try {
             // making order
             String credit_card_last_digit = credit_num.substring(Math.max(0, credit_num.length() - 4));
-            Show show = controllers.ControllerHelper.getDb().getShowsManager().getShow(show_id);
+            Show show = controllers.ControllerHelper.getDb().getShowsManager().getShowById(show_id);
             double total_payment = show.getPricePerSeat() * num_of_seats;
             ControllerHelper.getDb().getOrdersManager().add(client_id, fname, lname, email, phone, show_id, num_of_seats, total_payment, credit_card_last_digit, month, year);
             

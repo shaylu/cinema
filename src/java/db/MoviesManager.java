@@ -200,8 +200,8 @@ public class MoviesManager extends DbManagerEntity {
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
                 } else if (num_of_seat_left) {
-                    index = queryToreturn.indexOf("M");
-                    queryToreturn.insert(index+1, " inner join shows S on M.movie_id = S.movie_id ");
+                    index = queryToreturn.indexOf(" M ");
+                    queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
                     queryToreturn.append("and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
@@ -210,14 +210,14 @@ public class MoviesManager extends DbManagerEntity {
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
                 } else if (num_of_seat_left && is_recommended) {
-                    index = queryToreturn.indexOf("M");
-                    queryToreturn.insert(index+1, " inner join shows S on M.movie_id = S.movie_id ");
+                    index = queryToreturn.indexOf(" M ");
+                    queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
                     queryToreturn.append("and M.is_recommended is not null and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
                 } else if (has_trailer && num_of_seat_left) {
-                    index = queryToreturn.indexOf("M");
-                    queryToreturn.insert(index+1, " inner join shows S on M.movie_id = S.movie_id ");
+                    index = queryToreturn.indexOf(" M ");
+                    queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
                     queryToreturn.append("and M.trailer is not null and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
@@ -238,8 +238,8 @@ public class MoviesManager extends DbManagerEntity {
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
             } else if (num_of_seat_left) {
-                index = queryToreturn.indexOf("M");
-                queryToreturn.insert(index+1, " inner join shows S on M.movie_id = S.movie_id ");
+                index = queryToreturn.indexOf(" M ");
+                queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
                 queryToreturn.append("and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
@@ -250,15 +250,15 @@ public class MoviesManager extends DbManagerEntity {
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
             } else if (num_of_seat_left && is_recommended) {
-                index = queryToreturn.indexOf("M");
-                queryToreturn.insert(index+1, " inner join shows S on M.movie_id = S.movie_id ");
+                index = queryToreturn.indexOf(" M ");
+                queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
                 queryToreturn.append("and M.is_recommended is not null and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
             } else if (has_trailer && num_of_seat_left) {
-                index = queryToreturn.indexOf("M");
-                queryToreturn.insert(index+1, " inner join shows S on M.movie_id = S.movie_id ");
+                index = queryToreturn.indexOf(" M ");
+                queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
                 queryToreturn.append("and M.trailer is not null and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");

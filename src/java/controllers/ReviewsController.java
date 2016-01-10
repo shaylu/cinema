@@ -38,7 +38,7 @@ public class ReviewsController {
             json = gson.toJson(movieRes);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get al r, " + e.getMessage()).build();
+                    .entity("Failed to get add review page, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
@@ -52,7 +52,7 @@ public class ReviewsController {
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        return Response.status(Response.Status.OK).entity("Success.").build();
+        return Response.status(Response.Status.OK).entity("Successfully added new review.").build();
 
     }
 
@@ -66,7 +66,7 @@ public class ReviewsController {
             json = gson.toJson(reviews);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get all reviews, " + e.getMessage()).build();
+                    .entity("Failed to get reviews by movie id, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
@@ -80,7 +80,7 @@ public class ReviewsController {
             return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to add review, " + e.getMessage()).build();
+                    .entity("Failed to get add review page, " + e.getMessage()).build();
         }
 
     }

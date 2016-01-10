@@ -82,39 +82,11 @@ public class MovieController {
             }
             json = gson.toJson(movies);
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all movies, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get movies, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
 
-//    @GET
-//    @Path("liraz")
-//    @Produces(MediaType.TEXT_HTML)
-//    public String liraz() throws ServletException, IOException, SQLException, Exception {
-//        System.out.println("Shay you are my bitch");
-//        ControllerHelper.getDb().getMovieCategoriesManager().deletKeyFromRedis();
-//        ControllerHelper.getDb().getMoviesManager().deletKeyFromRedis();
-//        ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
-//        ControllerHelper.getDb().getMoviesManager().addDefaultValues();
-//        
-//       // ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
-//      //  ControllerHelper.getDb().getPromosManager().addDefaultValues();
-//        List<MovieCategory> cat = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
-//
-//        return "<!DOCTYPE html PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n"
-//                + "<HTML>\n"
-//                + "   <HEAD>\n"
-//                + "      <TITLE>\n"
-//                + "         A Small Hello \n"
-//                + "      </TITLE>\n"
-//                + "   </HEAD>\n"
-//                + "<BODY>\n"
-//                + "   <H1>Hi</H1>\n"
-//                + "   <P>This is very minimal \"Shay you are my bitch\" HTML document.</P> \n"
-//                + "</BODY>\n"
-//                + "</HTML>";
-//
-//    }
 
     @GET
     @Path("get/{id}")
@@ -126,7 +98,7 @@ public class MovieController {
             json = gson.toJson(movie);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get promotion, " + e.getMessage()).build();
+                    .entity("Failed to get movie, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
@@ -141,7 +113,7 @@ public class MovieController {
             json = gson.toJson(movies);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get al orders, " + e.getMessage()).build();
+                    .entity("Failed to get all movies, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }

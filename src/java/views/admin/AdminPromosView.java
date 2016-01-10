@@ -16,6 +16,7 @@ import views.ICinemaView;
  * @author Dell
  */
 public class AdminPromosView implements ICinemaView {
+
     List<Company> companies;
     List<PromotionCategory> categories;
 
@@ -48,14 +49,21 @@ public class AdminPromosView implements ICinemaView {
                 + "  <label for=\"txtImage\">Image</label>\n"
                 + "  <input type=\"text\" id=\"txtImage\" name=\"txtImage\">\n"
                 + "  <input type=\"submit\" value=\"Add\" />\n"
-                + "</form>");
+                + "</form>"
+                + "<p>"
+                + "<h2>Delete Promos</h2>\n"
+                + "<form id=\"deletePromo\">"
+                + "  <label for=\"txtPromoId\">Promo ID</label>\n"
+                + "  <input type=\"number\" id=\"txtPromoId\" name=\"txtPromoId\">\n"
+                + "  <input type=\"submit\" value=\"Delete\" />\n"
+                + "</form></p>");
 
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../scripts/admin_promos.js"));
         res.append(LayoutHelper.getFooter());
 
         return res.toString();
     }
-    
+
     private String getCompaniesSelectBox() {
         StringBuilder res = new StringBuilder();
         res.append("<select id=\"selCompID\" name=\"selCompID\">\n");
@@ -65,7 +73,7 @@ public class AdminPromosView implements ICinemaView {
         res.append("</select>");
         return res.toString();
     }
-    
+
     private String getPromoCatsSelectBox() {
         StringBuilder res = new StringBuilder();
         res.append("<select id=\"selCatID\" name=\"selCatID\">\n");

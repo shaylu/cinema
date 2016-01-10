@@ -53,9 +53,9 @@ public class ReviewsManager extends DbManagerEntity {
         int result = 0;
         //int order_id, int rank, String review_text
         result += add(1, 5, "Awesome movie! warmly recommended!");
-        result += add(2, 2.1, "Very Good");
+        result += add(2, 2, "Very Good");
         result += add(3, 1, "I've seen better...");
-        result += add(4, 4.8, "It is highly recommended, thrilling, exciting, WOW!");
+        result += add(4, 4, "It is highly recommended, thrilling, exciting, WOW!");
         return result;
     }
 //TODO

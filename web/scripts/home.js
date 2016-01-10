@@ -37,7 +37,7 @@ $(function () {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    alert(data);
+                    $("#byKeword").text(JSON.stringify(data));
                 });
     });
     
@@ -50,7 +50,7 @@ $(function () {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    alert(data);
+                    $("#byCategory").text(JSON.stringify(data));
                 });
     });
     
@@ -62,7 +62,7 @@ $(function () {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    alert(data);
+                    $("#recomendedMovies").text(JSON.stringify(data));
                 });
     });
 });

@@ -9,8 +9,55 @@ and open the template in the editor.
         <title>CINEMA CITY APP</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body,td,th {
+                font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+                font-size: 14px;
+            }
+        </style>
     </head>
     <body>
-        <p><a href="app/admin/">ADMIN</a></p>
+        <p dir="LTR"><strong>Dear examiner,</strong><br>
+            Following are the pages  we've made for ease of use to our Cinema City App, using the REST API.</p>
+        <p dir="LTR">Notice: in order to fill  the db, you need to go to this link:<br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/filldb">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/filldb</a><br>
+            This will not add the  default admin users. <br>
+            Adding the default admin users can be accessed through the admin login page.</p>
+        <p dir="LTR">Pages:</p>
+        <p dir="LTR"><a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin</a><br>
+            Admin login page<br>
+            This page contains a button to insert the default users,<br>
+            One of the default users is: <br>
+            Username: shay<br>
+            Password: shay</p>
+        <p dir="LTR">Admin control panel. You can access it after login.<br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/home">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/home</a><br>
+            After login, contains links to all admin pages<br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/categories">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/categories</a><br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/movies">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/movies</a><br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/halls">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/halls</a><br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/shows">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/shows</a><br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/promotions/categories">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/promotions/categories</a><br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/companies">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/companies</a><br>
+            <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/promotions">http://webedu15.mtacloud.co.il:8080/cinema_app/app/admin/promotions</a></p>
+        <p dir="LTR"><a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/home">http://webedu15.mtacloud.co.il:8080/cinema_app/app/home</a><br>
+            This page will show you the homepage.</p>
+        <p dir="LTR"><a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/movies/search_view">http://webedu15.mtacloud.co.il:8080/cinema_app/app/movies/search_view</a><br>
+            Search results page – and search by filter<br>
+            Checking one of the checkbox will show you only the movies that has the  checked property, if not checked it will show you all the results with or  without the property.</p>
+        <p dir="LTR"><a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/movies/%7bid%7d">http://webedu15.mtacloud.co.il:8080/cinema_app/app/movies/{id}</a><br>
+            (Example: <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/movies/1">http://webedu15.mtacloud.co.il:8080/cinema_app/app/movies/1</a>)<br>
+            Will show you the movie page, clicking on buttons will load the movie  properties.</p>
+        <p dir="LTR">http://webedu15.mtacloud.co.il:8080/cinema_app/app/shows/{show_id}/order<br>
+            (Example: <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/shows/1/order">http://webedu15.mtacloud.co.il:8080/cinema_app/app/shows/1/order</a>)<br>
+            This page will let you order tickets for a specific show.</p>
+        <p dir="LTR">http://webedu15.mtacloud.co.il:8080/cinema_app/app/orders/thankyou/{order_id}<br>
+            (Example: <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/orders/thankyou/1">http://webedu15.mtacloud.co.il:8080/cinema_app/app/orders/thankyou/1</a>)<br>
+            This is a post order page, showing the order details.</p>
+        <p dir="LTR">http://webedu15.mtacloud.co.il:8080/cinema_app/app/reviews/add_review/{order_id}<br>
+            (Example: <a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/reviews/add_review/1">http://webedu15.mtacloud.co.il:8080/cinema_app/app/reviews/add_review/1</a>)<br>
+            This page will let you post a review for the movie you ordered tickets  to.</p>
+        <p dir="LTR"><a href="http://webedu15.mtacloud.co.il:8080/cinema_app/app/promos">http://webedu15.mtacloud.co.il:8080/cinema_app/app/promos</a><br>
+            This page will show all the promotions.</p>
     </body>
 </html>

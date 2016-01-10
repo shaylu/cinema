@@ -41,7 +41,7 @@ public class OrderController {
             json = gson.toJson(orders);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get al orders, " + e.getMessage()).build();
+                    .entity("Failed to get all orders, " + e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
@@ -57,7 +57,7 @@ public class OrderController {
             return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get al orders, " + e.getMessage()).build();
+                    .entity("Failed to get order, " + e.getMessage()).build();
         }
     }
 
@@ -71,22 +71,10 @@ public class OrderController {
             return Response.status(Response.Status.OK).entity(view.getView()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-                    .entity("Failed to get al orders, " + e.getMessage()).build();
+                    .entity("Failed to get order details, " + e.getMessage()).build();
         }
     }
 
-//    @GET
-//    @Path("add_review/{order_id}")
-//    public Response addReview(@PathParam("order_id") int order_id, @FormParam("rank") double rank, @FormParam("review") String review) {
-//        Gson gson = new Gson();
-//        try {
-//            ControllerHelper.getDb().getReviewsManager().add(order_id, rank, review);
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-//                    .entity("Failed to add review, " + e.getMessage()).build();
-//        }
-//        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity("Sucess").build();
-//    }
     @POST
     @Path("add")
     public Response addNewOrder(@Context HttpServletRequest request, @FormParam("client_id") String client_id, @FormParam("fname") String fname,
@@ -105,7 +93,7 @@ public class OrderController {
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        return Response.status(Response.Status.OK).entity("Success.").build();
+        return Response.status(Response.Status.OK).entity("Successfully added new order.").build();
 
     }
 }

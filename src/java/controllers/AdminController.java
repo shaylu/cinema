@@ -54,15 +54,6 @@ import models.User;
 @Path("admin")
 public class AdminController {
 
-//    private static db.mysql.DbManager db;
-//    static {
-//        try {
-//            db = new DbManager();
-//        } catch (Exception e) {
-//            String txt;
-//            txt = e.getMessage();
-//        }
-//    }
     public AdminController() {
 
     }
@@ -93,7 +84,7 @@ public class AdminController {
                     + "</form>");
             res.append("<button id=\"createDefault\" name=\"createDefault\">Create Defualt Users</button>");
 
-            res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../scripts/login.js"));
+            res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/login.js"));
             res.append(LayoutHelper.getFooter());
 
             return Response.status(Response.Status.OK).entity(res.toString()).build();
@@ -144,15 +135,6 @@ public class AdminController {
         }
     }
 
-//    @POST
-//    @Path("filldb")
-//    public Response fillDb(@Context HttpServletRequest request, @FormParam("user") String user, @FormParam("pass") String pass) throws Exception {
-//        DbManager db = ControllerHelper.getDb();
-//        db.getMovieCategoriesManager().addDefaultValues();
-//        db.getMoviesManager().addDefaultValues();
-//        db.getHallsManager().addDefaultValues();
-//        db.getShowsManager().addDefaultValues();
-//    }
     // ========================================================
     // USERS
     // ========================================================
@@ -204,7 +186,7 @@ public class AdminController {
         try {
             result = ControllerHelper.getDb().getMovieCategoriesManager().addDefaultValues();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new category, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add default categories, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new categories to db.").build();
@@ -313,7 +295,7 @@ public class AdminController {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to add movie, " + e.getMessage()).build();
         }
 
-        return Response.status(Response.Status.OK).entity("movies!!!!!").build();
+        return Response.status(Response.Status.OK).entity("Successfully added new movie.").build();
     }
 
     // ========================================================
@@ -380,7 +362,7 @@ public class AdminController {
         try {
             result = ControllerHelper.getDb().getHallsManager().addDefaultValues();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add halls, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add default halls, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new halls to db.").build();
@@ -429,10 +411,10 @@ public class AdminController {
             int seats = hall.getNumOfSeats();
             ControllerHelper.getDb().getShowsManager().add(movie_id, hall_id, seats, date_str, time_str, price);
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new hall, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add new show, " + e.getMessage()).build();
         }
 
-        return Response.status(Response.Status.OK).entity("Added new hall to db.").build();
+        return Response.status(Response.Status.OK).entity("Added new show to db.").build();
     }
 
     @GET
@@ -467,10 +449,10 @@ public class AdminController {
         try {
             result = ControllerHelper.getDb().getShowsManager().addDefaultValues();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add halls, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add defualt shows, " + e.getMessage()).build();
         }
 
-        return Response.status(Response.Status.OK).entity("Added " + result + " new halls to db.").build();
+        return Response.status(Response.Status.OK).entity("Added " + result + " new shows to db.").build();
     }
 
     // ========================================================
@@ -537,7 +519,7 @@ public class AdminController {
         try {
             result = ControllerHelper.getDb().getPromoCompaniesManager().addDefaultValues();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add companies, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add defualt companies, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new companies to db.").build();
@@ -589,7 +571,7 @@ public class AdminController {
             List<PromotionCategory> categories = ControllerHelper.getDb().getPromoCategoriesManager().getAll();
             json = gson.toJson(categories);
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all companies, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get all categories, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
@@ -607,10 +589,25 @@ public class AdminController {
         try {
             result = ControllerHelper.getDb().getPromoCategoriesManager().addDefaultValues();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add categories, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add default categories, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new categories to db.").build();
+    }
+    
+    @POST
+    @Path("promotions/delete")
+    public Response deletePromo(@Context HttpServletRequest request, @FormParam("promo_id") int promo_id) throws Exception {
+        if (!isLogin(request)) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        
+        try {
+            ControllerHelper.getDb().getPromosManager().delete(promo_id);
+            return Response.status(Response.Status.OK).entity("Successfully deleted promo.").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to delete promo. " + e.getMessage()).build();
+        }
     }
 
     // ========================================================
@@ -687,7 +684,7 @@ public class AdminController {
         try {
             result = ControllerHelper.getDb().getPromosManager().addDefaultValues();
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add promos, " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add default promos, " + e.getMessage()).build();
         }
 
         return Response.status(Response.Status.OK).entity("Added " + result + " new promos to db.").build();

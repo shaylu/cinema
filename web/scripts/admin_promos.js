@@ -50,4 +50,24 @@ $(function () {
                     refreshPromos();
                 });
     });
+
+    $("#deletePromo").submit(function (e) {
+        e.preventDefault();
+        var url = "promotions/delete";
+        var promo_id = $("#txtPromoId").val();
+        $.ajax({
+            url: url,
+            data:
+                    {
+                        'promo_id': promo_id
+                    },
+            method: 'POST'})
+                .fail(function (data) {
+                    alert(data.responseText);
+                })
+                .done(function (data) {
+                    alert(data);
+                    refreshPromos();
+                });
+    });
 });

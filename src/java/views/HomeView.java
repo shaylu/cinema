@@ -26,19 +26,21 @@ public class HomeView implements ICinemaView {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
         res.append("<h1>Home</h1>\n"
-                + "<form name=\"searchByKeyword\" id=\"searchByKeyword\" method=\"post\">\n"
+                + "<p><form name=\"searchByKeyword\" id=\"searchByKeyword\" method=\"post\">\n"
                 + "  <label for=\"txtKeyword\">Search by Keyword</label>\n"
                 + "  <input type=\"text\" id=\"txtKeyword\" name=\"txtKeyword\">\n"
                 + "  <input type=\"submit\" value=\"Search\" />\n"
                 + "</form>"
-                + "<form name=\"searchByCategory\" id=\"searchByCategory\" method=\"post\">\n"
+                + "<div id=\"byKeword\"></div></p>"
+                + "<p><form name=\"searchByCategory\" id=\"searchByCategory\" method=\"post\">\n"
                 + "  <label for=\"selCatID\">Search by Category</label>\n"
                 + getCategoriesSelectBox()
                 + "  <input type=\"submit\" value=\"Search\" />\n"
                 + "</form>"
-                + "<h2>Recomended Movies</h2>"
-                + "<div id=\"recomendedMovies\"></div>"
-                + "<button id=\"btnGetRecomended\">Get Recomended Movies</button>"
+                + "<div id=\"byCategory\"></div></p>"
+                + "<p><h2>Recomended Movies</h2>"
+                + "<button id=\"btnGetRecomended\">Get Recomended Movies</button><br />"
+                + "<p><div id=\"recomendedMovies\"></div></p></p>"
         );
 
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/home.js"));

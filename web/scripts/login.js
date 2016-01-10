@@ -9,17 +9,17 @@ $(function () {
         e.preventDefault();
         var user = $("#txtUsername").val();
         var pass = $("#txtPassword").val();
-        var url = "login";
+        var url = "admin/login";
         $.ajax({url: url, data: {'user': user, 'pass': pass}, method: 'POST'}).fail(function (data) {
             alert(data.responseText);
         }).done(function (data) {
             alert(data);
-            document.location = "home";
+            document.location = "admin/home";
         });
     });
     
     $("#createDefault").click(function() {
-        var url = "users/add_default";
+        var url = "admin/users/add_default";
         $.ajax({url: url, method: 'POST'}).fail(function (data) {
             alert(data.responseText);
         }).done(function (data) {

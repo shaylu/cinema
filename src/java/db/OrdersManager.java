@@ -119,23 +119,23 @@ public class OrdersManager extends DbManagerEntity {
         return OrderToReturn;
     }
 
-     public Order createOrderFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
-        Order OrderToReturn = new Order();
-
-        OrderToReturn.setClientId(rs.getString("client_id"));
-        OrderToReturn.setFirstName(rs.getString("fname"));
-        OrderToReturn.setLastName(rs.getString("lname"));
-        OrderToReturn.setEmail(rs.getString("email"));
-        OrderToReturn.setPhoneNumber(rs.getString("phone"));
-        OrderToReturn.setShow(manager.getShowsManager().getShowById(rs.getInt("show_id")));
-        OrderToReturn.setNumOfSeats(rs.getInt("num_of_seats"));
-        OrderToReturn.setTotalPayment(rs.getDouble("total_payment"));
-        OrderToReturn.setCreditCardLastDigit(rs.getString("credit_card_last_digit"));
-        OrderToReturn.setExpDateMonth(rs.getInt("exp_date_month"));
-        OrderToReturn.setExpDateYear(rs.getInt("exp_date_year"));
-        OrderToReturn.setOrderDate(rs.getDate("order_date"));
-        return OrderToReturn;
-    }
+//     public Order createOrderFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
+//        Order OrderToReturn = new Order();
+//
+//        OrderToReturn.setClientId(rs.getString("client_id"));
+//        OrderToReturn.setFirstName(rs.getString("fname"));
+//        OrderToReturn.setLastName(rs.getString("lname"));
+//        OrderToReturn.setEmail(rs.getString("email"));
+//        OrderToReturn.setPhoneNumber(rs.getString("phone"));
+//        OrderToReturn.setShow(manager.getShowsManager().getShowById(rs.getInt("show_id")));
+//        OrderToReturn.setNumOfSeats(rs.getInt("num_of_seats"));
+//        OrderToReturn.setTotalPayment(rs.getDouble("total_payment"));
+//        OrderToReturn.setCreditCardLastDigit(rs.getString("credit_card_last_digit"));
+//        OrderToReturn.setExpDateMonth(rs.getInt("exp_date_month"));
+//        OrderToReturn.setExpDateYear(rs.getInt("exp_date_year"));
+//        OrderToReturn.setOrderDate(rs.getDate("order_date"));
+//        return OrderToReturn;
+//    }
 
     public List<Order> getAll() throws ClassNotFoundException, SQLException {
 

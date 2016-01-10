@@ -52,29 +52,6 @@ public class ShowsManager extends DbManagerEntity {
             statement.setDouble(6, price_per_seat);
             result = statement.executeUpdate();
 
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.next();
-            Show show = getShowById(rs.getInt(1));
-//
-//            Yes. See here. Section 7.1.9. Change your code to:
-
-//String sql = "INSERT INTO table (column1, column2) values(?, ?)";
-//stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//
-//
-//stmt.executeUpdate();
-//if(returnLastInsertId) {
-//   ResultSet rs = stmt.getGeneratedKeys();
-//    rs.next();
-//   auto_id = rs.getInt(1);
-//}
-            StringBuilder strBuild = new StringBuilder("movie:{");
-            strBuild.append(movie_id);
-            strBuild.append("}:shows");
-            this.jdisShow = new Jedis("localhost");
-            jdisShow.zadd(strBuild.toString(), num_of_seats_left, show.toRedisJson());
-            this.jdisShow.disconnect();
-
             return result;
         }
     }
@@ -94,8 +71,9 @@ public class ShowsManager extends DbManagerEntity {
         PreparedStatement statement = conn.prepareStatement(SUBSTRUCT);
         statement.setInt(1, num_of_tickets);
         statement.setInt(2, show_id);
+        int result = statement.executeUpdate();
 
-        return statement.executeUpdate();
+        return result;
     }
 
     public Show getShowById(int id) throws ClassNotFoundException, SQLException {
@@ -188,19 +166,4 @@ public class ShowsManager extends DbManagerEntity {
 
         return showToReturn;
     }
-
-    public Show createShowFromMySql(ResultSet rs) throws SQLException, ClassNotFoundException {
-        Show showToReturn = new Show();
-
-        showToReturn.setId(rs.getInt("show_id"));
-        showToReturn.setMovie(manager.getMoviesManager().getMovieById(rs.getInt("movie_id")));
-        showToReturn.setHall(manager.getHallsManager().getHallById(rs.getInt("hall_id")));
-        showToReturn.setDate(rs.getDate("show_date"));
-        showToReturn.setTime(rs.getString("show_time"));
-        showToReturn.setNumOfSeatsLeft(rs.getInt("num_of_seats_left"));
-        showToReturn.setPricePerSeat(rs.getDouble("price_per_seat"));
-
-        return showToReturn;
-    }
-
 }

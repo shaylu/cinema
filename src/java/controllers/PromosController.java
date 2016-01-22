@@ -64,4 +64,21 @@ public class PromosController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
+    
+    @GET
+    @Path("rand")
+    public Response getRandPromo() {
+        Gson gson = new Gson();
+        String json = null;
+        try {
+            Promotion promo = ControllerHelper.getDb().getPromosManager().getRand();
+            json = gson.toJson(promo);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get promotion, " + e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+    
+    
 }

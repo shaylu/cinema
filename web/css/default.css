@@ -1,0 +1,36 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 23, 2016, 3:15:32 PM
+    Author     : Dell
+*/
+
+body {
+    background-color: #171717;
+    color: #cecece;
+}
+
+.content-box {
+    background-color: #282828;
+    padding: 20px;
+}
+
+.content-box::after {
+    content: "";
+    display: block;
+    background: #f5821e;
+    height: 1px;
+    width: 100%;
+    margin-top: 15px;
+    position: relative;
+    margin-bottom: -20px;
+    
+}
+
+
+.content-box {
+    margin-top: 20px;
+}

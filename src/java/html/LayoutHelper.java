@@ -11,40 +11,27 @@ package html;
  */
 public class LayoutHelper {
 
-    public static String getHeader(String ... cssFiles) {
+    public static String getHeader(String... cssFiles) {
         StringBuilder str = new StringBuilder();
         str.append("<!doctype html>\n"
                 + "<html>\n"
                 + "<head>\n"
                 + "<meta charset=\"utf-8\">\n"
                 + "<title>++ CINEMA CITY APP ++</title>\n"
+                + addJquery()
                 + addBootstrap()
                 + addCss(cssFiles)
-                + "<style>"
-                + "form {\n"
-                + "	font-family: arial;\n"
-                + "	margin-bottom: 20px;\n"
-                + "	border: 1px solid black;\n"
-                + "	padding: 20px;\n"
-                + "}\n"
-                + "form label, input[type=\"submit\"] {\n"
-                + "	display: block;\n"
-                + "}\n"
-                + "form:not(.submitOnly) input[type=\"submit\"] {\n"
-                + "	margin-top: 10px;\n"
-                + "}\n"
-                + "form label:not(:first-child) {\n"
-                + "	margin-top: 7px;\n"
-                + "}\n"
-                + "</style>\n"
                 + "</head>\n"
-                + "<body>");
+                + "<body>"
+                + addTitleBar()
+                + "<div class=\"container\">"
+        );
         return str.toString();
     }
 
     public static String getFooter() {
         StringBuilder str = new StringBuilder();
-        str.append("</body>\n"
+        str.append("</div></body>\n"
                 + "</html>");
         return str.toString();
     }
@@ -56,16 +43,17 @@ public class LayoutHelper {
         }
         return str.toString();
     }
-    
-    public static String addCss(String ... files) {
+
+    public static String addCss(String... files) {
         StringBuilder str = new StringBuilder();
+        str.append("<link rel=\"stylesheet\" href=\"../css/default.css\" />");
         for (String file : files) {
             str.append("<link rel=\"stylesheet\" href=\"" + file + "\" />");
         }
-        
+
         return str.toString();
     }
-    
+
     public static String getAdminMenu() {
         StringBuilder str = new StringBuilder();
         str.append("<div><a href=\"categories\">Movie Categories</a></div>");
@@ -87,5 +75,32 @@ public class LayoutHelper {
                 + "\n"
                 + "<!-- Latest compiled and minified JavaScript -->\n"
                 + "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js\" integrity=\"sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS\" crossorigin=\"anonymous\"></script>";
+    }
+
+    private static String addJquery() {
+        return "<script src=\"http://code.jquery.com/jquery-1.12.0.min.js\"></script>\n"
+                + "    <script src=\"http://code.jquery.com/jquery-migrate-1.2.1.min.js\"></script>";
+    }
+
+    private static String addTitleBar() {
+        return "<div class=\"navbar navbar-inverse navbar-static-top\">\n"
+                + "  <div class=\"container\">\n"
+                + "    <div class=\"navbar-header\">\n"
+                + "      <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">\n"
+                + "        <span class=\"icon-bar\"></span>\n"
+                + "        <span class=\"icon-bar\"></span>\n"
+                + "        <span class=\"icon-bar\"></span>\n"
+                + "      </button>\n"
+                + "      <a class=\"navbar-brand\" href=\"#\"><img src=\"../images/logo.png\" alt=\"\" style=\"max-width:100px; max-height: 34px; margin-top: -7px;\"/></a>\n"
+                + "    </div>\n"
+                + "    <div class=\"collapse navbar-collapse\">\n"
+                + "      <ul class=\"nav navbar-nav\">\n"
+                + "        <li class=\"active\"><a href=\"#\">Home</a></li>\n"
+                + "        <li><a href=\"#\">Movies</a></li>\n"
+                + "        <li><a href=\"#\">Promotions</a></li>\n"
+                + "      </ul>\n"
+                + "    </div><!--/.nav-collapse -->\n"
+                + "  </div>\n"
+                + "</div>";
     }
 }

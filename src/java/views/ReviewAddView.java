@@ -12,10 +12,10 @@ import html.LayoutHelper;
  * @author Dell
  */
 public class ReviewAddView implements ICinemaView {
-    int id;
+    int order_id;
 
-    public ReviewAddView(int id) {
-        this.id = id;
+    public ReviewAddView(int cat_id) {
+        this.order_id = order_id;
     }
     
     @Override
@@ -23,7 +23,7 @@ public class ReviewAddView implements ICinemaView {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
         res.append("<h1>Add Review Page</h1>\n"
-                + "<form name=\"addReview\" id=\"addReview\" method=\"post\" data-id=\"" + id +"\">\n"
+                + "<form name=\"addReview\" id=\"addReview\" method=\"post\" data-id=\"" + order_id +"\">\n"
                 + "  <label for=\"txtRank\">Rank</label>\n"
                 + getRankSelectBox()
                 + "  <p><label for=\"txtReview\">Review</label>\n"

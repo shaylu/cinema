@@ -16,6 +16,7 @@ public class LayoutHelper {
         str.append("<!doctype html>\n"
                 + "<html>\n"
                 + "<head>\n"
+                + " <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0\" />"
                 + "<meta charset=\"utf-8\">\n"
                 + "<title>++ CINEMA CITY APP ++</title>\n"
                 + addJquery()
@@ -46,7 +47,7 @@ public class LayoutHelper {
 
     public static String addCss(String... files) {
         StringBuilder str = new StringBuilder();
-        str.append("<link rel=\"stylesheet\" href=\"../css/default.css\" />");
+        str.append("<link rel=\"stylesheet\" href=\"/cinema_app/css/default.css\" />");
         for (String file : files) {
             str.append("<link rel=\"stylesheet\" href=\"" + file + "\" />");
         }
@@ -91,13 +92,13 @@ public class LayoutHelper {
                 + "        <span class=\"icon-bar\"></span>\n"
                 + "        <span class=\"icon-bar\"></span>\n"
                 + "      </button>\n"
-                + "      <a class=\"navbar-brand\" href=\"#\"><img src=\"../images/logo.png\" alt=\"\" style=\"max-width:100px; max-height: 34px; margin-top: -7px;\"/></a>\n"
+                + "      <a class=\"navbar-brand\" href=\"/cinema_app/app/home\"><img src=\"/cinema_app/images/logo.png\" alt=\"\" style=\"max-width:100px; max-height: 34px; margin-top: -7px;\"/></a>\n"
                 + "    </div>\n"
                 + "    <div class=\"collapse navbar-collapse\">\n"
                 + "      <ul class=\"nav navbar-nav\">\n"
-                + "        <li class=\"active\"><a href=\"#\">Home</a></li>\n"
-                + "        <li><a href=\"#\">Movies</a></li>\n"
-                + "        <li><a href=\"#\">Promotions</a></li>\n"
+                + "        <li class=\"active\"><a href=\"/cinema_app/app/home\">Home</a></li>\n"
+                + "        <li><a href=\"/cinema_app/app/movies/search_view\">Movies</a></li>\n"
+                + "        <li><a href=\"/cinema_app/app/promos\">Promotions</a></li>\n"
                 + "      </ul>\n"
                 + "    </div><!--/.nav-collapse -->\n"
                 + "  </div>\n"

@@ -26,6 +26,7 @@ public class MoviesSearchView implements ICinemaView {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
         res.append("<h1>Search Results</h1>\n"
+                + "<div class=\"content-box\">"
                 + "<form name=\"search\" id=\"search\" method=\"post\">\n"
                 + "  <label for=\"keyword\">Search by keyword:</label>\n"
                 + "  <input type=\"text\" name=\"keyword\" id=\"keyword\"/>\n"
@@ -38,7 +39,7 @@ public class MoviesSearchView implements ICinemaView {
                 + "  <label for=\"isRecommanded\">Is Recomanded</label>\n"
                 + "  <input type=\"checkbox\" name=\"isRecommanded\" id=\"isRecommanded\" value=\"1\" />\n"
                 + "  <input type=\"submit\" value=\"Search\" />\n"
-                + "</form>"
+                + "</form></div>"
                 + "<div id=\"results\"></div>"
         );
 

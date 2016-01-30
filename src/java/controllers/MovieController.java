@@ -36,10 +36,10 @@ public class MovieController {
 
     @GET
     @Path("search_view")
-    public Response searchView() {
+    public Response searchView(@QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("last_tickets") boolean last_tickets, @QueryParam("recomended") boolean recomended) {
         try {
             List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
-            MoviesSearchView view = new MoviesSearchView(categories);
+            MoviesSearchView view = new MoviesSearchView(categories, keyword, cat_id, has_trailer, last_tickets, recomended);
             return Response.status(Response.Status.OK).entity(view.getView()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
@@ -50,7 +50,8 @@ public class MovieController {
     @Path("{id}")
     public Response moviePage(@PathParam("id") int id) {
         try {
-            MoviePageView view = new MoviePageView(id);
+            Movie movie = ControllerHelper.getDb().getMoviesManager().getMovieById(id);
+            MoviePageView view = new MoviePageView(movie);
             return Response.status(Response.Status.OK).entity(view.getView()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();

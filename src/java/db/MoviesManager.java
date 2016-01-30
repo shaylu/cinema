@@ -289,7 +289,7 @@ public class MoviesManager extends DbManagerEntity {
         // Creating Star Wars: The Force Awakens
         Date release_date = formatter.parse("2016-05-01");
         String plot = "Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a rag-tag group of heroes can stop them, along with the help of the Resistance.";
-        String posterLink = "http://ia.media-imdb.com/images/M/MV5BOTAzODEzNDAzMl5BMl5BanBnXkFtZTgwMDU1MTgzNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
+        String posterLink = "/cinema_app/images/posters/star.jpg";
         String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
         MovieCategory category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
 
@@ -298,7 +298,7 @@ public class MoviesManager extends DbManagerEntity {
         //Creating Krampus
         release_date = formatter.parse("2016-04-23");
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
-        posterLink = "http://ia.media-imdb.com/images/M/MV5BMjk0MjMzMTI3NV5BMl5BanBnXkFtZTgwODEyODkxNzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
+        posterLink = "/cinema_app/images/posters/krampus.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
 

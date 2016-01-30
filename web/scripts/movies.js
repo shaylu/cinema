@@ -6,8 +6,8 @@
 
 $(function () {
     var touch_pos;
-    
-    $(document).on('touchstart', '.movie', function (e) {
+
+    $(document).on('touchstart', '.movie :not(.movie_desc)', function (e) {
         touch_pos = $(window).scrollTop();
     }).on('click touchend', '.movie', function (e) {
         e.preventDefault();
@@ -15,9 +15,9 @@ $(function () {
             return;
         $changeToDecription($(this));
     });
-    
-    
-    $(document).on('touchstart', '.movie-desc', function (e) {
+
+
+    $(document).on('touchstart', '.movie-desc not:(.movie_go)', function (e) {
         touch_pos = $(window).scrollTop();
     }).on('click touchend', '.movie-desc', function (e) {
         e.preventDefault();
@@ -25,9 +25,21 @@ $(function () {
             return;
         $changeToMovieName($(this));
     });
-    
-    
-    $changeToDecription = function(obj) {
+
+    $(document).on('touchstart', '.movie-go', function (e) {
+        touch_pos = $(window).scrollTop();
+    }).on('click touchend', '.movie-go', function (e) {
+        e.preventDefault();
+        if (e.type === 'touchend' && (Math.abs(touch_pos - $(window).scrollTop()) > 3))
+            return;
+        e.stopPropagation();
+        var id = $(this).data("id");
+        var url = id;
+        document.location = url;
+    });
+
+
+    $changeToDecription = function (obj) {
         var name = $(this).data("name");
         var desc = $getDescription($(obj));
         $(obj).children("h2").html(desc);
@@ -39,7 +51,7 @@ $(function () {
         var poster = json.poster;
         var description = json.plot;
         var id = json.id;
-        var res = "<div class=\"movie\" style=\"\" data-description=\"" + description + "\" data-name=\"" + name + "\" data-id=\"" + id + "\">"
+        var res = "<div class=\"movie\" style=\"background-image: url('" + poster + "');\" data-description=\"" + description + "\" data-name=\"" + name + "\" data-id=\"" + id + "\">"
                 + "     <h2>" + name + "</h2>"
                 + "</div>";
 
@@ -62,13 +74,10 @@ $(function () {
 //    });
 
     $(document).on("click", ".movie-go", function (e) {
-        e.stopPropagation();
-        var id = $(this).data("id");
-        var url = id;
-        document.location = url;
+
     });
-    
-    $changeToMovieName = function(obj) {
+
+    $changeToMovieName = function (obj) {
         var name = $(obj).data("name");
         $(obj).removeClass("movie-desc");
         $(obj).children("h2").text(name);
@@ -97,4 +106,5 @@ $(function () {
         });
     });
 
+    $("#search").submit();
 });

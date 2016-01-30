@@ -21,6 +21,7 @@ public class LayoutHelper {
                 + "<title>++ CINEMA CITY APP ++</title>\n"
                 + addJquery()
                 + addBootstrap()
+                + addSugarJS()
                 + addCss(cssFiles)
                 + "</head>\n"
                 + "<body>"
@@ -103,5 +104,9 @@ public class LayoutHelper {
                 + "    </div><!--/.nav-collapse -->\n"
                 + "  </div>\n"
                 + "</div>";
+    }
+
+    private static String addSugarJS() {
+        return "<script src=\"/cinema_app/scripts/sugar.min.js\"></script>";
     }
 }

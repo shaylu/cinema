@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import models.Movie;
 import models.MovieCategory;
+import models.MovieSearchDetails;
 import org.apache.jasper.tagplugins.jstl.core.Catch;
 import redis.clients.jedis.Jedis;
 
@@ -201,7 +202,7 @@ public class MoviesManager extends DbManagerEntity {
                     statement.setString(1, "%" + keyword + "%");
                 } else if (num_of_seat_left) {
                     index = queryToreturn.indexOf(" M ");
-                    queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
+                    queryToreturn.insert(index + 3, " inner join shows S on M.movie_id = S.movie_id ");
                     queryToreturn.append("and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
@@ -211,27 +212,26 @@ public class MoviesManager extends DbManagerEntity {
                     statement.setString(1, "%" + keyword + "%");
                 } else if (num_of_seat_left && is_recommended) {
                     index = queryToreturn.indexOf(" M ");
-                    queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
+                    queryToreturn.insert(index + 3, " inner join shows S on M.movie_id = S.movie_id ");
                     queryToreturn.append("and M.is_recommended is not null and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
                 } else if (has_trailer && num_of_seat_left) {
                     index = queryToreturn.indexOf(" M ");
-                    queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
+                    queryToreturn.insert(index + 3, " inner join shows S on M.movie_id = S.movie_id ");
                     queryToreturn.append("and M.trailer is not null and S.num_of_seats_left < 10 ");
                     statement = conn.prepareStatement(queryToreturn.toString());
                     statement.setString(1, "%" + keyword + "%");
-                }else{
-                statement = conn.prepareStatement(queryToreturn.toString());
-                statement.setString(1, "%" + keyword + "%");
+                } else {
+                    statement = conn.prepareStatement(queryToreturn.toString());
+                    statement.setString(1, "%" + keyword + "%");
                 }
-            } else{
-                if (has_trailer) {
+            } else if (has_trailer) {
                 queryToreturn.append("and M.trailer is not null and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-                
+
             } else if (is_recommended) {
                 queryToreturn.append("and M.is_recommended is not null and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
@@ -239,7 +239,7 @@ public class MoviesManager extends DbManagerEntity {
                 statement.setInt(2, cat_id);
             } else if (num_of_seat_left) {
                 index = queryToreturn.indexOf(" M ");
-                queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
+                queryToreturn.insert(index + 3, " inner join shows S on M.movie_id = S.movie_id ");
                 queryToreturn.append("and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
@@ -251,27 +251,24 @@ public class MoviesManager extends DbManagerEntity {
                 statement.setInt(2, cat_id);
             } else if (num_of_seat_left && is_recommended) {
                 index = queryToreturn.indexOf(" M ");
-                queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
+                queryToreturn.insert(index + 3, " inner join shows S on M.movie_id = S.movie_id ");
                 queryToreturn.append("and M.is_recommended is not null and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
             } else if (has_trailer && num_of_seat_left) {
                 index = queryToreturn.indexOf(" M ");
-                queryToreturn.insert(index+3, " inner join shows S on M.movie_id = S.movie_id ");
+                queryToreturn.insert(index + 3, " inner join shows S on M.movie_id = S.movie_id ");
                 queryToreturn.append("and M.trailer is not null and S.num_of_seats_left < 10 and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-            }else{
+            } else {
                 queryToreturn.append("and M.cat_id = ?");
                 statement = conn.prepareStatement(queryToreturn.toString());
                 statement.setString(1, "%" + keyword + "%");
                 statement.setInt(2, cat_id);
-                }
-
-            
-        }
+            }
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Movie movie = createMovieFromMySql(rs);
@@ -280,6 +277,56 @@ public class MoviesManager extends DbManagerEntity {
         }
 
         return listToReturn;
+    }
+
+    public List<MovieSearchDetails> getAllByFilter2(String keyword, int cat_id, boolean has_trailer, boolean is_recommended, boolean num_of_seat_left) throws SQLException, ClassNotFoundException {
+        String base = "SELECT * FROM movies_search_details WHERE name LIKE ?";
+        String query = "";
+        String func_keyword = null;
+        ArrayList<Object> params = new ArrayList<>();
+        
+        try (Connection conn = manager.getConnection()) {
+            query += base;
+            
+            // keyword
+            func_keyword = (!keyword.isEmpty() && keyword != null) ? "%" + keyword + "%" : "%%";
+            params.add(func_keyword);
+            
+            // movie category
+            if (cat_id != 0) {
+                query += " AND cat_id = ?";
+                params.add(cat_id);
+            }
+
+            // is recomended
+            if (is_recommended == true) {
+                query += " AND is_recommended = 1";
+            }
+            
+            // has trailer
+            if (has_trailer == true) {
+                query += " AND trailer IS NOT NULL AND trailer <> ''";
+            }
+
+            // last tickets
+            if (num_of_seat_left == true) {
+                query += " AND num_of_seats_left <= 10";
+            }
+
+            PreparedStatement statment = conn.prepareStatement(query);
+            for (int i = 1; i <= params.size(); i++) {
+                statment.setObject(i, params.get(i - 1));
+            }
+            
+            ArrayList<MovieSearchDetails> result = new ArrayList<>();
+            ResultSet rs = statment.executeQuery();
+            
+            while (rs.next()) {
+                result.add(getMovieSearchDetailsFromRS(rs));
+            }
+
+            return result;
+        }
     }
 
     public int addDefaultValues() throws SQLException, ClassNotFoundException, ParseException {
@@ -352,6 +399,29 @@ public class MoviesManager extends DbManagerEntity {
         this.jdisMovie = new Jedis("localhost");
         this.jdisMovie.del(REDIS_KEY);
         this.jdisMovie.disconnect();
+    }
+    
+    public MovieSearchDetails getMovieSearchDetailsFromRS(ResultSet rs) throws SQLException {
+        int movie_id = rs.getInt("movie_id");
+        String name = rs.getString("name");
+        Date release_date = rs.getDate("release_date");
+        int movie_length = rs.getInt("mov_length");
+        String plot = rs.getString("plot");
+        String poster = rs.getString("poster");
+        String trailer = rs.getString("trailer");
+        boolean is_recommended = rs.getBoolean("is_recommended");
+        int cat_id = rs.getInt("cat_id");
+        String cat_name = rs.getString("cat_name");
+        int rank = rs.getInt("rank");
+        Date show_date = rs.getDate("show_date");
+        String show_time = rs.getTime("show_time").toString();
+        int show_id = rs.getInt("show_id");
+        int num_of_seats_left = rs.getInt("num_of_seats_left");
+        
+        MovieSearchDetails.MovieSearchDetailsCategory cat = new MovieSearchDetails.MovieSearchDetailsCategory(cat_id, cat_name);
+        MovieSearchDetails.MovieSearchDetailsShow show = new MovieSearchDetails.MovieSearchDetailsShow(show_id, show_date, show_time, num_of_seats_left);
+        MovieSearchDetails result = new MovieSearchDetails(movie_id, name, release_date, movie_length, cat, plot, poster, trailer, is_recommended, rank, show);
+        return result;
     }
 
 }

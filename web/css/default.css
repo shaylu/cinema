@@ -121,3 +121,34 @@ h1 {
     color: #cecece;
 }
 
+.filter-div {
+    display: inline-block;
+    height: 50px;
+    float: left;
+    margin: 10px;
+}
+
+.sort-div {
+    height: 30px !important;
+    color: #cecece;
+}
+
+.sort-div a{
+    font-weight: bold;
+    text-decoration: none;
+    color: #f5821e;
+    margin-left: 10px;
+}
+
+.sort-div a:hover{
+    text-decoration: none;
+    color: #f5821e;
+}
+
+.sort-div a.active{
+    color: #cecece;
+}
+
+.sort-div a.active:hover{
+    color: #cecece;
+}

@@ -23,6 +23,20 @@ public class DbManager implements AutoCloseable {
 
     private static final String MySqlUsername = "root";
     private static final String MySqlPassword = "1234";
+    
+    private static final String CREATE_MOVIES_SEARCH_DETAILS_VIEW = 
+        "SELECT M.*, rank, C.name AS cat_name, nearest_shows.show_date, nearest_shows.show_time, nearest_shows.show_id, nearest_shows.num_of_seats_left FROM \n" +
+        "	(SELECT S.movie_id, AVG(R.rank) AS rank FROM reviews R \n" +
+        "		INNER JOIN orders O ON R.order_id = O.order_id \n" +
+        "        INNER JOIN shows S ON O.show_id = S.show_id \n" +
+        "        GROUP BY S.movie_id) \n" +
+        "        AS ranks\n" +
+        "    INNER JOIN movies M ON ranks.movie_id = M.movie_id \n" +
+        "    INNER JOIN \n" +
+        "		(SELECT MIN(show_date) AS show_date, MIN(show_time) AS show_time, show_id, movie_id, num_of_seats_left FROM shows \n" +
+        "         GROUP BY movie_id) AS nearest_shows \n" +
+        "         ON M.movie_id = nearest_shows.movie_id \n" +
+        "         INNER JOIN movie_categories C ON C.cat_id = M.cat_id";
 
     private MovieCategoriesManager movieCategoriesManager;
     private MoviesManager moviesManager;
@@ -220,6 +234,7 @@ public class DbManager implements AutoCloseable {
                 + "  fldFname VARCHAR(50) NOT NULL,\n"
                 + "  fldLname VARCHAR(50) NOT NULL,\n"
                 + "  PRIMARY KEY (fldUserId))");
+        executeSql(DbName, CREATE_MOVIES_SEARCH_DETAILS_VIEW);
 //        executeSql(DbName, "CREATE OR REPLACE VIEW next_three_hours AS SELECT m.movie_id FROM movies as m INNER JOIN shows as s ON s.movie_id = m.movie_id WHERE s.show_date >= NOW() AND s.show_date <= NOW() + INTERVAL 3 HOUR;");
     }
 

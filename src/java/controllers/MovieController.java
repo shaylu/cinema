@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Movie;
 import models.MovieCategory;
+import models.MovieSearchDetails;
 import views.MoviePageView;
 import views.MoviesSearchView;
 
@@ -44,6 +45,23 @@ public class MovieController {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
+    }
+    
+    @GET
+    @Path("search2")
+    public Response getMovieByFilter2(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("last") boolean num_of_seat_left) {
+
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Gson gson = new Gson();
+        String json = null;
+
+        try {
+            List<MovieSearchDetails> movies = ControllerHelper.getDb().getMoviesManager().getAllByFilter2(keyword, cat_id, has_trailer, is_recommended, num_of_seat_left);
+            json = gson.toJson(movies);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity("Failed to get movies, " + e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
     
     @GET
@@ -87,7 +105,6 @@ public class MovieController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-
 
     @GET
     @Path("get/{id}")

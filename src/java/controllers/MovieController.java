@@ -48,6 +48,17 @@ public class MovieController {
     }
     
     @GET
+    @Path("get-rank/{id}")
+    public Response searchView(@PathParam("id") int movie_id) {
+        try {
+            Integer movieRank = ControllerHelper.getDb().getMoviesManager().getMovieRank(movie_id);
+            return Response.status(Response.Status.OK).type(MediaType.TEXT_PLAIN).entity(movieRank.toString()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.OK).type(MediaType.TEXT_PLAIN).entity("0").build();
+        }
+    }
+    
+    @GET
     @Path("search2")
     public Response getMovieByFilter2(@Context HttpServletRequest request, @QueryParam("keyword") String keyword, @QueryParam("cat_id") int cat_id, @QueryParam("has_trailer") boolean has_trailer, @QueryParam("is_recommended") boolean is_recommended, @QueryParam("last") boolean num_of_seat_left) {
 

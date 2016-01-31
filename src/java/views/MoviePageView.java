@@ -30,26 +30,25 @@ public class MoviePageView implements ICinemaView {
             res.append("Oops... We can't find the movie you wanted.");
         } else {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            res.append("<div style=\"min-height: 200px\">"
+            res.append("<div style=\"margin-bottom: 10px; padding-bottom: 10px;\"><div style=\"min-height: 200px;\">"
                     + "     <div class=\"movie_poster\" style=\"background-image: url(" + movie.getPoster() + ");\"></div>"
                     + "     <div class=\"movie_body grey_text\">"
-                    + "         <h1>" + movie.getName() + "</h1>"
+                    + "         <h1>" + movie.getName() + "<span class=\"rank\" data-id=" + movie.getId() + "></span></h1>"
                     + "         <p><span>"+ movie.getCategory().getName() + "</span> <span>(" + df.format(movie.getRelease_date()) + ")</span></p>"
                     + "         <div class=\"content-box\">" + movie.getPlot() + "</div>"
                     + "     </div>"
+                    + "</div></div>"
+                    + "<h4>Shows</h4>"
+                    + "<div class=\"content-box\" id=\"shows\" data-id=\"" + movie.getId() + "\">" 
                     + "</div>"
-                    + "     <div class=\"content-box\" id=\"shows\" data-id=\"" + movie.getId() + "\">" 
+                    + "<h4>Reviews</h4>"
+                    + "<div class=\"content-box\" id=\"reviews\" data-id=\"" + movie.getId() + "\">" 
                     + "</div>"
-                    + "<p><button id=\"btnMovieDetails\" data-id=\"" + movie.getId() + "\">Get Movie Details</button>"
-                    + "<div id=\"movieDetails\"></div></p>"
-                    + "<p><button id=\"btnMovieShows\" data-id=\"" + movie.getId() + "\">Get Movie Shows</button>"
-                    + "<div id=\"movieShows\"></div></p>"
-                    + "<p><button id=\"btnMovieReviews\" data-id=\"" + movie.getId() + "\">Get Movie Reviews</button>"
-                    + "<div id=\"movieReviews\"></div></p>"
+                    + "<p>"
             );
         }
 
-        res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../scripts/movie.js"));
+        res.append(html.LayoutHelper.addScripts("../../scripts/movie.js"));
         res.append(LayoutHelper.getFooter());
         return res.toString();
     }

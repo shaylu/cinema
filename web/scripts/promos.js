@@ -3,7 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+$getRandomPromo = function (div_to_place_in) {
+    url = "/cinema_app/app/promos/rand";
+    $.ajax({url: url}).done(function (data) {
+        var html = $getPromoHTML(data);
+        $(div_to_place_in).html(html);
+    });
+};
 
+$getPromoHTML = function (promo) {
+    return "<div class=\"promo\" data-id=\"" + promo.id + "\">"
+            + "<div class=\"promo_description\">"
+            + " <div class=\"promo_img\" style=\"background-image: url(/cinema_app/images/promos/" + promo.image + ");\"></div>"
+            + " <div class=\"promo_text\">" + promo.description + "</div>"
+            + " <div class=\"promo_address\">" + promo.company.name + ", " + promo.company.address + "</div>"
+            + "</div>"
+            + "<div class=\"promo_code\">USE THIS CODE: " + promo.promoCode + "</div>"
+            + "</div>";
+};
 
 $(function () {
     $("#btnShowPromos").click(function (e) {
@@ -11,7 +28,7 @@ $(function () {
         $.ajax({url: url}).fail(function (data) {
             alert(data.responseText);
         }).done(function (data) {
-            $("#promos").text(JSON.stringify(data));
+            return data;
         });
     });
 });

@@ -4,55 +4,41 @@
  * and open the template in the editor.
  */
 
+
 $(function () {
-    var touch_pos;
     var mov_arr;
     var sorted_by = "name";
 
-    $(document).on('touchstart', '.movie :not(.movie_desc)', function (e) {
-        touch_pos = $(window).scrollTop();
-    }).on('click touchend', '.movie', function (e) {
-        e.preventDefault();
-        if (e.type === 'touchend' && (Math.abs(touch_pos - $(window).scrollTop()) > 3))
-            return;
+    $(document).on("tap click", ".movie", function (e) {
         $changeToDecription($(this));
+        console.log(e.type);
+        return false;
     });
 
-
-    $(document).on('touchstart', '.movie-desc not:(.movie_go)', function (e) {
-        touch_pos = $(window).scrollTop();
-    }).on('click touchend', '.movie-desc', function (e) {
-        e.preventDefault();
-        if (e.type === 'touchend' && (Math.abs(touch_pos - $(window).scrollTop()) > 3))
-            return;
+    $(document).on("tap click", ".movie-desc", function (e) {
+        e.stopPropagation();
         $changeToMovieName($(this));
     });
 
-    $(document).on('touchstart', '.movie-go', function (e) {
-        touch_pos = $(window).scrollTop();
-    }).on('click touchend', '.movie-go', function (e) {
-        e.preventDefault();
-        if (e.type === 'touchend' && (Math.abs(touch_pos - $(window).scrollTop()) > 3))
-            return;
+    $(document).on("tap click", ".movie-go", function (e) {
         e.stopPropagation();
-        var id = $(this).data("id");
+        $goToMoviePage($(this));
+    });
+
+    $goToMoviePage = function (obj) {
+        var id = $(obj).data("id");
         var url = id;
         document.location = url;
-    });
-    
-    $(document).on('touchstart', '.sort-by', function (e) {
-        touch_pos = $(window).scrollTop();
-    }).on('click touchend', '.sort-by', function (e) {
+    };
+
+    $(document).on("tap click", ".sort-by", function (e) {
         e.preventDefault();
-        if (e.type === 'touchend' && (Math.abs(touch_pos - $(window).scrollTop()) > 3))
-            return;
         e.stopPropagation();
         sorted_by = $(this).data("sort-by");
         $(".sort-by").removeClass("active");
         $(this).addClass("active");
         $refresh_movies();
     });
-
 
     $changeToDecription = function (obj) {
         var name = $(this).data("name");
@@ -69,11 +55,37 @@ $(function () {
         var id = json.id;
         var res = "<div class=\"movie\" style=\"background-image: url('" + poster + "');\" data-description=\"" + description + "\" data-name=\"" + name + "\" data-id=\"" + id + "\">"
                 + "     <h2>"
-                + "         <span class=\"movie_name\">" + name + "</span><span class=\"movie_desc\">" + cat + "</span>"
+                + "         " + $getMovieNameHtml(id)
                 + "     </h2>"
                 + "</div>";
 
         return res;
+    };
+
+    $getMovieById = function (id) {
+        var movie = $.grep(mov_arr, function (obj) {
+            return obj.id === id;
+        })[0];
+        return movie;
+    };
+
+    $getMovieNameHtml = function (id) {
+        var movie = $getMovieById(id);
+        $getMovieRank(id);
+        return  "<span class=\"movie_name\">" + movie.name + "</span><span class=\"movie_desc\">" + movie.category.cat_name + "</span><span class=\"movie-rank\" data-id=\"" + movie.id + "\"></span>";
+    };
+
+    $getMovieRank = function (id) {
+        var url = "/cinema_app/app/movies/get-rank/" + id;
+        $.ajax({url: url}).fail(function (data) {
+            // nothing
+        }).done(function (data) {
+            $setRankImage(id, data);
+        });
+    };
+
+    $setRankImage = function (id, rank) {
+        $(".movie-rank[data-id=\"" + id + "\"]").html("<img src=\"/cinema_app/images/stars/" + rank + ".png\" />");
     };
 
     $getGoButton = function (id) {
@@ -82,57 +94,51 @@ $(function () {
 
     $getDescription = function (obj) {
         var id = $(obj).data("id");
-        var res = $(obj).data("description");
+        var res = "<div class=\"desc\">" + $(obj).data("description") + "</div>";
         res += $getGoButton(id);
         return res;
     };
 
-//    $(document).on("click touchstart", ".movie", function (obj, args) {
-//        $changeToDecription($(this));
-//    });
 
-    $(document).on("click", ".movie-go", function (e) {
-
-    });
-    
-    $sort = function() {
+    $sort = function () {
         if (sorted_by === "name") {
-            mov_arr = mov_arr.sortBy(function(n) {
+            mov_arr = mov_arr.sortBy(function (n) {
                 var x = n.name;
-               return x; 
+                return x;
             });
-        }
-        else if (sorted_by === "num_of_seats_left") {
-            mov_arr = mov_arr.sortBy(function(n) {
-               return n.show.num_of_seats_left; 
+        } else if (sorted_by === "num_of_seats_left") {
+            mov_arr = mov_arr.sortBy(function (n) {
+                return n.show.num_of_seats_left;
             });
-        }
-        else if (sorted_by === "rank") {
-             mov_arr = mov_arr.sortBy(function(n) {
-               return n.rank; 
-            });
-        }
-        else if (sorted_by === "cat_name") {
-             mov_arr = mov_arr.sortBy(function(n) {
-               return n.category.cat_name; 
+        } else if (sorted_by === "rank") {
+            mov_arr = mov_arr.sortBy(function (n) {
+                return n.rank;
+            }, true);
+        } else if (sorted_by === "cat_name") {
+            mov_arr = mov_arr.sortBy(function (n) {
+                return n.category.cat_name;
             });
         }
     };
-    
-    
-    $refresh_movies = function() {
+
+
+    $refresh_movies = function () {
         $sort();
         var res = "";
         $.each(mov_arr, function (idx, item) {
             res += $getMovieHtml(item);
         });
         $("#results").html(res);
+        $.each(mov_arr, function (index, obj) {
+            var movie_id = $(obj).data("id");
+            $getMovieRank(movie_id);
+        });
     };
 
     $changeToMovieName = function (obj) {
-        var name = $(obj).data("name");
+        var id = $(obj).data("id");
         $(obj).removeClass("movie-desc");
-        $(obj).children("h2").text(name);
+        $(obj).children("h2").html($getMovieNameHtml(id));
     };
 
     $(document).on("click", ".movie-desc", function (obj, args) {
@@ -156,4 +162,7 @@ $(function () {
     });
 
     $("#search").submit();
+
+
+
 });

@@ -58,9 +58,9 @@ public class PromosManager extends DbManagerEntity {
         int result = 0;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        result += add(1, 1, "coffe and cockis in 25 nis", formatter.parse("2016-05-01"), "1111", "http://www.ksharimplus.com/components/img.aspx?img=images%5Cshutterstock_11548816.jpg&width=600");
-        result += add(2, 1, "a meal that includes a burger fries and drink in 35 nis", formatter.parse("2016-08-31"), "2222", "https://rewards.americanexpress.co.il/contentassets/1f1a0e894740488da90740c7fcae0871/macbigb.jpg?id=16251");
-        result += add(2, 1, "a T-base in 25 nis", formatter.parse("2016-12-31"), "3333", "http://saloona.co.il/kona/files/2013/03/qk803rydhym2s8h028c.jpg");
+        result += add(1, 1, "coffe and cockis in 25 nis", formatter.parse("2016-05-01"), "1111", "coffe.jpg");
+        result += add(2, 1, "a meal that includes a burger fries and drink in 35 nis", formatter.parse("2016-08-31"), "2222", "burger.jpg");
+        result += add(2, 1, "a T-base in 25 nis", formatter.parse("2016-12-31"), "3333", "shirts.jpg");
 
         return result;
     }

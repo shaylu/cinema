@@ -65,7 +65,7 @@ button, input[type="submit"] {
     width: 100%;
     text-align: center;
     font-weight: bold;
-    height: 70px;
+    height: 110px;
     overflow:hidden;
 }
 .movie h2:before {
@@ -90,16 +90,21 @@ button, input[type="submit"] {
 }
 
 .content-box {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .movie-go {
     padding: 10px;
     position: absolute;
-    bottom: 5px;
+    bottom: 15px;
     left: 0;
     width: 100%;
     cursor: pointer;
+}
+
+.movie h2 .desc {
+    height: 80%;
+    overflow: hidden;
 }
 
 h1 {
@@ -160,4 +165,116 @@ h1 {
 
 .sort-div a.active:hover{
     color: #cecece;
+}
+
+.rank {
+    margin-left: 10px;
+}
+
+.movie-rank img {
+    margin: 5px;
+}
+
+h2,h3,h4,h5,h6 {
+    color: #f5821e;
+} 
+.content-box#shows {
+    color: #cecece;
+}
+
+.content-box#shows input, button {
+    color: #171717;
+}
+
+.show {
+    display: table;
+    width: 100%;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #171717;
+}
+
+.show .show_date,.show_time,.seats_left,.buy_seats {
+    display: inline-block;
+    width: 25%;
+}
+
+.show .buy_seats {
+    display: inline-block;
+    width: 25%;
+    text-align: right;
+}
+
+.show.header {
+    font-weight: bolder;
+}
+
+.review .review_date {
+    font-size: smaller;
+    color: #f5821e;
+}
+
+.review .rank {
+    margin: 0;
+}
+
+#reviews {
+    color: #cecece;
+}
+
+.review .review_body {
+    color: #cecece;
+    margin-bottom: 10px;
+    padding-top: 5px;
+}
+
+.content-box > span {
+    color: #cecece;
+}
+
+.promo {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.promo .promo_description {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 100%;
+    background-color: white;
+    height: 100px;
+}
+
+.promo_description .promo_img {
+    width: 25%;
+    height: 100%;
+    overflow: hidden;
+    float: left;
+    background-size: cover;
+}
+.promo_description .promo_text {
+    width: 75%;
+    text-align: center;
+    vertical-align: bottom;
+    float: left;
+    bottom: 10px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #ff0033;
+}
+
+.promo_description .promo_address {
+    width: 75%;
+    text-align: center;
+    float: left;
+    font-size: smaller;
+}
+
+.promo .promo_code {
+    padding: 10px;
+    background-color: #ff0033;
+    color: white;
+    font-weight: bold;
+    text-align: center;
 }

@@ -70,7 +70,7 @@ public class MoviesSearchView implements ICinemaView {
                 + "<div id=\"results\"></div>"
         );
 
-        res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../../scripts/movies.js"));
+        res.append(html.LayoutHelper.addScripts("../../scripts/movies.js"));
         res.append(LayoutHelper.getFooter());
 
         return res.toString();

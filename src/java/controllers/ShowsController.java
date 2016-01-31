@@ -6,6 +6,7 @@
 package controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,7 +33,7 @@ public class ShowsController {
     @GET
     @Path("bymovie/{movie_id}")
     public Response byMovie(@PathParam("movie_id") int movie_id) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy' '").create();
         String json = null;
         try {
             List<Show> shows = ControllerHelper.getDb().getShowsManager().getAllShowsForMovie(movie_id);

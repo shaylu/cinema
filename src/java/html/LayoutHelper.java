@@ -80,8 +80,12 @@ public class LayoutHelper {
     }
 
     private static String addJquery() {
-        return "<script src=\"http://code.jquery.com/jquery-1.12.0.min.js\"></script>\n"
-                + "    <script src=\"http://code.jquery.com/jquery-migrate-1.2.1.min.js\"></script>";
+        return " "
+                + "<script src=\"http://code.jquery.com/jquery-1.11.1.min.js\"></script>\n"
+                + "<script>jQuery(document).on(\"mobileinit\", function() {\n"
+                + "    jQuery.mobile.autoInitializePage = false;\n"
+                + "});</script>"
+                + "<script src=\"http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js\"></script>";
     }
 
     private static String addTitleBar() {
@@ -97,9 +101,10 @@ public class LayoutHelper {
                 + "    </div>\n"
                 + "    <div class=\"collapse navbar-collapse\">\n"
                 + "      <ul class=\"nav navbar-nav\">\n"
-                + "        <li class=\"active\"><a href=\"/cinema_app/app/home\">Home</a></li>\n"
+                + "        <li><a href=\"/cinema_app/app/home\">Home</a></li>\n"
                 + "        <li><a href=\"/cinema_app/app/movies/search_view\">Movies</a></li>\n"
                 + "        <li><a href=\"/cinema_app/app/promos\">Promotions</a></li>\n"
+                + "        <li><a href=\"/cinema_app/app/reviews/add-review\">Add Review</a></li>\n"
                 + "      </ul>\n"
                 + "    </div><!--/.nav-collapse -->\n"
                 + "  </div>\n"

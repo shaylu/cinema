@@ -103,7 +103,7 @@ public class OrdersManager extends DbManagerEntity {
 
     public Order createOrderFromMySqlWithInnerJoin(ResultSet rs) throws SQLException, ClassNotFoundException {
         Order OrderToReturn = new Order();
-
+        OrderToReturn.setId(rs.getInt("O.order_id"));
         OrderToReturn.setClientId(rs.getString("O.client_id"));
         OrderToReturn.setFirstName(rs.getString("O.fname"));
         OrderToReturn.setLastName(rs.getString("O.lname"));

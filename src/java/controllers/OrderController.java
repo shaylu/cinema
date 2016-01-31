@@ -94,4 +94,19 @@ public class OrderController {
         }
 
     }
+    
+    @POST
+    @Path("validate-order-code")
+    public Response validateOrderCode(@FormParam("order_id") int order_id, @FormParam("last_digits") String last_digits) {
+        try {
+            Order order = ControllerHelper.getDb().getOrdersManager().getOrderById(order_id);
+            String creditCardLastDigit = order.getCreditCardLastDigit();
+            if (creditCardLastDigit.equals(last_digits)) {
+                return Response.status(Response.Status.OK).build();
+            }
+            else throw new Exception("invalid data.");
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
 }

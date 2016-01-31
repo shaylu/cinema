@@ -27,6 +27,7 @@ public class ReviewsManager extends DbManagerEntity {
     public final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on R.order_id = O.id ";
     public final static String SELECT_REVIEW = "SELECT * FROM reviews WHERE rev_id = ?";
     public final static String SELECT_BY_MOVIE = "SELECT * FROM cinemacity.reviews R INNER JOIN Orders O ON R.order_id = O.order_id INNER JOIN shows ON O.show_id = shows.show_id WHERE shows.movie_id=?";
+    public final static String SELECT_BY_ORDER_ID = "SELECT * FROM reviews WHERE order_id = ?";
 
     public ReviewsManager(DbManager manager) {
         this.manager = manager;
@@ -47,6 +48,18 @@ public class ReviewsManager extends DbManagerEntity {
     private static Date getCurrentDate() {
         java.util.Date today = new java.util.Date();
         return new java.sql.Date(today.getTime());
+    }
+    
+    public boolean isReviewExistForOrder(int order_id) throws SQLException, ClassNotFoundException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_BY_ORDER_ID);
+            statement.setInt(1, order_id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next())
+                return true;
+            else 
+                return false;
+        }
     }
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException {

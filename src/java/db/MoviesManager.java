@@ -53,6 +53,12 @@ public class MoviesManager extends DbManagerEntity {
     public final static String RECOMMENDED_QUERY = "SELECT * FROM movies M WHERE M.is_recommended = true;";
     public static final String SELECT_MOVIE_BY_NAME = "SELECT * FROM movies M WHERE name = (?)";
     public static final String SELECT_MOVIE_BY_CATID = "SELECT * FROM movies M WHERE cat_id = (?)";
+    public static final String GET_RANK = "SELECT s.movie_id AS movie_id, AVG(r.rank) AS rank\n"
+            + "FROM reviews r\n"
+            + "	LEFT JOIN orders o ON r.order_id = o.order_id\n"
+            + "	LEFT JOIN shows s ON o.show_id = s.show_id\n"
+            + "    WHERE s.movie_id = ?\n"
+            + "    GROUP BY s.movie_id";
     public final static String REDIS_KEY = "recommended";
     Jedis jdisMovie;
 
@@ -99,6 +105,19 @@ public class MoviesManager extends DbManagerEntity {
             rs.next();
             Movie result = createMovieFromMySql(rs);
             return result;
+        }
+    }
+
+    public int getMovieRank(int movie_id) throws SQLException, ClassNotFoundException, Exception {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(GET_RANK);
+            statement.setInt(1, movie_id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("rank");
+            }
+            else 
+                throw new Exception("no rank for movie");
         }
     }
 
@@ -284,14 +303,14 @@ public class MoviesManager extends DbManagerEntity {
         String query = "";
         String func_keyword = null;
         ArrayList<Object> params = new ArrayList<>();
-        
+
         try (Connection conn = manager.getConnection()) {
             query += base;
-            
+
             // keyword
             func_keyword = (!keyword.isEmpty() && keyword != null) ? "%" + keyword + "%" : "%%";
             params.add(func_keyword);
-            
+
             // movie category
             if (cat_id != 0) {
                 query += " AND cat_id = ?";
@@ -302,7 +321,7 @@ public class MoviesManager extends DbManagerEntity {
             if (is_recommended == true) {
                 query += " AND is_recommended = 1";
             }
-            
+
             // has trailer
             if (has_trailer == true) {
                 query += " AND trailer IS NOT NULL AND trailer <> ''";
@@ -317,17 +336,16 @@ public class MoviesManager extends DbManagerEntity {
             for (int i = 1; i <= params.size(); i++) {
                 statment.setObject(i, params.get(i - 1));
             }
-            
+
             ArrayList<MovieSearchDetails> result = new ArrayList<>();
             ResultSet rs = statment.executeQuery();
-            
+
             while (rs.next()) {
                 result.add(getMovieSearchDetailsFromRS(rs));
             }
 
             return result;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
             throw ex;
         }
@@ -351,17 +369,17 @@ public class MoviesManager extends DbManagerEntity {
         posterLink = "/cinema_app/images/posters/krampus.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
-       
+
         result += add("Krampus", release_date, 98, category.getId(), plot, posterLink, trailer, true);
 
         //Creating In the Heart of the Sea
         release_date = formatter.parse("2015-10-12");
         plot = "A recounting of a whaling ship's sinking by a giant whale in 1820 that would inspire the great novel, Moby Dick.";
-        posterLink = "/cinema_app/images/posters/c.jpg";
+        posterLink = "/cinema_app/images/posters/heart.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
         result += add("In the Heart of the Sea", release_date, 122, category.getId(), plot, posterLink, trailer, true);
-        
+
         //Creating Creed 
         release_date = formatter.parse("2015-05-25");
         plot = "The former World Heavyweight Champion Rocky Balboa serves as a trainer and mentor to Adonis Johnson, the son of his late friend and former rival Apollo Creed.";
@@ -370,7 +388,6 @@ public class MoviesManager extends DbManagerEntity {
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Drama");
         result += add("Creed", release_date, 133, category.getId(), plot, posterLink, trailer, false);
 
-        
         //Creating The Hunger Games: Mockingjay - Part 2 
         release_date = formatter.parse("2015-11-19");
         plot = "As the war of Panem escalates to the destruction of other districts by the Capitol, Katniss Everdeen, the reluctant leader of the rebellion, must bring together an army against President Snow, while all she holds dear hangs in the balance.";
@@ -379,15 +396,14 @@ public class MoviesManager extends DbManagerEntity {
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Sci-Fi");
         result += add("The Hunger Games: Mockingjay - Part 2", release_date, 137, category.getId(), plot, posterLink, trailer, true);
 
-        
         //Creating Spectre  
         release_date = formatter.parse("2015-05-11");
         plot = "A cryptic message from Bond's past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.";
-        posterLink = "/cinema_app/images/posters/creed.jpg";
+        posterLink = "/cinema_app/images/posters/spectre.jpg";
         trailer = "https://www.youtube.com/watch?v=Uv554B7YHk4";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
         result += add("Spectre", release_date, 148, category.getId(), plot, posterLink, trailer, false);
-        
+
         return result;
 
     }
@@ -437,7 +453,7 @@ public class MoviesManager extends DbManagerEntity {
         this.jdisMovie.del(REDIS_KEY);
         this.jdisMovie.disconnect();
     }
-    
+
     public MovieSearchDetails getMovieSearchDetailsFromRS(ResultSet rs) throws SQLException {
         int movie_id = rs.getInt("movie_id");
         String name = rs.getString("name");
@@ -454,7 +470,7 @@ public class MoviesManager extends DbManagerEntity {
         String show_time = (rs.getTime("show_time") != null) ? rs.getTime("show_time").toString() : null;
         Integer show_id = rs.getInt("show_id");
         Integer num_of_seats_left = rs.getInt("num_of_seats_left");
-        
+
         MovieSearchDetails.MovieSearchDetailsCategory cat = new MovieSearchDetails.MovieSearchDetailsCategory(cat_id, cat_name);
         MovieSearchDetails.MovieSearchDetailsShow show = new MovieSearchDetails.MovieSearchDetailsShow(show_id, show_date, show_time, num_of_seats_left);
         MovieSearchDetails result = new MovieSearchDetails(movie_id, name, release_date, movie_length, cat, plot, poster, trailer, is_recommended, rank, show);

@@ -33,7 +33,7 @@ public class LayoutHelper {
 
     public static String getFooter() {
         StringBuilder str = new StringBuilder();
-        str.append("</div></body>\n"
+        str.append("</div><div style=\"height: 50px;\"></div></body>\n"
                 + "</html>");
         return str.toString();
     }

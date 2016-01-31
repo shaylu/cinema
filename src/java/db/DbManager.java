@@ -23,20 +23,47 @@ public class DbManager implements AutoCloseable {
 
     private static final String MySqlUsername = "root";
     private static final String MySqlPassword = "1234";
-    
+
     private static final String CREATE_MOVIES_SEARCH_DETAILS_VIEW = 
-        "SELECT M.*, rank, C.name AS cat_name, nearest_shows.show_date, nearest_shows.show_time, nearest_shows.show_id, nearest_shows.num_of_seats_left FROM \n" +
-        "	(SELECT S.movie_id, AVG(R.rank) AS rank FROM reviews R \n" +
-        "		INNER JOIN orders O ON R.order_id = O.order_id \n" +
-        "        INNER JOIN shows S ON O.show_id = S.show_id \n" +
-        "        GROUP BY S.movie_id) \n" +
-        "        AS ranks\n" +
-        "    INNER JOIN movies M ON ranks.movie_id = M.movie_id \n" +
-        "    INNER JOIN \n" +
-        "		(SELECT MIN(show_date) AS show_date, MIN(show_time) AS show_time, show_id, movie_id, num_of_seats_left FROM shows \n" +
-        "         GROUP BY movie_id) AS nearest_shows \n" +
-        "         ON M.movie_id = nearest_shows.movie_id \n" +
-        "         INNER JOIN movie_categories C ON C.cat_id = M.cat_id";
+            "CREATE OR REPLACE VIEW movies_search_details AS "
+            + "SELECT \n"
+            + "	tbl.*, \n"
+            + "    rank_tbl.rank,\n"
+            + "    shows_tbl.show_id,\n"
+            + "    shows_tbl.show_date,\n"
+            + "    shows_tbl.show_time,\n"
+            + "    shows_tbl.num_of_seats_left\n"
+            + "FROM (\n"
+            + "		(\n"
+            + "			SELECT \n"
+            + "				M.*, \n"
+            + "				C.name AS cat_name\n"
+            + "			FROM movies M \n"
+            + "			LEFT JOIN movie_categories C \n"
+            + "				ON C.cat_id = M.cat_id \n"
+            + "			\n"
+            + "		)\n"
+            + "	) AS tbl\n"
+            + "	LEFT JOIN (\n"
+            + "		SELECT \n"
+            + "			S.movie_id, \n"
+            + "			AVG(R.rank) AS rank \n"
+            + "		FROM reviews R\n"
+            + "		LEFT JOIN orders O \n"
+            + "			ON R.order_id = O.order_id\n"
+            + "		LEFT JOIN shows S \n"
+            + "			ON O.show_id = S.show_id\n"
+            + "		GROUP BY S.movie_id\n"
+            + "	) AS rank_tbl \n"
+            + "		ON rank_tbl.movie_id = tbl.movie_id\n"
+            + "	LEFT JOIN\n"
+            + "		(\n"
+            + "			SELECT * FROM shows S \n"
+            + "            GROUP BY S.movie_id\n"
+            + "            ORDER BY S.show_date AND S.show_time\n"
+            + "            \n"
+            + "		) AS shows_tbl\n"
+            + "			ON shows_tbl.movie_id = tbl.movie_id";
 
     private MovieCategoriesManager movieCategoriesManager;
     private MoviesManager moviesManager;

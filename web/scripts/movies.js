@@ -63,11 +63,14 @@ $(function () {
 
     $getMovieHtml = function (json) {
         var name = json.name;
+        var cat = json.category.cat_name;
         var poster = json.poster;
         var description = json.plot;
         var id = json.id;
         var res = "<div class=\"movie\" style=\"background-image: url('" + poster + "');\" data-description=\"" + description + "\" data-name=\"" + name + "\" data-id=\"" + id + "\">"
-                + "     <h2>" + name + "</h2>"
+                + "     <h2>"
+                + "         <span class=\"movie_name\">" + name + "</span><span class=\"movie_desc\">" + cat + "</span>"
+                + "     </h2>"
                 + "</div>";
 
         return res;

@@ -78,6 +78,13 @@ button, input[type="submit"] {
     margin-bottom: 10px;
 }
 
+.movie .movie_desc {
+    display: block !important;
+    font-size: smaller;
+    font-weight: lighter;
+    color: #f5821e;
+}
+
 .movie-desc h2 {
     height: 100% !important;
 }
@@ -131,6 +138,8 @@ h1 {
 .sort-div {
     height: 30px !important;
     color: #cecece;
+    float: none !important;
+    margin: 0px;
 }
 
 .sort-div a{

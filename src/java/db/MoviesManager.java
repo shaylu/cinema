@@ -327,6 +327,10 @@ public class MoviesManager extends DbManagerEntity {
 
             return result;
         }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw ex;
+        }
     }
 
     public int addDefaultValues() throws SQLException, ClassNotFoundException, ParseException {
@@ -339,7 +343,6 @@ public class MoviesManager extends DbManagerEntity {
         String posterLink = "/cinema_app/images/posters/star.jpg";
         String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
         MovieCategory category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
-
         result += add("Star Wars: The Force Awakens", release_date, 131, category.getId(), plot, posterLink, trailer, true);
 
         //Creating Krampus
@@ -348,9 +351,43 @@ public class MoviesManager extends DbManagerEntity {
         posterLink = "/cinema_app/images/posters/krampus.jpg";
         trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
+       
+        result += add("Krampus", release_date, 98, category.getId(), plot, posterLink, trailer, true);
 
-        result += add("Krampus", release_date, 98, 2, plot, posterLink, trailer, true);
+        //Creating In the Heart of the Sea
+        release_date = formatter.parse("2015-10-12");
+        plot = "A recounting of a whaling ship's sinking by a giant whale in 1820 that would inspire the great novel, Moby Dick.";
+        posterLink = "/cinema_app/images/posters/c.jpg";
+        trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
+        result += add("In the Heart of the Sea", release_date, 122, category.getId(), plot, posterLink, trailer, true);
+        
+        //Creating Creed 
+        release_date = formatter.parse("2015-05-25");
+        plot = "The former World Heavyweight Champion Rocky Balboa serves as a trainer and mentor to Adonis Johnson, the son of his late friend and former rival Apollo Creed.";
+        posterLink = "/cinema_app/images/posters/creed.jpg";
+        trailer = "https://www.youtube.com/watch?v=Uv554B7YHk4";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Drama");
+        result += add("Creed", release_date, 133, category.getId(), plot, posterLink, trailer, false);
 
+        
+        //Creating The Hunger Games: Mockingjay - Part 2 
+        release_date = formatter.parse("2015-11-19");
+        plot = "As the war of Panem escalates to the destruction of other districts by the Capitol, Katniss Everdeen, the reluctant leader of the rebellion, must bring together an army against President Snow, while all she holds dear hangs in the balance.";
+        posterLink = "/cinema_app/images/posters/hunger.jpg";
+        trailer = "https://www.youtube.com/watch?v=n-7K_OjsDCQ";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Sci-Fi");
+        result += add("The Hunger Games: Mockingjay - Part 2", release_date, 137, category.getId(), plot, posterLink, trailer, true);
+
+        
+        //Creating Spectre  
+        release_date = formatter.parse("2015-05-11");
+        plot = "A cryptic message from Bond's past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.";
+        posterLink = "/cinema_app/images/posters/creed.jpg";
+        trailer = "https://www.youtube.com/watch?v=Uv554B7YHk4";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
+        result += add("Spectre", release_date, 148, category.getId(), plot, posterLink, trailer, false);
+        
         return result;
 
     }
@@ -405,18 +442,18 @@ public class MoviesManager extends DbManagerEntity {
         int movie_id = rs.getInt("movie_id");
         String name = rs.getString("name");
         Date release_date = rs.getDate("release_date");
-        int movie_length = rs.getInt("mov_length");
+        Integer movie_length = rs.getInt("mov_length");
         String plot = rs.getString("plot");
         String poster = rs.getString("poster");
         String trailer = rs.getString("trailer");
         boolean is_recommended = rs.getBoolean("is_recommended");
-        int cat_id = rs.getInt("cat_id");
+        Integer cat_id = rs.getInt("cat_id");
         String cat_name = rs.getString("cat_name");
-        int rank = rs.getInt("rank");
+        Integer rank = rs.getInt("rank");
         Date show_date = rs.getDate("show_date");
-        String show_time = rs.getTime("show_time").toString();
-        int show_id = rs.getInt("show_id");
-        int num_of_seats_left = rs.getInt("num_of_seats_left");
+        String show_time = (rs.getTime("show_time") != null) ? rs.getTime("show_time").toString() : null;
+        Integer show_id = rs.getInt("show_id");
+        Integer num_of_seats_left = rs.getInt("num_of_seats_left");
         
         MovieSearchDetails.MovieSearchDetailsCategory cat = new MovieSearchDetails.MovieSearchDetailsCategory(cat_id, cat_name);
         MovieSearchDetails.MovieSearchDetailsShow show = new MovieSearchDetails.MovieSearchDetailsShow(show_id, show_date, show_time, num_of_seats_left);

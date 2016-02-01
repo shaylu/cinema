@@ -34,7 +34,7 @@ public class MoviesSearchView implements ICinemaView {
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
-        res.append("<h1>Search Results</h1>\n"
+        res.append("<h1>Movies</h1>\n"
                 + "<div class=\"content-box\">"
                 + "<form name=\"search\" id=\"search\" method=\"post\">"
                 + "  <p><div class=\"filter-div\">\n"

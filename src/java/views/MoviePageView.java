@@ -34,15 +34,18 @@ public class MoviePageView implements ICinemaView {
                     + "     <div class=\"movie_poster\" style=\"background-image: url(" + movie.getPoster() + ");\"></div>"
                     + "     <div class=\"movie_body grey_text\">"
                     + "         <h1>" + movie.getName() + "<span class=\"rank\" data-id=" + movie.getId() + "></span></h1>"
-                    + "         <p><span>"+ movie.getCategory().getName() + "</span> <span>(" + df.format(movie.getRelease_date()) + ")</span></p>"
+                    + "         <p><span>" + movie.getCategory().getName() + "</span> <span>(" + df.format(movie.getRelease_date()) + ")</span></p>"
                     + "         <div class=\"content-box\">" + movie.getPlot() + "</div>"
                     + "     </div>"
-                    + "</div></div>"
-                    + "<h4>Shows</h4>"
-                    + "<div class=\"content-box\" id=\"shows\" data-id=\"" + movie.getId() + "\">" 
+                    + "</div></div>");
+            if (!movie.getTrailer().equals("") && movie.getTrailer() != null) {
+                res.append("<div class=\"content-box\"><iframe style=\"width: 100%\" src=\"" + movie.getTrailer() + "\" frameborder=\"0\" allowfullscreen></iframe></div>");
+            };
+            res.append("<h4>Shows</h4>"
+                    + "<div class=\"content-box\" id=\"shows\" data-id=\"" + movie.getId() + "\">"
                     + "</div>"
                     + "<h4>Reviews</h4>"
-                    + "<div class=\"content-box\" id=\"reviews\" data-id=\"" + movie.getId() + "\">" 
+                    + "<div class=\"content-box\" id=\"reviews\" data-id=\"" + movie.getId() + "\">"
                     + "</div>"
                     + "<p>"
             );

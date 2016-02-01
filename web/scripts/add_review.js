@@ -8,7 +8,9 @@ $("#addReview").submit(function (e) {
     $.ajax({url: url, data: {'last_digits': last_digits, 'order_id': order_id, 'rank': rank, 'text': text}, method: 'POST'}).fail(function (data) {
         alert(data.responseText);
     }).done(function (data) {
-        $getRandomPromo($("#addReview .content-box"));
+        $getRandomPromo(function(html) {
+            $("#addReview .content-box").html(html);
+        });
     });
 });
 

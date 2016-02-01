@@ -26,8 +26,13 @@ public class ShowsController {
     @GET
     @Path("{show_id}/order")
     public Response newOrder(@PathParam("show_id") int show_id) {
-        views.ShowsNewOrderView view = new ShowsNewOrderView(show_id);
+        try {
+            Show show = ControllerHelper.getDb().getShowsManager().getShowById(show_id);
+            views.ShowsNewOrderView view = new ShowsNewOrderView(show);
         return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
+        } catch (Exception e) {
+           return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_HTML).build();
+        }
     }
     
     @GET

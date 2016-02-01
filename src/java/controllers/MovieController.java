@@ -6,6 +6,7 @@
 package controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import db.DbManager;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -120,10 +121,25 @@ public class MovieController {
     @GET
     @Path("get/{id}")
     public Response getMovieById(@PathParam("id") int movie_id) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy' '").create();
         String json = null;
         try {
             Movie movie = ControllerHelper.getDb().getMoviesManager().getMovieById(movie_id);
+            json = gson.toJson(movie);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get movie, " + e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+    
+    @GET
+    @Path("get-details/{id}")
+    public Response getMovieDetailsById(@PathParam("id") int movie_id) {
+        Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy' '").create();
+        String json = null;
+        try {
+            MovieSearchDetails movie = ControllerHelper.getDb().getMoviesManager().getMovieDetailsById(movie_id);
             json = gson.toJson(movie);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
@@ -152,7 +168,7 @@ public class MovieController {
     public Response getRecommandedForHome(@Context HttpServletRequest request) {
         try {
             String recommendedFromRedis = ControllerHelper.getDb().getMoviesManager().getRecommendedFromRedis();
-            return Response.status(Response.Status.OK).entity(recommendedFromRedis).build();
+            return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(recommendedFromRedis).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN).entity(e.getMessage()).build();
         }

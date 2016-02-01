@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-$getRandomPromo = function (div_to_place_in) {
+
+$getRandomPromo = function (callback) {
     url = "/cinema_app/app/promos/rand";
     $.ajax({url: url}).done(function (data) {
         var html = $getPromoHTML(data);
-        $(div_to_place_in).html(html);
+        callback(html);
     });
 };
 

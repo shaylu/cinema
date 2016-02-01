@@ -90,10 +90,6 @@ public class Show {
         return this.price_per_seate;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
     public String getTime() {
         return time;
     }
@@ -105,7 +101,7 @@ public class Show {
       public String toRedisJson() {
         JsonObject json = new JsonObject();
         json.addProperty("id", getId());
-        json.addProperty("date", getDate().toString());
+        json.addProperty("date", getShowDate().toString());
         json.addProperty("num_of_seats_left", getNumOfSeatsLeft());
         return json.toString();
     }

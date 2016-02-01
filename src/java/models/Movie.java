@@ -7,6 +7,8 @@ package models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -128,11 +130,14 @@ public class Movie {
     }
     
     public String toRedisRecommanded() {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         JsonObject json = new JsonObject();
         json.addProperty("id", getId());
         json.addProperty("name", getName());
         json.addProperty("plot", getPlot());
         json.addProperty("poster", getPoster());
+        json.addProperty("cat_name", getCategory().getName());
+        json.addProperty("release_date", df.format(getRelease_date()));
         return json.toString();
     }
 }

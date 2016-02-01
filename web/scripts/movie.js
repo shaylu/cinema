@@ -58,7 +58,7 @@ $(function () {
                 + "<span class=\"show_date\">" + show.date + "</span>"
                 + "<span class=\"show_time\">" + show.time + "</span>"
                 + "<span class=\"seats_left\">" + show.num_of_seats_left + "</span>"
-                + "<span class=\"buy_seats\"><button>Buy Tickets</button></span>"
+                + "<span class=\"buy_seats\"><button class=\"buy-tickets\" data-id=\"" + show.id + "\">Buy</button></span>"
                 + "</div>";
     };
 
@@ -89,6 +89,18 @@ $(function () {
             $("#reviews").html(html);
         });
     };
+    
+    $(document).on("click", ".buy-tickets", function() {
+        var show_id = $(this).parents(".show").data("id");
+        var seats_left = $(this).parents(".show").children(".seats_left").text();
+        if (seats_left !== '' && seats_left > 0)
+        {
+            document.location = "/cinema_app/app/shows/" + show_id + "/order";
+        }
+        else {
+            alert("No tickets left for this show.");
+        }
+    });
 
     $refreshShows = function () {
         var movie_id = id;

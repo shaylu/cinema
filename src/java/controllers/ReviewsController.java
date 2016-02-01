@@ -53,7 +53,13 @@ public class ReviewsController {
     public Response addNewReview(@FormParam("order_id") int order_id, @FormParam("rank") double rank, @FormParam("text") String text, @FormParam("last_digits") String last_digits) {
         try {
             Order order = ControllerHelper.getDb().getOrdersManager().getOrderById(order_id);
+            
+            if (rank < 1 || rank > 5) {
+                throw new Exception("Invalid rank!");
+            }
+            
             String creditCardLastDigit = order.getCreditCardLastDigit();
+            
             if (!creditCardLastDigit.equals(last_digits)) {
                 throw new Exception("Invalid order data.");
             }

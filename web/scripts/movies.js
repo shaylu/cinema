@@ -3,7 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+$getMovieDescriptionHTML = function (movie_id, callbackFunction) {
+    var url = "/cinema_app/app/movies/get-details/" + movie_id;
+    $.ajax({url: url}).done(function (movie) {
+        var html =  "<div class=\"movie-details\" style=\"margin-bottom: 10px; padding-bottom: 10px;\"><div style=\"min-height: 200px;\">"
+                + "     <div class=\"movie_poster\" style=\"background-image: url(" + movie.poster + ");\"></div>"
+                + "     <div class=\"movie_body grey_text\">"
+                + "         <h3>" + movie.name + "<span class=\"rank\" data-id=" + movie.id + "></span></h3>"
+                + "         <p><span>" + movie.category.cat_name + "</span> <span>(" + movie.release_date + ")</span></p>"
+                + "         <div class=\"content-box\">" + movie.plot + "</div>"
+                + "     </div>"
+                + "</div></div>";
+        callbackFunction(html);
+    });
+};
 
+$getRecomendedMovieHTML = function (movie) {
+    return "<div class=\"movie-recomended\" style=\"margin-bottom: 10px; padding-bottom: 10px;\" data-id=\"" + movie.id + "\"><div style=\"min-height: 200px;\">"
+            + "     <div class=\"movie_poster\" style=\"background-image: url(" + movie.poster + ");\"></div>"
+            + "     <div class=\"movie_body grey_text\">"
+            + "         <h3>" + movie.name + "</h3>"
+            + "         <p><span>" + movie.cat_name + "</span> <span>(" + movie.release_date + ")</span></p>"
+            + "         <div class=\"content-box\">" + movie.plot + "</div>"
+            + "     </div>"
+            + "</div></div>";
+};
 
 $(function () {
     var mov_arr;
@@ -47,6 +71,7 @@ $(function () {
         $(obj).addClass("movie-desc");
     };
 
+
     $getMovieHtml = function (json) {
         var name = json.name;
         var cat = json.category.cat_name;
@@ -71,18 +96,17 @@ $(function () {
 
     $getMovieNameHtml = function (id) {
         var movie = $getMovieById(id);
-        $getMovieRank(id);
-        return  "<span class=\"movie_name\">" + movie.name + "</span><span class=\"movie_desc\">" + movie.category.cat_name + "</span><span class=\"movie-rank\" data-id=\"" + movie.id + "\"></span>";
+        return  "<span class=\"movie_name\">" + movie.name + "<br><img src=\"/cinema_app/images/stars/" + movie.rank + ".png\" /></span><span class=\"movie_desc\">" + movie.category.cat_name + "</span><span class=\"movie-rank\" data-id=\"" + movie.id + "\"></span>";
     };
 
-    $getMovieRank = function (id) {
-        var url = "/cinema_app/app/movies/get-rank/" + id;
-        $.ajax({url: url}).fail(function (data) {
-            // nothing
-        }).done(function (data) {
-            $setRankImage(id, data);
-        });
-    };
+//    $getMovieRank = function (id) {
+//        var url = "/cinema_app/app/movies/get-rank/" + id;
+//        $.ajax({url: url}).fail(function (data) {
+//            // nothing
+//        }).done(function (data) {
+//            $setRankImage(id, data);
+//        });
+//    };
 
     $setRankImage = function (id, rank) {
         $(".movie-rank[data-id=\"" + id + "\"]").html("<img src=\"/cinema_app/images/stars/" + rank + ".png\" />");
@@ -94,7 +118,8 @@ $(function () {
 
     $getDescription = function (obj) {
         var id = $(obj).data("id");
-        var res = "<div class=\"desc\">" + $(obj).data("description") + "</div>";
+        var movie = $getMovieById(id);
+        var res = "<div class=\"movie_name\">" + movie.name + "</div><div class=\"movie_desc\">" + movie.category.cat_name + "</div><div class=\"desc\">" + movie.plot + "</div>";
         res += $getGoButton(id);
         return res;
     };
@@ -109,7 +134,7 @@ $(function () {
         } else if (sorted_by === "num_of_seats_left") {
             mov_arr = mov_arr.sortBy(function (n) {
                 return n.show.num_of_seats_left;
-            });
+            }, true);
         } else if (sorted_by === "rank") {
             mov_arr = mov_arr.sortBy(function (n) {
                 return n.rank;
@@ -129,10 +154,6 @@ $(function () {
             res += $getMovieHtml(item);
         });
         $("#results").html(res);
-        $.each(mov_arr, function (index, obj) {
-            var movie_id = $(obj).data("id");
-            $getMovieRank(movie_id);
-        });
     };
 
     $changeToMovieName = function (obj) {
@@ -162,7 +183,5 @@ $(function () {
     });
 
     $("#search").submit();
-
-
 
 });

@@ -15,6 +15,7 @@ body {
 .content-box label {
     color: #cecece;
     display: block;
+    margin-top: 5px;
 }
 
 select {
@@ -58,14 +59,14 @@ button, input[type="submit"] {
     bottom: 0px;
     left: 0px;
     background: rgba(0, 0, 0, 0.75);
-    padding: 15px 10px;
+    padding: 15px 15px;
     color: white;
     margin: 0;
     font: 14px Sans-Serif;
     width: 100%;
     text-align: center;
     font-weight: bold;
-    height: 110px;
+    height: 120px;
     overflow:hidden;
 }
 .movie h2:before {
@@ -83,6 +84,7 @@ button, input[type="submit"] {
     font-size: smaller;
     font-weight: lighter;
     color: #f5821e;
+    margin-top: 3px;
 }
 
 .movie-desc h2 {
@@ -91,6 +93,10 @@ button, input[type="submit"] {
 
 .content-box {
     margin-top: 10px;
+}
+
+.light-color {
+    color: #cecece;
 }
 
 .movie-go {
@@ -105,6 +111,8 @@ button, input[type="submit"] {
 .movie h2 .desc {
     height: 80%;
     overflow: hidden;
+    font-weight: normal;
+    margin: 5px;
 }
 
 h1 {
@@ -115,7 +123,7 @@ h1 {
 
 .movie_poster {
     display: inline-block;
-    width: 15%;
+    width: 25%;
     height: auto;
     float: left;
     min-height: 200px;
@@ -125,7 +133,7 @@ h1 {
 .movie_body {
     padding-left: 20px;
     display: inline-block;
-    width: 85%;
+    width: 75%;
     left: 15%;
 }
 
@@ -277,4 +285,43 @@ h2,h3,h4,h5,h6 {
     color: white;
     font-weight: bold;
     text-align: center;
+}
+
+.movie-recomended h3{
+    margin-top: 0;
+}
+
+
+#totalPrice {
+    margin-left: 10px;
+    display: inline-block;
+}
+
+#addOrder .block {
+    display: inline-block !important;
+    margin-right: 10px;
+}
+
+.content-box input[type="submit"] {
+    margin-top: 10px;
+}
+
+.green {
+    color: #00d129;
+}
+
+.thank-you {
+    color: #cecece;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.movie .movie_name img {
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+
+.movie_name img[src$="0.png"] {
+    margin: 0;
+    display: none;
 }

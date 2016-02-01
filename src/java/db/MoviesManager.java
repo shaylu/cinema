@@ -38,6 +38,7 @@ public class MoviesManager extends DbManagerEntity {
             + "plot, poster,trailer,is_recommended) values(?,?,?,?,?,?,?,?)";
     public static final String SELECT_ALL = "SELECT * FROM movies M inner join movie_categories C on M.cat_id = C.cat_id ";
     public static final String SELECT_MOVIE_BY_ID = "SELECT * FROM movies M WHERE M.movie_id = ?";
+    public static final String SELECT_MOVIE_DETAILS_BY_ID = "SELECT * FROM movies_search_details WHERE movie_id = ?";
     public static final String SELECT_MOVIE_BY_KEYWORD = "SELECT * FROM movies M WHERE M.name like ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
     //new
@@ -104,6 +105,18 @@ public class MoviesManager extends DbManagerEntity {
             ResultSet rs = statement.executeQuery();
             rs.next();
             Movie result = createMovieFromMySql(rs);
+            return result;
+        }
+    }
+    
+    public MovieSearchDetails getMovieDetailsById(int id) throws SQLException, ClassNotFoundException {
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_MOVIE_DETAILS_BY_ID);
+            //for check :id = 1;
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            MovieSearchDetails result = getMovieSearchDetailsFromRS(rs);
             return result;
         }
     }
@@ -359,7 +372,7 @@ public class MoviesManager extends DbManagerEntity {
         Date release_date = formatter.parse("2016-05-01");
         String plot = "Three decades after the defeat of the Galactic Empire, a new threat arises. The First Order attempts to rule the galaxy and only a rag-tag group of heroes can stop them, along with the help of the Resistance.";
         String posterLink = "/cinema_app/images/posters/star.jpg";
-        String trailer = "https://www.youtube.com/watch?v=sGbxmsDFVnE";
+        String trailer = "https://www.youtube.com/embed/sGbxmsDFVnE";
         MovieCategory category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
         result += add("Star Wars: The Force Awakens", release_date, 131, category.getId(), plot, posterLink, trailer, true);
 
@@ -367,7 +380,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2016-04-23");
         plot = "A boy who has a bad Christmas ends up accidentally summoning a Christmas demon to his family home.";
         posterLink = "/cinema_app/images/posters/krampus.jpg";
-        trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
+        trailer = "https://www.youtube.com/embed/h6cVyoMH4QE";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
 
         result += add("Krampus", release_date, 98, category.getId(), plot, posterLink, trailer, true);
@@ -376,7 +389,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2015-10-12");
         plot = "A recounting of a whaling ship's sinking by a giant whale in 1820 that would inspire the great novel, Moby Dick.";
         posterLink = "/cinema_app/images/posters/heart.jpg";
-        trailer = "https://www.youtube.com/watch?v=h6cVyoMH4QE";
+        trailer = "https://www.youtube.com/embed/h6cVyoMH4QE";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
         result += add("In the Heart of the Sea", release_date, 122, category.getId(), plot, posterLink, trailer, true);
 
@@ -384,7 +397,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2015-05-25");
         plot = "The former World Heavyweight Champion Rocky Balboa serves as a trainer and mentor to Adonis Johnson, the son of his late friend and former rival Apollo Creed.";
         posterLink = "/cinema_app/images/posters/creed.jpg";
-        trailer = "https://www.youtube.com/watch?v=Uv554B7YHk4";
+        trailer = "https://www.youtube.com/embed/Uv554B7YHk4";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Drama");
         result += add("Creed", release_date, 133, category.getId(), plot, posterLink, trailer, false);
 
@@ -392,7 +405,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2015-11-19");
         plot = "As the war of Panem escalates to the destruction of other districts by the Capitol, Katniss Everdeen, the reluctant leader of the rebellion, must bring together an army against President Snow, while all she holds dear hangs in the balance.";
         posterLink = "/cinema_app/images/posters/hunger.jpg";
-        trailer = "https://www.youtube.com/watch?v=n-7K_OjsDCQ";
+        trailer = "https://www.youtube.com/embed/n-7K_OjsDCQ";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Sci-Fi");
         result += add("The Hunger Games: Mockingjay - Part 2", release_date, 137, category.getId(), plot, posterLink, trailer, true);
 
@@ -400,7 +413,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2015-05-11");
         plot = "A cryptic message from Bond's past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.";
         posterLink = "/cinema_app/images/posters/spectre.jpg";
-        trailer = "https://www.youtube.com/watch?v=Uv554B7YHk4";
+        trailer = "https://www.youtube.com/embed/Uv554B7YHk4";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
         result += add("Spectre", release_date, 148, category.getId(), plot, posterLink, trailer, false);
 

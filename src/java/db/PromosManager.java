@@ -34,7 +34,7 @@ public class PromosManager extends DbManagerEntity {
     public static final String SELECT_PROMOION = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_id = ?";
     public static final String SELECT_RAND = "SELECT * FROM promotions p inner join companies c on P.comp_id = C.comp_id ORDER BY RAND() LIMIT 1;";
     public static final String SELECT_PROMOION_BY_CAT_ID = "SELECT * FROM promotions P inner join promotion_categories C on P.promo_cat_id = C.promo_cat_id ORDER BY RAND() LIMIT 1;";
-    
+
     public PromosManager(DbManager manager) {
         this.manager = manager;
     }
@@ -53,7 +53,6 @@ public class PromosManager extends DbManagerEntity {
             return statement.executeUpdate();
         }
     }
-//TODO
 
     public int addDefaultValues() throws ClassNotFoundException, SQLException, ParseException {
         int result = 0;
@@ -80,19 +79,19 @@ public class PromosManager extends DbManagerEntity {
 
         return result;
     }
+
     // get random promotion picture according to promotion category id
-    public String getRndomPicByPromoCatId(int promoCatId) throws SQLException, ClassNotFoundException{
-        
+    public String getRndomPicByPromoCatId(int promoCatId) throws SQLException, ClassNotFoundException {
         String retPic;
         Promotion promotionToReturn = getRand();
-        
-        while(!promotionToReturn.getPromoCategorie().equals(promoCatId)){
+
+        while (!promotionToReturn.getPromoCategorie().equals(promoCatId)) {
             promotionToReturn = getRand();
         }
-        
+
         retPic = promotionToReturn.getImage();
         return retPic;
-        
+
     }
 
     public Promotion getPromotionById(int id) throws SQLException, ClassNotFoundException {
@@ -131,7 +130,7 @@ public class PromosManager extends DbManagerEntity {
         result.setImage(rs.getString("P.image"));
         return result;
     }
-    
+
     public Promotion getRand() throws SQLException, ClassNotFoundException {
         Promotion promotionToReturn;
         try (Connection conn = manager.getConnection()) {

@@ -33,7 +33,8 @@ public class PromosManager extends DbManagerEntity {
     public final static String SELECT_ALL = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id";
     public static final String SELECT_PROMOION = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_id = ?";
     public static final String SELECT_RAND = "SELECT * FROM promotions p inner join companies c on P.comp_id = C.comp_id ORDER BY RAND() LIMIT 1;";
-
+    public static final String SELECT_PROMOION_BY_CAT_ID = "SELECT * FROM promotions P inner join promotion_categories C on P.promo_cat_id = C.promo_cat_id ORDER BY RAND() LIMIT 1;";
+    
     public PromosManager(DbManager manager) {
         this.manager = manager;
     }
@@ -79,13 +80,17 @@ public class PromosManager extends DbManagerEntity {
 
         return result;
     }
-    
-    public String getRndomPicByPromoId(int promoId) throws SQLException, ClassNotFoundException{
+    // get random promotion picture according to promotion category id
+    public String getRndomPicByPromoCatId(int promoCatId) throws SQLException, ClassNotFoundException{
         
         String retPic;
-        Promotion promoById = getPromotionById(promoId);
+        Promotion promotionToReturn = getRand();
         
-        retPic = promoById.getImage();
+        while(!promotionToReturn.getPromoCategorie().equals(promoCatId)){
+            promotionToReturn = getRand();
+        }
+        
+        retPic = promotionToReturn.getImage();
         return retPic;
         
     }

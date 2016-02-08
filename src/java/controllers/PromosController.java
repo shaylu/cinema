@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Promotion;
+import models.PromotionCategory;
 import views.PromotionsView;
 
 /**
@@ -28,7 +29,8 @@ public class PromosController {
     @Path("")
     public Response home() {
         try {
-            PromotionsView view = new PromotionsView();
+            List<PromotionCategory> categories = ControllerHelper.getDb().getPromoCategoriesManager().getAll();
+            PromotionsView view = new PromotionsView(categories);
             return Response.status(Response.Status.OK).entity(view.getView()).type(MediaType.TEXT_HTML).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();

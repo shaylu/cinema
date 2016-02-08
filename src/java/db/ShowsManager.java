@@ -148,7 +148,6 @@ public class ShowsManager extends DbManagerEntity {
                 Show show = createShowFromMySqlWithInnerJoin(rs);
                 result.add(show);
             }
-
             return result;
         }
     }

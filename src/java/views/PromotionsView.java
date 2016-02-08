@@ -42,7 +42,7 @@ public class PromotionsView implements ICinemaView {
   <img src="http://webmaster.org.il/images/logo.gif" 
        alt="אתר וובמאסטר" />
 </a>*/
-            res.append("<a href=\"" + getHref(category.name) + "\" ");
+            res.append("<a href=\"" + getHref(category.name) + "< img src = " + /* getImg() +*/  "alt = " + category.name + "/>");
         }
 
         return res.toString();
@@ -52,7 +52,7 @@ public class PromotionsView implements ICinemaView {
         StringBuilder res = new StringBuilder();
         res.append("http://webedu15.mtacloud.co.il:8080/cinema_app/app/promos/{");
         res.append(catName);
-        res.append("}");
+        res.append("}\n");
         return res.toString();
     }
 }

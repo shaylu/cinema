@@ -18,7 +18,7 @@ import java.sql.Statement;
 public class DbManager implements AutoCloseable {
 
     private static final String MySqlClassName = "com.mysql.jdbc.Driver";
-    private static final String MySqlHost = "jdbc:mysql://localhost:3306/";
+    private static final String MySqlHost = "jdbc:mysql://localhost/";
     private static final String DbName = "CinemaCity";
 
     private static final String MySqlUsername = "root";

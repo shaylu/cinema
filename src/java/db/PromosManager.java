@@ -79,6 +79,16 @@ public class PromosManager extends DbManagerEntity {
 
         return result;
     }
+    
+    public String getRndomPicByPromoId(int promoId) throws SQLException, ClassNotFoundException{
+        
+        String retPic;
+        Promotion promoById = getPromotionById(promoId);
+        
+        retPic = promoById.getImage();
+        return retPic;
+        
+    }
 
     public Promotion getPromotionById(int id) throws SQLException, ClassNotFoundException {
         Promotion promotionToReturn;

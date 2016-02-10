@@ -66,7 +66,7 @@ public class PromosController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
+
     @GET
     @Path("rand")
     public Response getRandPromo() {
@@ -81,6 +81,18 @@ public class PromosController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
-    
+
+//    @GET
+//    @Path("{promo_cat_id}")
+//    public Response promotionsCategoryPage(@PathParam("promo_cat_id") int id) {
+//        try {
+//            List<Promotion> promotions = ControllerHelper.getDb().getPromosManager().getAll();
+//            PromotionCategoryPageView view = new PromotionCategoryPageView(promotions);
+//            return Response.status(Response.Status.OK).entity(view.getView()).build();
+//        } catch (Exception e) {
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+//                    .entity("Failed to get promotion, " + e.getMessage()).build();
+//        }
+//    }
+
 }

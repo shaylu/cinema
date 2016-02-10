@@ -6,7 +6,9 @@
 package views;
 
 import html.LayoutHelper;
-import models.PromotionCategory;
+import java.util.List;
+import models.Promotion;
+
 
 /**
  *
@@ -14,22 +16,26 @@ import models.PromotionCategory;
  */
 public class PromotionCategoryPageView implements ICinemaView {
 
-    PromotionCategory promotionCategory;
+    List<Promotion> promotionsOnCategory;
 
-    public PromotionCategoryPageView(PromotionCategory promotionCategory) {
-        this.promotionCategory = promotionCategory;
+    public PromotionCategoryPageView(List<Promotion> promotionsOnCategory) {
+        this.promotionsOnCategory = promotionsOnCategory;
     }
-    
-    
+
     @Override
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
-        
-        
-        res.append(html.LayoutHelper.addScripts("../../scripts/movie.js"));
-        res.append(LayoutHelper.getFooter());
+        for (Promotion promotionsOnCategory : promotionsOnCategory) {
+            res.append("<div style=\"margin-bottom: 10px; padding-bottom: 10px;\"><div style=\"min-height: 200px;\">"
+                    + "     style=\"background-image: url(" + promotionsOnCategory.getImage() + ");\"></div>"
+                    + "         <h1>" + promotionsOnCategory.getDescription()+ "</h1>"
+                    + "</div></div>");
+
+            res.append(html.LayoutHelper.addScripts("../../scripts/movie.js"));
+            res.append(LayoutHelper.getFooter());
+        }
         return res.toString();
     }
-    
+
 }

@@ -22,49 +22,47 @@ import java.util.logging.Logger;
 public class PromotionsView implements ICinemaView {
 
     List<PromotionCategory> categories;
+    List<Promotion> promotions;
+    ArrayList<PromotionCategoryPresentation> promoCatPresent;
 
     public PromotionsView(List<PromotionCategory> categories) {
         this.categories = categories;
-
+        //this.promotions = promotions;
+        CreatePromoCatByRandPicList();
     }
+
+    private void CreatePromoCatByRandPicList() {
+        boolean flag = false;
+        this.promoCatPresent = new ArrayList<PromotionCategoryPresentation>();
+
+        for (PromotionCategory categoryPromo : categories) {
+            flag = false;
+            for (Promotion promo : promotions && !flag) {
+                if (categoryPromo == promo.getPromoCategorie()) {
+                    this.promoCatPresent.add(new PromotionCategoryPresentation(categoryPromo.id, categoryPromo.name, promo.getImage()));
+                    flag = true;
+                }
+            }
+        }
+    }
+
 
     @Override
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
-        try {
-            res.append("<h1>Promotions</h1>\n"
-                    + "<p><button id=\"btnShowPromos\">Show Promotions</button>"
-                    + "<div id=\"promos\"></div></p>"
-                    + getPromotionCategoriesBoxs()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(PromotionsView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PromotionsView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        for (PromotionCategoryPresentation promoCatPresent : promoCatPresent) {
+
+            res.append("<div class=\"promoCat\" data-id=\" " + promoCatPresent.id + "\">");
+            res.append(promoCatPresent.name + "</div>");
+            res.append("style=\"background-image: url(" + promoCatPresent.getImg() + ");\"");
 
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/promos.js"));
         res.append(LayoutHelper.getFooter());
         return res.toString();
     }
 
-    /*<a href="http://www.webmasters.org.il">
-  <img src="http://webmaster.org.il/images/logo.gif" 
-       alt="אתר וובמאסטר" />
-</a>*/
-    private String getPromotionCategoriesBoxs() throws SQLException, ClassNotFoundException{
-        StringBuilder res = new StringBuilder();
-        for (PromotionCategory categoryPromo : categories) {
 
-            res.append("<a href=\" " + getHref(categoryPromo.name) + "\" " + ">\n< img src = ");
-            res.append("\"" + ControllerHelper.getDb().getPromosManager().getRndomPicByPromoCatId(categoryPromo.getId()) + "\" ");
-            res.append("alt =\" " + categoryPromo.id + "\" " + "/>");
-            res.append("</a>");
-        }
-
-        return res.toString();
-    }
 
     private String getHref(String catName) {
         StringBuilder res = new StringBuilder();

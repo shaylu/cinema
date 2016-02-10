@@ -33,3 +33,17 @@ $(function () {
         });
     });
 });
+
+
+$(function () {
+    $(".promo").click(function (e) {
+        var id = $(this).data("id");
+    
+        var url = "promos/category/" + id;
+        $.ajax({url: url}).fail(function (data) {
+            alert(data.responseText);
+        }).done(function (data) {
+            return data;
+        })
+    });
+});

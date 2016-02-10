@@ -325,3 +325,14 @@ h2,h3,h4,h5,h6 {
     margin: 0;
     display: none;
 }
+
+
+.promos{
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font: 14px Sans-Serif;
+    width: 100%;
+
+
+}

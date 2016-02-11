@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import models.Promotion;
 import models.PromotionCategory;
 import views.PromotionsView;
+import models.PromotionCategoryPresentation;
 
 /**
  *
@@ -30,7 +31,9 @@ public class PromosController {
     public Response home() {
         try {
             List<PromotionCategory> categories = ControllerHelper.getDb().getPromoCategoriesManager().getAll();
-            PromotionsView view = new PromotionsView(categories);
+          //List<Promotion> promotion = ControllerHelper.getDb().getPromosManager().getAll();
+           List<PromotionCategoryPresentation> presnted = ControllerHelper.getDb().getPromosManager().getPromoCatByRandPicList(categories);
+            PromotionsView view = new PromotionsView(presnted);
             return Response.status(Response.Status.OK).entity(view.getView()).type(MediaType.TEXT_HTML).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
@@ -66,7 +69,7 @@ public class PromosController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
+
     @GET
     @Path("rand")
     public Response getRandPromo() {
@@ -81,6 +84,4 @@ public class PromosController {
         }
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
-    
-    
 }

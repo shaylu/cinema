@@ -327,12 +327,25 @@ h2,h3,h4,h5,h6 {
 }
 
 
-.promos{
-    color: white;
+.promoCat{
+    color: black;
     text-align: center;
     font-weight: bold;
-    font: 14px Sans-Serif;
-    width: 100%;
+    font: 24px Sans-Serif;
+    width: 50%;
+    height: 200px;
+    display: inline-block;
+    background-size: cover;   
+    box-sizing: border-box;
+}
 
-
+.promoCat h3 {
+    vertical-align: middle;
+    line-height: 200px;
+    margin: 0;
+    padding: 0;
+   background: rgba(255, 255, 255,.5);
+   font-size: 24pt;
+    
+        
 }

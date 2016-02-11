@@ -9,14 +9,21 @@ package models;
  *
  * @author efrat
  */
-public class PromotionCategoryPresentation extends PromotionCategory {
+public class PromotionCategoryPresentation {
 
-    String img;
+    public PromotionCategory promoCat;
+    public String img;
+
+    public PromotionCategoryPresentation() {
+    }
 
     public PromotionCategoryPresentation(int id, String name, String img) {
-        super(id, name);
+        this.promoCat = new PromotionCategory(id, name);
         this.img = img;
+    }
 
+    public PromotionCategory getPromoCat() {
+        return promoCat;
     }
 
     public String getImg() {

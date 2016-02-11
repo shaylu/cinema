@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 import models.MovieCategory;
 import models.Promotion;
+import models.PromotionCategory;
+import models.PromotionCategoryPresentation;
 
 /**
  *
@@ -59,8 +61,8 @@ public class PromosManager extends DbManagerEntity {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         result += add(1, 1, "coffe and cockis in 25 nis", formatter.parse("2016-05-01"), "1111", "coffe.jpg");
-        result += add(2, 1, "a meal that includes a burger fries and drink in 35 nis", formatter.parse("2016-08-31"), "2222", "burger.jpg");
-        result += add(2, 1, "a T-base in 25 nis", formatter.parse("2016-12-31"), "3333", "shirts.jpg");
+        result += add(2, 3, "a meal that includes a burger fries and drink in 35 nis", formatter.parse("2016-08-31"), "2222", "burger.jpg");
+        result += add(2, 2, "a T-base in 25 nis", formatter.parse("2016-12-31"), "3333", "shirts.jpg");
 
         return result;
     }
@@ -141,5 +143,22 @@ public class PromosManager extends DbManagerEntity {
         }
 
         return promotionToReturn;
+    }
+public List<PromotionCategoryPresentation> getPromoCatByRandPicList(List<PromotionCategory> categories) throws SQLException, ClassNotFoundException {
+        boolean flag = false;
+        
+        List<Promotion> promotions = this.getAll();
+        List<PromotionCategoryPresentation> promoCatPresents = new ArrayList<>();
+
+        for (PromotionCategory categoryPromo : categories) {
+            flag = false;
+            for (Promotion promo : promotions) {
+                if (!flag && categoryPromo.id == promo.getPromoCategorie().id) {
+                    promoCatPresents.add(new PromotionCategoryPresentation(categoryPromo.id, categoryPromo.name, promo.getImage()));
+                    flag = true;
+                }
+            }
+       }
+        return promoCatPresents;
     }
 }

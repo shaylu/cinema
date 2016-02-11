@@ -14,6 +14,8 @@ import db.PromosManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.PromotionCategoryPresentation;
+import java.util.Map;
 
 /**
  *
@@ -21,31 +23,11 @@ import java.util.logging.Logger;
  */
 public class PromotionsView implements ICinemaView {
 
-    List<PromotionCategory> categories;
-    List<Promotion> promotions;
-    ArrayList<PromotionCategoryPresentation> promoCatPresent;
+    List<PromotionCategoryPresentation> promoCatPresent;
 
-    public PromotionsView(List<PromotionCategory> categories) {
-        this.categories = categories;
-        //this.promotions = promotions;
-        CreatePromoCatByRandPicList();
+    public PromotionsView(List<PromotionCategoryPresentation> promoCatPresent) {
+        this.promoCatPresent = promoCatPresent;
     }
-
-    private void CreatePromoCatByRandPicList() {
-        boolean flag = false;
-        this.promoCatPresent = new ArrayList<PromotionCategoryPresentation>();
-
-        for (PromotionCategory categoryPromo : categories) {
-            flag = false;
-            for (Promotion promo : promotions && !flag) {
-                if (categoryPromo == promo.getPromoCategorie()) {
-                    this.promoCatPresent.add(new PromotionCategoryPresentation(categoryPromo.id, categoryPromo.name, promo.getImage()));
-                    flag = true;
-                }
-            }
-        }
-    }
-
 
     @Override
     public String getView() {
@@ -53,22 +35,14 @@ public class PromotionsView implements ICinemaView {
         res.append(LayoutHelper.getHeader());
         for (PromotionCategoryPresentation promoCatPresent : promoCatPresent) {
 
-            res.append("<div class=\"promoCat\" data-id=\" " + promoCatPresent.id + "\">");
-            res.append(promoCatPresent.name + "</div>");
-            res.append("style=\"background-image: url(" + promoCatPresent.getImg() + ");\"");
+            res.append("<div class=\"promoCat\" data-id=\" " + promoCatPresent.getPromoCat().id + "\" style=\"background-image: url(/cinema_app/images/promos/" + promoCatPresent.getImg() + ");\">");
+            res.append("<h3>"+promoCatPresent.getPromoCat().name + "</h3></div>");
+        //    res.append("");
 
+        }
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/promos.js"));
         res.append(LayoutHelper.getFooter());
         return res.toString();
     }
 
-
-
-    private String getHref(String catName) {
-        StringBuilder res = new StringBuilder();
-        res.append("http://localhost:8084/cinema_app/app/promos/{");
-        res.append(catName);
-        res.append("}");
-        return res.toString();
-    }
 }

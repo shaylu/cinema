@@ -8,7 +8,7 @@ package views;
 import html.LayoutHelper;
 import java.util.List;
 import models.Promotion;
-
+import models.PromotionCategory;
 
 /**
  *
@@ -16,25 +16,25 @@ import models.Promotion;
  */
 public class PromotionCategoryPageView implements ICinemaView {
 
-    List<Promotion> promotionsOnCategory;
+    PromotionCategory promoCat;
 
-    public PromotionCategoryPageView(List<Promotion> promotionsOnCategory) {
-        this.promotionsOnCategory = promotionsOnCategory;
+    public PromotionCategoryPageView(PromotionCategory promoCat) {
+        this.promoCat = promoCat;
+
     }
 
     @Override
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
-        for (Promotion promotionsOnCategory : promotionsOnCategory) {
-            res.append("<div style=\"margin-bottom: 10px; padding-bottom: 10px;\"><div style=\"min-height: 200px;\">"
-                    + "     style=\"background-image: url(" + promotionsOnCategory.getImage() + ");\"></div>"
-                    + "         <h1>" + promotionsOnCategory.getDescription()+ "</h1>"
-                    + "</div></div>");
+        res.append("<div>Special offers: " + promoCat.getName() + "</div>" +
+        "<div class=\"content-box\" id=\"promos\" data-catId=\"" +  promoCat.getId() + "\"> </div>" +
+        "<div><a href=\"/cinema_app/app/promos\"> <<Back</a></div>");
+        res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promos.js"));
+         res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promo_category.js"));
+        // res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promos.js","/cinema_app/scripts/promo_category.js"));
+        res.append(LayoutHelper.getFooter());
 
-            res.append(html.LayoutHelper.addScripts("../../scripts/movie.js"));
-            res.append(LayoutHelper.getFooter());
-        }
         return res.toString();
     }
 

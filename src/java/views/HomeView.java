@@ -52,6 +52,7 @@ public class HomeView implements ICinemaView {
         );
 
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/home.js"));
+        //  res.append(html.LayoutHelper.addScripts("../../scripts/movies.js"));
         res.append(LayoutHelper.getFooter());
 
         return res.toString();
@@ -74,4 +75,6 @@ public class HomeView implements ICinemaView {
         res.append("<h3>" + randPromo.description + "</h3></div>");
         return res.toString();
     }
+
+    
 }

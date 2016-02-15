@@ -28,19 +28,33 @@ $(function () {
                 });
     });
 
+
     $("#searchByKeyword").submit(function (e) {
         e.preventDefault();
-        var url = "../app/movies/search";
         var keyword = $("#txtKeyword").val();
-        $.ajax({url: url, data: {'keyword': keyword}})
-                .fail(function (data) {
-                    alert(data.responseText);
-                })
-                .done(function (data) {
-                    $("#byKeword").text(JSON.stringify(data));
-                });
+        var url = "/cinema_app/app/movies/search_view?keyword=" + keyword;
+        document.location = url;
     });
-    
+
+
+
+//$(function () {
+//    var cat_id = $("#promos").data("catid");
+//    var init = function (id) {
+//        var url = "/cinema_app/app/promos/get-by-cat/" + id;
+//        var promosHtml = "";
+//        $.ajax({url: url}).done(function (data) {
+//            $.each(data, function (index, item) {
+//                promosHtml += $getPromoHTML(item);
+//            });
+//            $("#promos").html(promosHtml);
+//        });
+//    };
+//    init(cat_id);
+//});
+
+///////////////////////////////////////////////////////////////////////////
+
     $("#searchByCategory").submit(function (e) {
         e.preventDefault();
         var url = "../app/movies/search";
@@ -53,7 +67,7 @@ $(function () {
                     $("#byCategory").text(JSON.stringify(data));
                 });
     });
-    
+
     $("#btnGetRecomended").click(function () {
         var url = "../app/movies/home_recommended";
         var cat_id = $("#selCatID").val();

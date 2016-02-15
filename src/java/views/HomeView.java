@@ -8,6 +8,7 @@ package views;
 import html.LayoutHelper;
 import java.util.List;
 import models.MovieCategory;
+import models.Promotion;
 
 /**
  *
@@ -16,9 +17,11 @@ import models.MovieCategory;
 public class HomeView implements ICinemaView {
 
     List<MovieCategory> categories;
+    Promotion randPromo;
 
-    public HomeView(List<MovieCategory> categories) {
+    public HomeView(List<MovieCategory> categories, Promotion randPromo) {
         this.categories = categories;
+        this.randPromo = randPromo;
     }
 
     @Override
@@ -45,6 +48,7 @@ public class HomeView implements ICinemaView {
                 + "<p><h2>Recomended Movies</h2>"
                 + "<button id=\"btnGetRecomended\">Get Recomended Movies</button><br />"
                 + "<p><div id=\"recomendedMovies\"></div></p></p>"
+                + getRandPromotionBox()
         );
 
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/home.js"));
@@ -63,4 +67,11 @@ public class HomeView implements ICinemaView {
         return res.toString();
     }
 
+    private String getRandPromotionBox() {
+        StringBuilder res = new StringBuilder();
+        res.append("<div class=\"randPromo-box\" id=\"randPromo\" data-promoId=\"" + randPromo.getId()
+                + "\"style=\"background-image: url(/cinema_app/images/promos/" + randPromo.getImage() + ");\">");
+        res.append("<h3>" + randPromo.description + "</h3></div>");
+        return res.toString();
+    }
 }

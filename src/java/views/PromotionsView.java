@@ -35,7 +35,8 @@ public class PromotionsView implements ICinemaView {
         res.append(LayoutHelper.getHeader());
         for (PromotionCategoryPresentation promoCatPresent : promoCatPresent) {
 
-            res.append("<div class=\"promoCat\" data-id=\"" + promoCatPresent.getPromoCat().id + "\" style=\"background-image: url(/cinema_app/images/promos/" + promoCatPresent.getImg() + ");\">");
+            res.append("<div class=\"promoCat\" data-id=\"" + promoCatPresent.getPromoCat().id 
+                    + "\" style=\"background-image: url(/cinema_app/images/promos/" + promoCatPresent.getImg() + ");\">");
             res.append("<h3>" + promoCatPresent.getPromoCat().name + "</h3></div>");
         }
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/promos.js"));

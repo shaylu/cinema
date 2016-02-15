@@ -29,7 +29,7 @@ public class PromotionCategoryPageView implements ICinemaView {
         res.append(LayoutHelper.getHeader());
         res.append("<div>Special offers: " + promoCat.getName() + "</div>" +
         "<div class=\"content-box\" id=\"promos\" data-catId=\"" +  promoCat.getId() + "\"> </div>" +
-        "<div><a href=\"/cinema_app/app/promos\"> <<Back</a></div>");
+        "<div><a href=\"/cinema_app/app/promos\"> << Back </a></div>");
         res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promos.js"));
          res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promo_category.js"));
         // res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promos.js","/cinema_app/scripts/promo_category.js"));

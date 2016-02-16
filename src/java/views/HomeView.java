@@ -45,14 +45,15 @@ public class HomeView implements ICinemaView {
                 + "</form>"
                 + "</div>"
                 + "<div id=\"byCategory\"></div></p>"
+                + "<div id=\"promoDiv\" class=\"promo\"></div>"
                 + "<p><h2>Recomended Movies</h2>"
-                + "<button id=\"btnGetRecomended\">Get Recomended Movies</button><br />"
                 + "<p><div id=\"recomendedMovies\"></div></p></p>"
-                + getRandPromotionBox()
+                
         );
 
+        res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promos.js"));
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/home.js"));
-         //res.append(html.LayoutHelper.addScripts("../../scripts/movies.js"));
+        //   res.append(html.LayoutHelper.addScripts("../../scripts/promos.js"));
         res.append(LayoutHelper.getFooter());
 
         return res.toString();
@@ -67,14 +68,4 @@ public class HomeView implements ICinemaView {
         res.append("</select>");
         return res.toString();
     }
-
-    private String getRandPromotionBox() {
-        StringBuilder res = new StringBuilder();
-        res.append("<div class=\"randPromo-box\" id=\"randPromo\" data-promoId=\"" + randPromo.getId()
-                + "\"style=\"background-image: url(/cinema_app/images/promos/" + randPromo.getImage() + ");\">");
-        res.append("<h3>" + randPromo.description + "</h3></div>");
-        return res.toString();
-    }
-
-    
 }

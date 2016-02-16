@@ -5,6 +5,12 @@
  */
 
 $(function () {
+
+    var updatePromo = function (html) {
+        $("#promoDiv").html(html);
+    };
+
+
     $("#addOrder").submit(function (e) {
         e.preventDefault();
         var url = "../../orders/add";
@@ -44,7 +50,7 @@ $(function () {
         document.location = url;
     });
 
-    $("#btnGetRecomended").click(function () {
+    var getRecommandedMovies = function () {
         var url = "../app/movies/home_recommended";
         var cat_id = $("#selCatID").val();
         $.ajax({url: url, data: {'cat_id': cat_id}})
@@ -60,7 +66,7 @@ $(function () {
 
                     $("#recomendedMovies").html(res);
                 });
-    });
+    };
 
 
     $getRecomendedMovieHTML = function (movie) {
@@ -79,12 +85,15 @@ $(function () {
         e.stopPropagation();
         $goToMoviePage($(this));
     });
-    
+
     $goToMoviePage = function (obj) {
         var id = $(obj).data("id");
-        var url = "/cinema_app/app/movies/"+ id;
+        var url = "/cinema_app/app/movies/" + id;
         document.location = url;
     };
+
+    $getRandomPromo(updatePromo);
+    getRecommandedMovies();
 });
 
 

@@ -29,6 +29,7 @@ button, input[type="submit"] {
 .content-box {
     background-color: #282828;
     padding: 20px;
+    overflow: auto;
 }
 
 .content-box::after {
@@ -326,24 +327,37 @@ h2,h3,h4,h5,h6 {
     display: none;
 }
 
+.promoContainer {
+    padding: 5px;
+    width: 50%;
+    float: left;
+}
 
 .promoCat{
+    margin: 5px;
     color: black;
     text-align: center;
     font-weight: bold;
     font: 24px Sans-Serif;
-    width: 50%;
+    width: 100%;
     height: 200px;
     display: inline-block;
     background-size: cover;   
-    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+
 }
 
 .promoCat h3 {
     vertical-align: middle;
-    line-height: 200px;
     margin: 0;
     padding: 0;
-    background: rgba(255, 255, 255,.5);
-    font-size: 24pt;
+    background: rgba(0, 0, 0,.8);
+    font-size: 16pt;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    min-height: 50px;
+    padding-top: 15px;
+    border-top: 1px solid #f5821e;
 }

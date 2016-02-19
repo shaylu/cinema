@@ -27,32 +27,28 @@ public class HomeView implements ICinemaView {
     @Override
     public String getView() {
         StringBuilder res = new StringBuilder();
-        res.append(LayoutHelper.getHeader());
-        res.append("<h1>Home</h1>\n"
-                + "<div class=\"content-box\">"
-                + "  <form name=\"searchByKeyword\" id=\"searchByKeyword\" method=\"post\">\n"
+        res.append(LayoutHelper.getHeader("/cinema_app/scripts/owl-carousel/owl.carousel.css", "/cinema_app/scripts/owl-carousel/owl.theme.css"));
+        res.append(""
+                + getSlider()
+                + "<h3>Search for Movies:</h3><div class=\"content-box\">"
+                + "  <p><form name=\"searchByKeyword\" id=\"searchByKeyword\" method=\"post\">\n"
                 + "     <label for=\"txtKeyword\">Search by Keyword</label>\n"
                 + "     <input type=\"text\" id=\"txtKeyword\" name=\"txtKeyword\">\n"
                 + "     <input type=\"submit\" value=\"Search\" />\n"
-                + "  </form>"
-                + "</div>"
-                + "<div id=\"byKeword\"></div>"
-                + "<div class=\"content-box\">"
-                + "  <form name=\"searchByCategory\" id=\"searchByCategory\" method=\"post\">\n"
+                + "  </form></p>"
+                + "  <p><form name=\"searchByCategory\" id=\"searchByCategory\" method=\"post\">\n"
                 + "  <label for=\"selCatID\">Search by Category</label>\n"
                 + getCategoriesSelectBox()
                 + "  <input type=\"submit\" value=\"Search\" />\n"
-                + "</form>"
-                + "</div>"
-                + "<div id=\"byCategory\"></div></p>"
-                + "<div id=\"promoDiv\" class=\"promo\"></div>"
-                + "<p><h2>Recomended Movies</h2>"
-                + "<p><div id=\"recomendedMovies\"></div></p></p>"
-                
+                + "</form></p>"
+                + "<p>&nbsp;</p></div>"
+                + "<h3>Special Offer For U:</h3><div id=\"promoDiv\" class=\"promo\"></div>"
+                + "<p><h3>Recomended Movies:</h3>"
+                + "<p><div id=\"recomendedMovies\" class='content-box'></div></p></p>"
         );
 
         res.append(html.LayoutHelper.addScripts("/cinema_app/scripts/promos.js"));
-        res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/home.js"));
+        res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "/cinema_app/scripts/owl-carousel/owl.carousel.js", "../scripts/home.js"));
         //   res.append(html.LayoutHelper.addScripts("../../scripts/promos.js"));
         res.append(LayoutHelper.getFooter());
 
@@ -67,5 +63,9 @@ public class HomeView implements ICinemaView {
         }
         res.append("</select>");
         return res.toString();
+    }
+
+    private String getSlider() {
+        return "<div class='more-movies'><h4>>> More Movies</h4></div><div id='owl-slider' class='owl-carousel'></div>";
     }
 }

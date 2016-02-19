@@ -6,34 +6,27 @@
 
 $(function () {
 
+    var $getSliderMovieHTML = function (movieJson) {
+        return "<div class='movie' data-id='" + movieJson.id + "' style='background-image: url(" + movieJson.poster + "); background-size: cover;'><h2>" + movieJson.name + "</h2></div>";
+    };
+
     var updatePromo = function (html) {
         $("#promoDiv").html(html);
     };
-
-
-    $("#addOrder").submit(function (e) {
-        e.preventDefault();
-        var url = "../../orders/add";
-        var client_id = $("#addOrder #txtClientId").val();
-        var fname = $("#addOrder #txtFname").val();
-        var lname = $("#addOrder #txtLname").val();
-        var email = $("#addOrder #txtEmail").val();
-        var phone = $("#addOrder #txtPhone").val();
-        var num_of_seats = $("#addOrder #txtNumOfSeats").val();
-        var credit_num = $("#addOrder #txtCreditCardNum").val();
-        var month = $("#addOrder #selMonth").val();
-        var year = $("#addOrder #selYear").val();
-        var show_id = $("#addOrder #txtShowId").val();
-        $.ajax({url: url, data: {'client_id': client_id, 'fname': fname, 'lname': lname, 'email': email, 'phone': phone, 'num_of_seats': num_of_seats, 'credit_num': credit_num, 'month': month, 'year': year, 'show_id': show_id}, method: 'POST'})
-                .fail(function (data) {
-                    alert(data.responseText);
-                })
-                .done(function (data) {
-                    alert("Order Successfully Added!");
-                    refreshShows();
-                });
+    
+    $(document).on("click", ".owl-item div.movie", function(e) {
+        var id = $(this).data("id");
+        var url = "/cinema_app/app/movies/" + id;
+        document.location = url;
     });
 
+    $(document).on("click", ".movie-recomended", function (e) {
+        e.preventDefault();
+        var movie_id = $(this).data("id");
+        var url = "/cinema_app/app/movies/" + movie_id;
+        document.location = url;
+    });
+    
 
     $("#searchByKeyword").submit(function (e) {
         e.preventDefault();
@@ -48,6 +41,10 @@ $(function () {
         var cat_id = $("#selCatID").val();
         var url = "/cinema_app/app/movies/search_view?cat_id=" + cat_id;
         document.location = url;
+    });
+    
+    $(document).on("click", ".more-movies", function() {
+        document.location = "/cinema_app/app/movies/search_view";
     });
 
     var getRecommandedMovies = function () {
@@ -67,6 +64,20 @@ $(function () {
                     $("#recomendedMovies").html(res);
                 });
     };
+    
+    var $getRandomMovies = function() {
+      var url = "/cinema_app/app/movies/random10";
+      var html = "";
+      $.ajax({url: url}).done(function(data) {
+          $.each(data, function(index, item) {
+              html += $getSliderMovieHTML(item);
+          });
+          
+          $("#owl-slider").html(html);
+                 $("#owl-slider").owlCarousel();
+          
+      });
+  };
 
 
     $getRecomendedMovieHTML = function (movie) {
@@ -94,6 +105,9 @@ $(function () {
 
     $getRandomPromo(updatePromo);
     getRecommandedMovies();
+    
+    $getRandomMovies();
+    
 });
 
 

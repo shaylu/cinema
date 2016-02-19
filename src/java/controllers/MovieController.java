@@ -23,6 +23,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import models.HomeRandomMovie;
 import models.Movie;
 import models.MovieCategory;
 import models.MovieSearchDetails;
@@ -126,6 +127,21 @@ public class MovieController {
         try {
             Movie movie = ControllerHelper.getDb().getMoviesManager().getMovieById(movie_id);
             json = gson.toJson(movie);
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get movie, " + e.getMessage()).build();
+        }
+        return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
+    }
+    
+    @GET
+    @Path("random10")
+    public Response getRandom10Movies(@PathParam("id") int movie_id) {
+        Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy' '").create();
+        String json = null;
+        try {
+            List<HomeRandomMovie> random10 = ControllerHelper.getDb().getMoviesManager().getRandom10();
+            json = gson.toJson(random10);
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
                     .entity("Failed to get movie, " + e.getMessage()).build();

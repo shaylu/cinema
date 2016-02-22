@@ -29,6 +29,8 @@ button, input[type="submit"] {
 .content-box {
     background-color: #282828;
     padding: 20px;
+    overflow: auto;
+    margin-bottom: 25px;
 }
 
 .content-box::after {
@@ -40,6 +42,7 @@ button, input[type="submit"] {
     margin-top: 15px;
     position: relative;
     margin-bottom: -20px;
+    overflow: auto;
 
 }
 
@@ -52,6 +55,10 @@ button, input[type="submit"] {
     display: inline-block;
     background-image: url(/cinema_app/images/logo.png);
     background-size: cover;
+}
+
+.owl-item div.movie {
+    min-width: 100%;
 }
 
 .movie h2 {
@@ -69,6 +76,7 @@ button, input[type="submit"] {
     height: 120px;
     overflow:hidden;
 }
+
 .movie h2:before {
     content: "";
     display: block;
@@ -119,6 +127,7 @@ h1 {
     color: #f5821e;
     font-size: 2em;
     margin-top: 0px;
+    margin-bottom: 15px;
 }
 
 .movie_poster {
@@ -185,7 +194,13 @@ h1 {
 
 h2,h3,h4,h5,h6 {
     color: #f5821e;
+    margin-bottom: 15px;
 } 
+
+div h2:first-child,h3:first-child,h4:first-child,h5:first-child,h6:first-child {
+    margin-top: 0px;
+} 
+
 .content-box#shows {
     color: #cecece;
 }
@@ -287,6 +302,10 @@ h2,h3,h4,h5,h6 {
     text-align: center;
 }
 
+.movie-recomended {
+    cursor: pointer;
+}
+
 .movie-recomended h3{
     margin-top: 0;
 }
@@ -326,26 +345,64 @@ h2,h3,h4,h5,h6 {
     display: none;
 }
 
+.promoContainer {
+    padding: 5px;
+    width: 50%;
+    float: left;
+}
 
 .promoCat{
+    margin: 5px;
     color: black;
     text-align: center;
     font-weight: bold;
     font: 24px Sans-Serif;
-    width: 50%;
+    width: 100%;
     height: 200px;
     display: inline-block;
     background-size: cover;   
-    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+
 }
 
 .promoCat h3 {
     vertical-align: middle;
-    line-height: 200px;
     margin: 0;
     padding: 0;
-   background: rgba(255, 255, 255,.5);
-   font-size: 24pt;
+    background: rgba(0, 0, 0,.8);
+    font-size: 16pt;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    min-height: 50px;
+    padding-top: 15px;
+    border-top: 1px solid #f5821e;
+}
+#owl-slider {
+    width: 100%;
+}
+
+.owl-item div {
+    width: 500px !important;
+    height: 200px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.more-movies {
+    text-align: right;
+    line-height: 35px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.orange-link {
+    color: #f5821e;
+    text-decoration: none;
+}
+
+.orange-link:hover {
+    color: white;
     
-        
 }

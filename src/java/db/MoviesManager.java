@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import models.HomeRandomMovie;
 import models.Movie;
 import models.MovieCategory;
 import models.MovieSearchDetails;
@@ -41,6 +42,7 @@ public class MoviesManager extends DbManagerEntity {
     public static final String SELECT_MOVIE_DETAILS_BY_ID = "SELECT * FROM movies_search_details WHERE movie_id = ?";
     public static final String SELECT_MOVIE_BY_KEYWORD = "SELECT * FROM movies M WHERE M.name like ?";
     public final static String DELET_MOVIE = "DELETE from movies M WHERE movie_id = (?)";
+    public final static String SELECT_RAND_10 = "SELECT * FROM movies ORDER BY RAND() LIMIT 10";
     //new
 //    public final static String FILTER_QUERY_FILTERED_BY_ALL_NO_TRAILER = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.is_recommended = ? and S.num_of_seats_left < 10 and M.name like ? ";
 //    public final static String FILTER_QUERY_FILTERED_BY_ALL = "SELECT * FROM movies M inner join shows S on M.movie_id = S.movie_id where M.trailer = ? and M.is_recommended = ? and S.num_of_seats_left < 10 and M.name like ? ";
@@ -511,6 +513,26 @@ public class MoviesManager extends DbManagerEntity {
         MovieSearchDetails.MovieSearchDetailsCategory cat = new MovieSearchDetails.MovieSearchDetailsCategory(cat_id, cat_name);
         MovieSearchDetails.MovieSearchDetailsShow show = new MovieSearchDetails.MovieSearchDetailsShow(show_id, show_date, show_time, num_of_seats_left);
         MovieSearchDetails result = new MovieSearchDetails(movie_id, name, release_date, movie_length, cat, plot, poster, trailer, is_recommended, rank, show);
+        return result;
+    }
+    
+    public HomeRandomMovie getRandomMovieFromRS(ResultSet rs) throws SQLException {
+        int movie_id = rs.getInt("movie_id");
+        String name = rs.getString("name");
+        String poster = rs.getString("poster");
+        return new HomeRandomMovie(movie_id, poster, name);
+    }
+
+    public List<HomeRandomMovie> getRandom10() throws ClassNotFoundException, SQLException {
+        ArrayList<HomeRandomMovie> result = new ArrayList<>();
+        try (Connection conn = manager.getConnection()) {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(SELECT_RAND_10);
+            while (rs.next()) {
+                HomeRandomMovie movieSearchDetailsFromRS = getRandomMovieFromRS(rs);
+                result.add(movieSearchDetailsFromRS);
+            }
+        }
         return result;
     }
 

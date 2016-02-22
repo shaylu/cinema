@@ -33,13 +33,15 @@ public class PromotionsView implements ICinemaView {
     public String getView() {
         StringBuilder res = new StringBuilder();
         res.append(LayoutHelper.getHeader());
+                res.append("<h1>Promotions</h1>");
+                res.append("<div class='content-box'>");
         for (PromotionCategoryPresentation promoCatPresent : promoCatPresent) {
 
-            res.append("<div class=\"promoCat\" data-id=\" " + promoCatPresent.getPromoCat().id + "\" style=\"background-image: url(/cinema_app/images/promos/" + promoCatPresent.getImg() + ");\">");
-            res.append("<h3>"+promoCatPresent.getPromoCat().name + "</h3></div>");
-        //    res.append("");
-
+            res.append("<div class='promoContainer'><div class=\"promoCat\" data-id=\"" + promoCatPresent.getPromoCat().id 
+                    + "\" style=\"background-image: url(/cinema_app/images/promos/" + promoCatPresent.getImg() + ");\">");
+            res.append("<h3>" + promoCatPresent.getPromoCat().name + "</h3></div></div>");
         }
+        res.append("</div>");
         res.append(html.LayoutHelper.addScripts("//code.jquery.com/jquery-1.11.3.min.js", "//code.jquery.com/jquery-migrate-1.2.1.min.js", "../scripts/promos.js"));
         res.append(LayoutHelper.getFooter());
         return res.toString();

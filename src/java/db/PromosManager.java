@@ -35,7 +35,7 @@ public class PromosManager extends DbManagerEntity {
     public final static String SELECT_ALL = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id";
     public static final String SELECT_PROMOION = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_id = ?";
     public static final String SELECT_RAND = "SELECT * FROM promotions p inner join companies c on P.comp_id = C.comp_id ORDER BY RAND() LIMIT 1;";
-    public static final String SELECT_PROMOION_BY_CAT_ID = "SELECT * FROM promotions P inner join promotion_categories C on P.promo_cat_id = C.promo_cat_id ORDER BY RAND() LIMIT 1;";
+    public static final String SELECT_PROMOION_BY_CAT_ID = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_cat_id = ?";
 
     public PromosManager(DbManager manager) {
         this.manager = manager;
@@ -148,9 +148,10 @@ public class PromosManager extends DbManagerEntity {
 
         return promotionToReturn;
     }
-public List<PromotionCategoryPresentation> getPromoCatByRandPicList(List<PromotionCategory> categories) throws SQLException, ClassNotFoundException {
+
+    public List<PromotionCategoryPresentation> getPromoCatByRandPicList(List<PromotionCategory> categories) throws SQLException, ClassNotFoundException {
         boolean flag = false;
-        
+
         List<Promotion> promotions = this.getAll();
         List<PromotionCategoryPresentation> promoCatPresents = new ArrayList<>();
 
@@ -162,7 +163,22 @@ public List<PromotionCategoryPresentation> getPromoCatByRandPicList(List<Promoti
                     flag = true;
                 }
             }
-       }
+        }
         return promoCatPresents;
+    }
+
+    public List<Promotion> getPromosByCatId(int cat_id) throws SQLException, ClassNotFoundException {
+        ArrayList<Promotion> result=new ArrayList<>();
+        
+        try (Connection conn = manager.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SELECT_PROMOION_BY_CAT_ID);
+            statement.setInt(1, cat_id);
+           ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Promotion mc = createPromotionFromMySql(rs);
+                result.add(mc);
+            }
+          return result;
+        }
     }
 }

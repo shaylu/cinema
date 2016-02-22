@@ -18,6 +18,7 @@ import models.Promotion;
 import models.PromotionCategory;
 import views.PromotionsView;
 import models.PromotionCategoryPresentation;
+import views.PromotionCategoryPageView;
 
 /**
  *
@@ -31,8 +32,8 @@ public class PromosController {
     public Response home() {
         try {
             List<PromotionCategory> categories = ControllerHelper.getDb().getPromoCategoriesManager().getAll();
-          //List<Promotion> promotion = ControllerHelper.getDb().getPromosManager().getAll();
-           List<PromotionCategoryPresentation> presnted = ControllerHelper.getDb().getPromosManager().getPromoCatByRandPicList(categories);
+            //List<Promotion> promotion = ControllerHelper.getDb().getPromosManager().getAll();
+            List<PromotionCategoryPresentation> presnted = ControllerHelper.getDb().getPromosManager().getPromoCatByRandPicList(categories);
             PromotionsView view = new PromotionsView(presnted);
             return Response.status(Response.Status.OK).entity(view.getView()).type(MediaType.TEXT_HTML).build();
         } catch (Exception e) {
@@ -85,17 +86,29 @@ public class PromosController {
         return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json).build();
     }
 
-//    @GET
-//    @Path("{promo_cat_id}")
-//    public Response promotionsCategoryPage(@PathParam("promo_cat_id") int id) {
-//        try {
-//            List<Promotion> promotions = ControllerHelper.getDb().getPromosManager().getAll();
-//            PromotionCategoryPageView view = new PromotionCategoryPageView(promotions);
-//            return Response.status(Response.Status.OK).entity(view.getView()).build();
-//        } catch (Exception e) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
-//                    .entity("Failed to get promotion, " + e.getMessage()).build();
-//        }
-//    }
+    @GET
+    @Path("/category/{promo_cat_id}")
+    public Response promotionsCategoryPage(@PathParam("promo_cat_id") int id) {
+        try {
+            PromotionCategory category = ControllerHelper.getDb().getPromoCategoriesManager().getPromotionCategoryById(id);
+            PromotionCategoryPageView view = new PromotionCategoryPageView(category);
+            return Response.status(Response.Status.OK).entity(view.getView()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get promotion, " + e.getMessage()).build();
+        }
+    }
 
+    @GET
+    @Path("get-by-cat/{id}")
+    public Response getByCat(@PathParam("id") int cat_id) {
+        try {
+            Gson gson = new Gson();
+            List<Promotion> promos = ControllerHelper.getDb().getPromosManager().getPromosByCatId(cat_id);
+            return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(gson.toJson(promos)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN)
+                    .entity("Failed to get promotion, " + e.getMessage()).build();
+        }
+    }
 }

@@ -60,10 +60,14 @@ public class PromosManager extends DbManagerEntity {
         int result = 0;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        result += add(1, 1, "coffe and cockis in 25 nis", formatter.parse("2016-05-01"), "1111", "coffe.jpg");
-        result += add(2, 3, "a meal that includes a burger fries and drink in 35 nis", formatter.parse("2016-08-31"), "2222", "burger.jpg");
-        result += add(2, 2, "a T-base in 25 nis", formatter.parse("2016-12-31"), "3333", "shirts.jpg");
-
+        result += add(1, 1, "Coffee and cake at 25 NIS", formatter.parse("2016-05-01"), "1111", "coffe.jpg");
+        result += add(2, 3, "Hamburger Fries and Drink at 35 NIS", formatter.parse("2016-08-31"), "2222", "burger.jpg");
+        result += add(2, 2, "Basic T-shirt at 25 NIS", formatter.parse("2016-12-31"), "3333", "shirts.jpg");
+        result += add(2, 2, "T-shirts with prints of favorite movies Only at 40 NIS", formatter.parse("2016-05-31"), "4444", "hungar_t.jpg");
+        result += add(3, 2, "Best Movie Merchandise Only at 10 NIS", formatter.parse("2016-12-31"), "5555", "Souvenirs.jpg");        
+//Souvenirs
+        
+        
         return result;
     }
 

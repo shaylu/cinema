@@ -417,6 +417,30 @@ public class MoviesManager extends DbManagerEntity {
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Action");
         result += add("Spectre", release_date, 148, category.getId(), plot, posterLink, trailer, false);
 
+        // Creating Fifty Shades of Grey
+        release_date = formatter.parse("2015-02-13");
+        plot = "Literature student Anastasia Steele's life changes forever when she meets handsome, yet tormented, billionaire Christian Grey.";
+        posterLink = "/cinema_app/images/posters/50_Shades.jpg";
+        trailer = "https://youtu.be/SfZWFDs0LxA";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Drama");
+        result += add("Fifty Shades of Grey", release_date, 125, category.getId(), plot, posterLink, trailer, true);
+        
+        // Creating The Boxtrolls
+        release_date = formatter.parse("2014-09-26");
+        plot = "A young orphaned boy raised by underground cave-dwelling trash collectors tries to save his friends from an evil exterminator.";
+        posterLink = "/cinema_app/images/posters/boxtrolls.jpg";
+        trailer = "https://youtu.be/Q2dFVnp5K0o";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
+        result += add("The Boxtrolls", release_date, 97, category.getId(), plot, posterLink, trailer, true);
+      
+        // Creating Let's Be Cops
+        release_date = formatter.parse("2015-08-13");
+        plot = "Two struggling pals dress as police officers for a costume party and become neighborhood sensations. But when these newly-minted \"heroes\" get tangled in a real life web of mobsters and dirty detectives, they must put their fake badges on the line.";
+        posterLink = "/cinema_app/images/posters/Let's_Be_Cops.jpg";
+        trailer = "https://youtu.be/ExciLtpHp74";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
+        result += add("Let's Be Cops", release_date, 104, category.getId(), plot, posterLink, trailer, true);
+        
         return result;
 
     }

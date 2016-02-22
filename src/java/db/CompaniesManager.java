@@ -46,7 +46,7 @@ public class CompaniesManager extends DbManagerEntity {
         result += add("Elit", "Alenbi 55,Haifa", "coffe and candy");
         result += add("McDodals", "Herzel 55, TelAvivi", "fast food");
         result += add("Lizi Boutique", "Ben Zvi 156,Jerusalem ", "fashion");
-       
+        result += add("Best Merchandise Ever", "Ben Ziyon 20,Jerusalem ", "movie merchandise ");
         return result;
     }
 

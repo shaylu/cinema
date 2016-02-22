@@ -39,7 +39,7 @@ public class OrdersManager extends DbManagerEntity {
 
         try (Connection conn = manager.getConnection()) {
             conn.setAutoCommit(false);
-            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY,PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = conn.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             SimpleDateFormat dateformatSql = new SimpleDateFormat("yyyy-MM-dd");
 
             statement.setString(1, client_id);
@@ -60,7 +60,7 @@ public class OrdersManager extends DbManagerEntity {
             ResultSet rs = statement.getGeneratedKeys();
             rs.next();
             //Order order =getOrderById(rs.getInt(1));
-            
+
             return rs.getInt(1);
         }
     }
@@ -72,8 +72,10 @@ public class OrdersManager extends DbManagerEntity {
         result += add("123456", "Mor", "Shalom", "morS@gmail.com", "05244781256", 1, 1, 25.5, "2588", 05, 2019);
         result += add("111444", "Inbar", "Gal", "inbargal@gmail.com", "0507778899", 2, 3, 88.5, "3669", 02, 2021);
         result += add("265487", "Raz", "Maor", "razmaor@gmail.com", "057874556", 3, 2, 44, "5987", 07, 2017);
-        result += add("841576", "Ben", "Tapuzi", "tapuzi@gmail.com", "0505547123", 4, 2, 71, "5987", 07, 2017);
-
+        result += add("841576", "Ben", "Tapuzi", "tapuzi@gmail.com", "0505547123", 4, 2, 71, "1123", 07, 2017);
+        result += add("841576", "Ben", "Menahem", "Menahem@gmail.com", "0505254123", 11, 4, 140, "2235", 07, 2018);
+        result += add("841576", "Batya", "shalom", "shalom@gmail.com", "0505543653", 10, 4, 140, "2626", 06, 2019);
+        result += add("841576", "Nurit", "El", "Nel@gmail.com", "0505548953", 7, 4, 140, "1515", 10, 2020);
         return result;
     }
 //TODO
@@ -136,7 +138,6 @@ public class OrdersManager extends DbManagerEntity {
 //        OrderToReturn.setOrderDate(rs.getDate("order_date"));
 //        return OrderToReturn;
 //    }
-
     public List<Order> getAll() throws ClassNotFoundException, SQLException {
 
         ArrayList<Order> ListToReturn = new ArrayList<Order>();

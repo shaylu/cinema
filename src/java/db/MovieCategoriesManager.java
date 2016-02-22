@@ -55,6 +55,7 @@ public class MovieCategoriesManager extends DbManagerEntity {
         result += add("Comedy");
         result += add("Drama");
         result += add("Sci-Fi");
+        result += add("Family");
         return result;
     }
 //TODO

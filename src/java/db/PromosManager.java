@@ -61,13 +61,13 @@ public class PromosManager extends DbManagerEntity {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         result += add(1, 1, "Coffee and cake at 25 NIS", formatter.parse("2016-05-01"), "1111", "coffe.jpg");
-        result += add(2, 3, "Hamburger Fries and Drink at 35 NIS", formatter.parse("2016-08-31"), "2222", "burger.jpg");
+        result += add(2, 1, "Hamburger Fries and Drink at 35 NIS", formatter.parse("2016-08-31"), "2222", "burger.jpg");
         result += add(2, 2, "Basic T-shirt at 25 NIS", formatter.parse("2016-12-31"), "3333", "shirts.jpg");
-        result += add(2, 2, "T-shirts with prints of favorite movies Only at 40 NIS", formatter.parse("2016-05-31"), "4444", "hungar_t.jpg");
-        result += add(3, 2, "Best Movie Merchandise Only at 10 NIS", formatter.parse("2016-12-31"), "5555", "Souvenirs.jpg");        
-//Souvenirs
-        
-        
+        result += add(3, 2, "T-shirts with prints of favorite movies Only at 40 NIS", formatter.parse("2016-05-31"), "4444", "hungar_t.jpg");
+        result += add(3, 3, "Best Movie Merchandise Only at 10 NIS", formatter.parse("2016-12-31"), "5555", "Souvenirs.jpg");
+        result += add(1, 1, "2 Large Popcorn and Drink at 40 NIS", formatter.parse("2016-05-01"), "6666", "popkoren.jpg");
+        result += add(4, 3, "A movie ticket at half price! Only Cinema membership card holders", formatter.parse("2016-12-31"), "7878", "cinema20ticket.jpg");
+
         return result;
     }
 
@@ -168,17 +168,17 @@ public class PromosManager extends DbManagerEntity {
     }
 
     public List<Promotion> getPromosByCatId(int cat_id) throws SQLException, ClassNotFoundException {
-        ArrayList<Promotion> result=new ArrayList<>();
-        
+        ArrayList<Promotion> result = new ArrayList<>();
+
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_PROMOION_BY_CAT_ID);
             statement.setInt(1, cat_id);
-           ResultSet rs = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Promotion mc = createPromotionFromMySql(rs);
                 result.add(mc);
             }
-          return result;
+            return result;
         }
     }
 }

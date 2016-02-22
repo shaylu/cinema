@@ -49,16 +49,17 @@ public class ReviewsManager extends DbManagerEntity {
         java.util.Date today = new java.util.Date();
         return new java.sql.Date(today.getTime());
     }
-    
+
     public boolean isReviewExistForOrder(int order_id) throws SQLException, ClassNotFoundException {
         try (Connection conn = manager.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SELECT_BY_ORDER_ID);
             statement.setInt(1, order_id);
             ResultSet rs = statement.executeQuery();
-            if (rs.next())
+            if (rs.next()) {
                 return true;
-            else 
+            } else {
                 return false;
+            }
         }
     }
 
@@ -69,9 +70,14 @@ public class ReviewsManager extends DbManagerEntity {
         result += add(2, 2, "Very Good");
         result += add(3, 1, "I've seen better...");
         result += add(4, 4, "It is highly recommended, thrilling, exciting, WOW!");
+        result += add(6, 5, "Amazing, WOW!");
+        result += add(5, 4, "Hilarious! LOL!!");
+        result += add(7, 4, "It is highly recommended!");
+
         return result;
     }
 //TODO
+
     public Review getReviewById(int id) throws SQLException, ClassNotFoundException {
         Review reviewToReturn;
         try (Connection conn = manager.getConnection()) {
@@ -84,6 +90,7 @@ public class ReviewsManager extends DbManagerEntity {
         return reviewToReturn;
     }
 //TODO
+
     public List<Review> getAll() throws ClassNotFoundException, SQLException {
 
         ArrayList<Review> result = new ArrayList<>();

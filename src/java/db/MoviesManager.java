@@ -407,7 +407,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2015-11-19");
         plot = "As the war of Panem escalates to the destruction of other districts by the Capitol, Katniss Everdeen, the reluctant leader of the rebellion, must bring together an army against President Snow, while all she holds dear hangs in the balance.";
         posterLink = "/cinema_app/images/posters/hunger.jpg";
-        trailer = "https://www.youtube.com/embed/n-7K_OjsDCQ";
+        trailer = "https://www.youtube.com/embed/7KOjsDCQ";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Sci-Fi");
         result += add("The Hunger Games: Mockingjay - Part 2", release_date, 137, category.getId(), plot, posterLink, trailer, true);
 
@@ -423,7 +423,7 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2015-02-13");
         plot = "Literature student Anastasia Steele's life changes forever when she meets handsome, yet tormented, billionaire Christian Grey.";
         posterLink = "/cinema_app/images/posters/50_Shades.jpg";
-        trailer = "https://youtu.be/SfZWFDs0LxA";
+        trailer = "https://www.youtube.com/embed/SfZWFDs0LxA";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Drama");
         result += add("Fifty Shades of Grey", release_date, 125, category.getId(), plot, posterLink, trailer, true);
         
@@ -431,17 +431,33 @@ public class MoviesManager extends DbManagerEntity {
         release_date = formatter.parse("2014-09-26");
         plot = "A young orphaned boy raised by underground cave-dwelling trash collectors tries to save his friends from an evil exterminator.";
         posterLink = "/cinema_app/images/posters/boxtrolls.jpg";
-        trailer = "https://youtu.be/Q2dFVnp5K0o";
-        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
-        result += add("The Boxtrolls", release_date, 97, category.getId(), plot, posterLink, trailer, true);
+        trailer = "https://www.youtube.com/embed/Q2dFVnp5K0o";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Family");
+        result += add("The Boxtrolls", release_date, 97, category.getId(), plot, posterLink, trailer, false);
       
         // Creating Let's Be Cops
         release_date = formatter.parse("2015-08-13");
         plot = "Two struggling pals dress as police officers for a costume party and become neighborhood sensations. But when these newly-minted \"heroes\" get tangled in a real life web of mobsters and dirty detectives, they must put their fake badges on the line.";
-        posterLink = "/cinema_app/images/posters/Let's_Be_Cops.jpg";
-        trailer = "https://youtu.be/ExciLtpHp74";
+        posterLink = "/cinema_app/images/posters/letsbecops.jpg";
+        trailer = "https://www.youtube.com/embed/ExciLtpHp74";
         category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Comedy");
-        result += add("Let's Be Cops", release_date, 104, category.getId(), plot, posterLink, trailer, true);
+        result += add("Let's Be Cops", release_date, 104, category.getId(), plot, posterLink, trailer, false);
+ 
+        // Creating Kung Fu Panda 3
+        release_date = formatter.parse("2016-01-23");
+        plot = "Continuing his \"legendary adventures of awesomeness\", Po must face two hugely epic, but different threats: one supernatural and the other a little closer to his home.";
+        posterLink = "/cinema_app/images/posters/Panda_3.jpg";
+        trailer = "https://www.youtube.com/embed/10r9ozshGVE";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Family");
+        result += add("Kung Fu Panda 3", release_date, 95, category.getId(), plot, posterLink, trailer, true);
+        
+        // Creating The 5th Wave
+        release_date = formatter.parse("2016-01-23");
+        plot = "16-year-old Cassie Sullivan tries to survive in a world devastated by the waves of an alien invasion that has already decimated the population and knocked mankind back to the Stone Age.";
+        posterLink = "/cinema_app/images/posters/5wave.jpg";
+        trailer = "https://www.youtube.com/embed/kmxLybfGNC4";
+        category = controllers.ControllerHelper.getDb().getMovieCategoriesManager().getMovieCategoryByName("Sci-Fi");
+        result += add("The 5th Wave", release_date, 112, category.getId(), plot, posterLink, trailer, true);
         
         return result;
 

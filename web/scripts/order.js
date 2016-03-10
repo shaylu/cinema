@@ -57,7 +57,15 @@ $(function () {
                     alert(data.responseText);
                 })
                 .done(function (data) {
-                    $orderSucess();
+                    var order = {};
+                    order.id = data;
+                    order.client_id = client_id;
+                    order.fname = fname;
+                    order.lname = lname;
+                    order.email = email;
+                    order.phone = phone;
+                    order.num_of_seats = num_of_seats;
+                    $orderSucess(order);
                 });
     });
     
@@ -70,8 +78,8 @@ $(function () {
       $(".movie-details").html(html); 
     };
     
-    $orderSucess = function() {
-        $("#addOrder").html("<div class=\"thank-you\"><span class=\"green\">Thank you for buying tickets for this show.</span><br><span class=\"light-grey\">To thank you we would like to offer you a special offer and only for a limited time!</span></div><div id=\"promo\"></div>");
+    $orderSucess = function(order) {
+        $("#addOrder").html("<div class=\"thank-you\"><span class=\"green\">Thank you for buying tickets for this show.</span><p>Order Number: " + order.id + "<br>Name: " + order.fname + " " + order.lname + "<br>Num Of Seats: " + order.num_of_seats + "</p><span class=\"light-grey\">To thank you we would like to offer you a special offer and only for a limited time!</span></div><div id=\"promo\"></div>");
         $getRandomPromo(function(html) {
             $("#promo").html(html);
         }); 

@@ -26,7 +26,7 @@ public class ReviewsManager extends DbManagerEntity {
             + " review_date) values(?,?,?,?)";
     public final static String SELECT_ALLREVIWES = "SELECT * FROM reviews R inner join orders O on R.order_id = O.id ";
     public final static String SELECT_REVIEW = "SELECT * FROM reviews WHERE rev_id = ?";
-    public final static String SELECT_BY_MOVIE = "SELECT * FROM cinemacity.reviews R INNER JOIN Orders O ON R.order_id = O.order_id INNER JOIN shows ON O.show_id = shows.show_id WHERE shows.movie_id=?";
+    public final static String SELECT_BY_MOVIE = "SELECT * FROM reviews R INNER JOIN orders O ON R.order_id = O.order_id INNER JOIN shows ON O.show_id = shows.show_id WHERE shows.movie_id=?";
     public final static String SELECT_BY_ORDER_ID = "SELECT * FROM reviews WHERE order_id = ?";
 
     public ReviewsManager(DbManager manager) {

@@ -25,9 +25,19 @@ public class HomeController {
     public Response home() {
         try {
             List<MovieCategory> categories = ControllerHelper.getDb().getMovieCategoriesManager().getAllFromRedis();
-            Promotion randPromo = ControllerHelper.getDb().getPromosManager().getRand();
-            HomeView view = new HomeView(categories, randPromo);
+            HomeView view = new HomeView(categories);
             return Response.status(Response.Status.OK).entity(view.getView()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+    
+    @GET
+    @Path("restartdb")
+    public Response restartDbInstance() {
+        try {
+            ControllerHelper.restartDbInstance();
+            return Response.status(Response.Status.OK).entity("OK").build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }

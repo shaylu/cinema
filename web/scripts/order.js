@@ -26,7 +26,7 @@ $(function () {
         var show_id = $("#addOrder #txtShowId").val();
         var seats_left = $("#addOrder #numSeats").attr("max");
         
-        if (num_of_seats < 1 || num_of_seats > seats_left)
+        if ( parseInt(num_of_seats) < 1 || parseInt(num_of_seats) > seats_left)
         {
             alert("Number of seats has to be between 1 to " + seats_left);
             return;

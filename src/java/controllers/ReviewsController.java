@@ -102,7 +102,7 @@ public class ReviewsController {
                 throw new Exception("Invalid order data.");
             }
             boolean reviewExistForOrder = ControllerHelper.getDb().getReviewsManager().isReviewExistForOrder(order_id);
-            Movie movie = ControllerHelper.getDb().getMoviesManager().getMovieById(order_id);
+            Movie movie = ControllerHelper.getDb().getMoviesManager().getMovieById(order.getShow().getId());
             views.ReviewAddView view = new ReviewAddView(order_id, creditCardLastDigit, movie, reviewExistForOrder);
             return Response.status(Response.Status.OK).type(MediaType.TEXT_HTML).entity(view.getView()).build();
         } catch (Exception e) {

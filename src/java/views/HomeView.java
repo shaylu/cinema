@@ -17,11 +17,9 @@ import models.Promotion;
 public class HomeView implements ICinemaView {
 
     List<MovieCategory> categories;
-    Promotion randPromo;
 
-    public HomeView(List<MovieCategory> categories, Promotion randPromo) {
+    public HomeView(List<MovieCategory> categories) {
         this.categories = categories;
-        this.randPromo = randPromo;
     }
 
     @Override

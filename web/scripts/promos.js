@@ -13,7 +13,7 @@ $getRandomPromo = function (callback) {
 };
 
 $getPromoHTML = function (promo) {
-    return "<div class=\"promo\" data-id=\"" + promo.id + "\">"
+    return "<div class=\"promo pad-lower\" data-id=\"" + promo.id + "\">"
             + "<div class=\"promo_description\">"
             + " <div class=\"promo_img\" style=\"background-image: url(/cinema_app/images/promos/" + promo.image + ");\"></div>"
             + " <div class=\"promo_text\">" + promo.description + "</div>"

@@ -6,6 +6,7 @@
 package controllers;
 
 import db.DbManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -34,6 +35,14 @@ public class ControllerHelper {
             String txt;
             txt = e.getMessage();
         }
+    }
+    
+    public static void restartDbInstance() throws SQLException, Exception {
+        if (db != null) {
+            db = null;
+        }
+        
+        db = new DbManager();
     }
 
 }

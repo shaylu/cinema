@@ -34,7 +34,7 @@ public class PromosManager extends DbManagerEntity {
     public final static String DELET_PROMOTION = "DELETE FROM promotions WHERE promo_id = (?)";
     public final static String SELECT_ALL = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id";
     public static final String SELECT_PROMOION = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_id = ?";
-    public static final String SELECT_RAND = "SELECT * FROM promotions p inner join companies c on P.comp_id = C.comp_id ORDER BY RAND() LIMIT 1;";
+    public static final String SELECT_RAND = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id ORDER BY RAND() LIMIT 1;";
     public static final String SELECT_PROMOION_BY_CAT_ID = "SELECT * FROM promotions P inner join companies C on P.comp_id = C.comp_id WHERE promo_cat_id = ?";
 
     public PromosManager(DbManager manager) {

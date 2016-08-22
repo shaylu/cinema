@@ -26,23 +26,11 @@ $getPromoHTML = function (promo) {
 $(function () {
     $("#btnShowPromos").click(function (e) {
         var url = "promos/all";
+		
         $.ajax({url: url}).fail(function (data) {
             alert(data.responseText);
         }).done(function (data) {
             return data;
         });
     });
-    
-    $(document).on("click", ".promoCat", function (e) {
-        var id = $(this).data("id");
-    
-        var url = "promos/category/" + id;
-        
-        document.location = url;
-    });
-});
-
-
-$(function () {
-    
 });
